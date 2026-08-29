@@ -626,11 +626,6 @@ p { text-wrap: pretty; }
 }
 .rec__lead { padding-block: clamp(2.5rem, 6vh, 4.5rem); border-bottom: 1px solid var(--rule); }
 .rec__lead figure { margin: 0 0 var(--sc-6) 0; overflow: hidden; }
-/* The MSB frame is the one image still sourced from a 480px original: its
-   own project page carries no photographs. Shown at full spread width it
-   would be the only soft picture on the page, so it is held near its true
-   resolution until the company supplies the originals. */
-.rec__lead--soft figure { max-width: 46rem; }
 .rec__lead img {
   width: 100%; height: auto; display: block;
   border: 1px solid var(--rule);
@@ -654,6 +649,28 @@ p { text-wrap: pretty; }
 /* The "in use" beat. A contractor's real proof is not the handover photo,
    it is the room working: benches, shelves, seats. It lives inside the
    record rather than as its own chapter, so the page's spine is unchanged. */
+/* The MSB work is a military facility, so imagery for it is limited and
+   always will be. Treating that as a gap to apologise for is the wrong
+   read: the entry is set typographically, the one public photograph sits
+   as a small inset, and the reason is stated plainly. A contractor that
+   respects a client's disclosure limits is showing competence, not a hole. */
+.rec__lead--quiet .rec__lead-body { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; }
+.rec__lead--quiet .rec__t { font-size: clamp(1.5rem, 1.1rem + 1.9vw, 2.6rem); }
+.rec__note {
+  margin-top: var(--sc-5);
+  font-family: var(--sc-font-mono); font-size: 0.72rem; line-height: 1.65;
+  letter-spacing: 0.01em; color: var(--sc-ink-soft);
+  border-left: 2px solid var(--rule); padding-left: var(--sc-4);
+  max-width: 44ch;
+}
+.rec__inset { margin: 0 0 var(--sc-5) 0; max-width: 22rem; overflow: hidden; }
+.rec__inset img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule); filter: saturate(0.94);
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -14px), 0) scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) { .rec__inset img { transform: none; } }
+
 .rec__lead--use .use-grid {
   display: grid; gap: var(--sc-3);
   grid-template-columns: repeat(3, 1fr);
@@ -922,22 +939,22 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </div>
         </article>
 
-        <article class="rec__lead rec__lead--soft" id="kayit-02" data-ep data-ep-range="1.05 -0.05">
-          <figure>
-            <img src="assets/proje/karargah-ve-yemekhane-binasi-detail.webp"
-                 srcset="assets/proje/karargah-ve-yemekhane-binasi-card.webp 800w, assets/proje/karargah-ve-yemekhane-binasi-detail.webp 1200w"
-                 sizes="(max-width: 860px) 92vw, 74vw"
-                 width="1200" height="800" loading="lazy"
-                 alt="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
-          </figure>
+        <article class="rec__lead rec__lead--quiet" id="kayit-02" data-ep data-ep-range="0.95 0.55">
           <div class="rec__lead-body">
             <div>
               <span class="rec__no">02</span>
               <h3 class="rec__t">Karargâh ve Yemekhane Binası</h3>
               <p class="rec__d">K.K.T.C.'de Millî Savunma Bakanlığı için yemekhane ve idari birimleri
                 kapsayan karargâh kompleksi projesi devam etmektedir.</p>
+              <p class="rec__note">Askerî tesis kapsamında yürütüldüğü için bu projeye ait görsel
+                paylaşımı sınırlı tutulmuştur.</p>
             </div>
             <div>
+              <figure class="rec__inset">
+                <img src="assets/proje/karargah-ve-yemekhane-binasi-card.webp"
+                     width="800" height="513" loading="lazy"
+                     alt="Karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
+              </figure>
               <div class="rec__label">
                 <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
                 <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
