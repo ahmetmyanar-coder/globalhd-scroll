@@ -253,7 +253,7 @@ p { text-wrap: pretty; }
 .seq-stage__frames {
   --cap-band: clamp(150px, 22vh, 220px);
   /* hold the last frame through the final 12%: that hold is the silence */
-  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6);
+  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5);
 }
 .seq-stage__frames img {
   position: absolute; inset: 0;
@@ -270,11 +270,10 @@ p { text-wrap: pretty; }
 .seq-stage__frames img:nth-child(4) { --k: 3; }
 .seq-stage__frames img:nth-child(5) { --k: 4; }
 .seq-stage__frames img:nth-child(6) { --k: 5; }
-.seq-stage__frames img:nth-child(7) { --k: 6; }
 
 /* Captions switch on the same variable, harder than the images so one line
    owns the frame instead of two ghosting through each other. */
-.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6); }
+.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5); }
 
 /* Caption sits in its own plate, never laid across the picture as a banner. */
 .seq-cap {
@@ -305,7 +304,6 @@ p { text-wrap: pretty; }
 .seq-cap__line:nth-child(4) { --k: 3; }
 .seq-cap__line:nth-child(5) { --k: 4; }
 .seq-cap__line:nth-child(6) { --k: 5; }
-.seq-cap__line:nth-child(7) { --k: 6; }
 .seq-cap__note {
   display: block;
   margin-top: var(--sc-5);
@@ -315,13 +313,13 @@ p { text-wrap: pretty; }
   color: #A99C87;
   max-width: 34ch;
 }
-.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6);
+.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5);
   position: absolute; left: calc(var(--folio-w) + var(--sc-6)); right: var(--sc-6);
   bottom: calc(var(--cap-band) - 1px); height: 1px;
   background: rgba(239,231,216,0.18);
 }
 .seq-progress i {
-  display: block; height: 100%; width: calc(var(--seqP, 0) / 6 * 100%);
+  display: block; height: 100%; width: calc(var(--seqP, 0) / 5 * 100%);
   background: #EFE7D8;
 }
 
@@ -628,6 +626,11 @@ p { text-wrap: pretty; }
 }
 .rec__lead { padding-block: clamp(2.5rem, 6vh, 4.5rem); border-bottom: 1px solid var(--rule); }
 .rec__lead figure { margin: 0 0 var(--sc-6) 0; overflow: hidden; }
+/* The MSB frame is the one image still sourced from a 480px original: its
+   own project page carries no photographs. Shown at full spread width it
+   would be the only soft picture on the page, so it is held near its true
+   resolution until the company supplies the originals. */
+.rec__lead--soft figure { max-width: 46rem; }
 .rec__lead img {
   width: 100%; height: auto; display: block;
   border: 1px solid var(--rule);
@@ -811,25 +814,23 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
           <div class="seq-stage__frames" id="seqFrames">
-            <img src="assets/seq-web/01-A0.jpg" srcset="assets/seq-web/01-A0-m.jpg 900w, assets/seq-web/01-A0.jpg 1600w" sizes="100vw" width="1600" height="900" alt="Mimar masasında pergelle kâğıda çizilen ilk yay." fetchpriority="high">
-            <img data-src="assets/seq-web/02-A1.jpg" data-srcset="assets/seq-web/02-A1-m.jpg 900w, assets/seq-web/02-A1.jpg 1600w" sizes="100vw" alt="Kâğıt üzerinde tamamlanmış kat planı; bir kenarı üç boyuta yükselmeye başlıyor." aria-hidden="true">
-            <img data-src="assets/seq-web/03-A.jpg" data-srcset="assets/seq-web/03-A-m.jpg 900w, assets/seq-web/03-A.jpg 1600w" sizes="100vw" alt="Plandan yükselen ilk temel duvarları ve kolon başlangıçları." aria-hidden="true">
-            <img data-src="assets/seq-web/04-B.jpg" data-srcset="assets/seq-web/04-B-m.jpg 900w, assets/seq-web/04-B.jpg 1600w" sizes="100vw" alt="Model ölçeğinde betonarme karkas, açıkta donatı, kalıp ve iskele." aria-hidden="true">
-            <img data-src="assets/seq-web/05-C.jpg" data-srcset="assets/seq-web/05-C-m.jpg 900w, assets/seq-web/05-C.jpg 1600w" sizes="100vw" alt="Kule vinç, malzeme yığınları ve çalışma ışıklarıyla canlanan şantiye." aria-hidden="true">
-            <img data-src="assets/seq-web/06-D.jpg" data-srcset="assets/seq-web/06-D-m.jpg 900w, assets/seq-web/06-D.jpg 1600w" sizes="100vw" alt="Yapı fotoğrafik ölçeğe geçerken kâğıt ve masa çerçevenin dışına çıkıyor." aria-hidden="true">
-            <img data-src="assets/seq-web/07-E.jpg" data-srcset="assets/seq-web/07-E-m.jpg 900w, assets/seq-web/07-E.jpg 1600w" sizes="100vw" alt="Masa ve çizim tamamen kaybolmuş; aktif bir betonarme şantiye." aria-hidden="true">
+            <img src="assets/seq-web/M1.jpg" srcset="assets/seq-web/M1-m.jpg 900w, assets/seq-web/M1.jpg 1600w" sizes="100vw" width="1600" height="900" alt="Mimar masasında kâğıda çizilen eğimli arsa sınırı, erişim yolu ve ilk uzun blok." fetchpriority="high">
+            <img data-src="assets/seq-web/M2.jpg" data-srcset="assets/seq-web/M2-m.jpg 900w, assets/seq-web/M2.jpg 1600w" sizes="100vw" alt="Paralel bloklar, bağlantı hacimleri, yollar ve kotlarla tamamlanmış vaziyet planı." aria-hidden="true">
+            <img data-src="assets/seq-web/M3.jpg" data-srcset="assets/seq-web/M3-m.jpg 900w, assets/seq-web/M3.jpg 1600w" sizes="100vw" alt="Plandan yükselen şeffaf üç boyutlu çizgisel kütle." aria-hidden="true">
+            <img data-src="assets/seq-web/M4.jpg" data-srcset="assets/seq-web/M4-m.jpg 900w, assets/seq-web/M4.jpg 1600w" sizes="100vw" alt="Maket ölçeğinde betonarme karkas, iskele ve küçük kule vinç." aria-hidden="true">
+            <img data-src="assets/seq-web/M5.jpg" data-srcset="assets/seq-web/M5-m.jpg 900w, assets/seq-web/M5.jpg 1600w" sizes="100vw" alt="Öndeki bloklarda taş kaplama ve kahverengi panel dolgu başlarken arkadakiler hâlâ ham beton." aria-hidden="true">
+            <img data-src="assets/seq-web/M6.jpg" data-srcset="assets/seq-web/M6-m.jpg 900w, assets/seq-web/M6.jpg 1600w" sizes="100vw" alt="Kâğıdın üzerinde duran, peyzajı ve yollarıyla tamamlanmış mimari maket." aria-hidden="true">
           </div>
           <div class="seq-cap">
             <div class="seq-cap__lines">
-              <span class="seq-cap__line">Bir yay.</span>
-              <span class="seq-cap__line">Bir plan.</span>
-              <span class="seq-cap__line">İlk kolonlar.</span>
+              <span class="seq-cap__line">Bir arsa, bir yol.</span>
+              <span class="seq-cap__line">Yerleşim oturur.</span>
+              <span class="seq-cap__line">Plan ayağa kalkar.</span>
               <span class="seq-cap__line">Beton ve demir.</span>
-              <span class="seq-cap__line">Şantiye kurulur.</span>
-              <span class="seq-cap__line">Kâğıt geride kalır.</span>
+              <span class="seq-cap__line">Cephe giyinir.</span>
               <span class="seq-cap__line">Ve yapı ayakta durur.</span>
             </div>
-            <span class="seq-cap__note">Kavramsal görsel anlatım. Belirli bir projeyi belgelemez.</span>
+            <span class="seq-cap__note">Merkezi Derslik Projesi · kavramsal çizim ve maket anlatımı, fotoğraf değildir.</span>
           </div>
           <div class="seq-progress" aria-hidden="true"><i></i></div>
         </div>
@@ -843,17 +844,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <span class="ch-open__no">Bölüm iki</span>
       <div class="plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.06 0.5">
-          <img src="assets/proje/karargah-ve-yemekhane-binasi-detail.webp"
-               width="1200" height="800"
-               alt="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
-          <figcaption>Karargâh ve Yemekhane Binası, K.K.T.C. Şantiye, havadan.</figcaption>
+          <img src="assets/saha-web/merkezi-derslik-04.jpg"
+               srcset="assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w"
+               sizes="(max-width: 900px) 92vw, 56vw"
+               width="1600" height="1067"
+               alt="Merkezi Derslik Projesi şantiyesi, tamamlanmaya yakın bloklar, havadan görünüm.">
+          <figcaption>Merkezi Derslik Projesi. Saha, havadan.</figcaption>
         </figure>
         <div class="sc-stack" data-sc-in data-sc-stagger="70">
           <h2 class="plate__say">Bir çizim, ancak sahada karşılığı varsa iş sayılır.</h2>
           <div class="plate__meta">
-            <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
-            <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
-            <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
+            <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
+            <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
             <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
           </div>
         </div>
@@ -920,7 +922,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </div>
         </article>
 
-        <article class="rec__lead" id="kayit-02" data-ep data-ep-range="1.05 -0.05">
+        <article class="rec__lead rec__lead--soft" id="kayit-02" data-ep data-ep-range="1.05 -0.05">
           <figure>
             <img src="assets/proje/karargah-ve-yemekhane-binasi-detail.webp"
                  srcset="assets/proje/karargah-ve-yemekhane-binasi-card.webp 800w, assets/proje/karargah-ve-yemekhane-binasi-detail.webp 1200w"
