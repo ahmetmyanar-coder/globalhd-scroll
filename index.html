@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Global HD İnşaat · Güçlü yapılar, güvenilir mühendislik</title>
+<meta name="description" content="Ankara merkezli mühendislik ve taahhüt firması. Kamu kurumları ve özel sektör için üstyapı, altyapı, restorasyon ve çevre düzenleme projeleri.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A160F'/><path d='M10 24V9l7 4v11' fill='none' stroke='%23E8E0D2' stroke-width='2'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+/* ============================================================
+   Global HD — chaptered editorial
+   Two grounds that hard-cut: kâğıt (light) and masa (dark).
+   Two-stop accent: one hue, two lightnesses, keyed to the ground.
+   ============================================================ */
+:root {
+  --sc-canvas:      #E9E2D5;
+  --sc-surface:     #DED5C4;
+  --sc-ink:         #16130E;
+  --sc-ink-soft:    #5C5344;
+  --sc-accent:      #1D5586;
+  --sc-accent-ink:  #F2ECE1;
+  --sc-font-display: "Archivo", system-ui, sans-serif;
+  --sc-font-text:    "Source Serif 4", Georgia, serif;
+
+  --paper:      #E9E2D5;
+  --paper-deep: #DED5C4;
+  --desk:       #16130E;
+  --desk-soft:  #221D15;
+  --rule:       color-mix(in srgb, var(--sc-ink) 18%, transparent);
+  --folio-w:    clamp(0px, 8vw, 132px);
+}
+
+/* Dark chapters restate ink AND color, per taste.md: redefining the token
+   alone does not re-ink inherited text. */
+.ch--desk {
+  --sc-canvas:     #16130E;
+  --sc-surface:    #221D15;
+  --sc-ink:        #EFE7D8;
+  --sc-ink-soft:   #A99C87;
+  --sc-accent:     #7FB0DC;
+  --sc-accent-ink: #16130E;
+  --rule: color-mix(in srgb, var(--sc-ink) 22%, transparent);
+  color: var(--sc-ink);
+  background: var(--sc-canvas);
+}
+
+body {
+  background: var(--paper);
+  color: var(--sc-ink);
+  font-family: var(--sc-font-text);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- shared editorial furniture ---------- */
+.wrap { max-width: 78rem; margin-inline: auto; padding-inline: var(--sc-gutter); }
+.measure { max-width: 60ch; }
+.lead-in { font-size: 1.15em; line-height: 1.55; }
+
+.eyebrow {
+  font-family: var(--sc-font-display);
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sc-ink-soft);
+}
+
+h1, h2, h3, .display {
+  font-family: var(--sc-font-display);
+  font-weight: 600;
+  letter-spacing: var(--sc-track-tight);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+p { text-wrap: pretty; }
+
+/* Chapter opener plate: the intertitle that makes this a book. */
+.ch-open { padding-block: clamp(5rem, 12vh, 9rem) clamp(2.5rem, 5vh, 4rem); }
+.ch-open__no {
+  font-family: var(--sc-font-display);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--sc-accent);
+  display: block; margin-bottom: var(--sc-4);
+}
+.ch-open__t { font-size: clamp(2rem, 1.2rem + 3.4vw, 3.9rem); }
+.ch-open__d {
+  margin-top: var(--sc-5);
+  max-width: 52ch; color: var(--sc-ink-soft);
+  font-size: 1.05rem;
+}
+.ch-open__d--after { margin-top: var(--sc-4); font-style: italic; color: var(--sc-ink-soft); }
+.ch-rule { height: 1px; background: var(--rule); border: 0; margin: 0; }
+
+/* ---------- folio: the chrome. No fixed bar in this grammar. ---------- */
+.folio {
+  position: fixed; inset-block: 0; left: 0; width: var(--folio-w);
+  display: none; flex-direction: column; align-items: center;
+  justify-content: space-between;
+  padding-block: var(--sc-6);
+  z-index: var(--sc-z-chrome);
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+@media (min-width: 1080px) { .folio { display: flex; } }
+
+.folio__mark { width: 46px; pointer-events: auto; }
+.folio__mark img {
+  width: 100%; height: auto; display: block;
+  /* The signature move: the real artwork is uncovered from the ground up,
+     never redrawn, so the mark is never approximated. */
+  clip-path: inset(calc(100% - var(--mark-p, 0) * 100%) 0 0 0);
+  transition: clip-path 260ms var(--sc-ease-out);
+}
+.folio__mark--ghost {
+  position: absolute; inset: 0;
+  opacity: 0.14;
+  clip-path: none;
+}
+.folio__mark { position: relative; }
+
+.folio__now {
+  writing-mode: vertical-rl;
+  font-family: var(--sc-font-display);
+  font-size: 0.66rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--sc-ink-soft);
+  white-space: nowrap;
+}
+.folio__now b { color: var(--sc-ink); font-weight: 600; }
+
+/* The folio is fixed over grounds that hard-cut light to dark, so the mark
+   carries a mono treatment on dark rather than a colour that vanishes. */
+.folio.is-dark .folio__mark img { filter: brightness(0) invert(1); }
+.folio.is-dark .folio__now   { color: #A99C87; }
+.folio.is-dark .folio__now b { color: #EFE7D8; }
+
+/* skip link + the one nav we do keep: a jump list, keyboard reachable */
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--sc-ink); color: var(--sc-canvas);
+  padding: var(--sc-3) var(--sc-4); z-index: 999;
+  font-family: var(--sc-font-display);
+}
+.skip:focus { left: var(--sc-4); top: var(--sc-4); }
+
+/* ---------- title page ---------- */
+.title-page {
+  min-height: 100svh;
+  display: grid; align-content: center;
+  padding-block: clamp(6rem, 14vh, 10rem) clamp(3rem, 8vh, 6rem);
+  padding-left: var(--folio-w);
+  position: relative;
+}
+.title-page__mark { width: clamp(150px, 20vw, 232px); margin-bottom: var(--sc-8); }
+.title-page__mark img { width: 100%; height: auto; display: block; }
+.title-page h1 {
+  font-size: clamp(2.6rem, 1.1rem + 6.2vw, 6rem);
+  line-height: 0.98;
+  max-width: 16ch;
+}
+.title-page h1 em { font-style: normal; color: var(--sc-accent); }
+.title-page__lede {
+  margin-top: var(--sc-6); max-width: 46ch;
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.3rem);
+  color: var(--sc-ink-soft);
+}
+.title-page__foot {
+  margin-top: clamp(3rem, 7vh, 5rem);
+  display: flex; flex-wrap: wrap; gap: var(--sc-5) var(--sc-8);
+  align-items: baseline;
+  border-top: 1px solid var(--rule); padding-top: var(--sc-5);
+}
+.title-page__foot p { margin: 0; color: var(--sc-ink-soft); font-size: 0.95rem; }
+.title-page__foot .eyebrow { color: var(--sc-ink); }
+@media (max-width: 700px) {
+  .title-page h1 { font-size: clamp(2.2rem, 1rem + 8vw, 3rem); }
+}
+
+/* ---------- chapter 01: the sequence stage ---------- */
+.seq-stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--desk); }
+.seq-stage__frames { position: absolute; inset: 0; }
+/* The crossfade is pure CSS off the act's own --sc-p, so a frame is correct
+   the instant the engine writes progress. Driving it from a rAF callback made
+   the harness photograph the page before the swap had run. */
+.seq-stage__frames {
+  /* hold the last frame through the final 12%: that hold is the silence */
+  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6);
+}
+.seq-stage__frames img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  will-change: opacity;
+  opacity: min(
+    clamp(0, calc((var(--seqP) - var(--k)) + 1), 1),
+    clamp(0, calc((var(--k) - var(--seqP)) + 1), 1)
+  );
+}
+.seq-stage__frames img:nth-child(1) { --k: 0; }
+.seq-stage__frames img:nth-child(2) { --k: 1; }
+.seq-stage__frames img:nth-child(3) { --k: 2; }
+.seq-stage__frames img:nth-child(4) { --k: 3; }
+.seq-stage__frames img:nth-child(5) { --k: 4; }
+.seq-stage__frames img:nth-child(6) { --k: 5; }
+.seq-stage__frames img:nth-child(7) { --k: 6; }
+
+/* Captions switch on the same variable, harder than the images so one line
+   owns the frame instead of two ghosting through each other. */
+.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6); }
+
+/* Caption sits in its own plate, never laid across the picture as a banner. */
+.seq-cap {
+  position: absolute; left: 0; bottom: 0;
+  padding: var(--sc-6) var(--sc-6) var(--sc-7) calc(var(--folio-w) + var(--sc-6));
+  max-width: min(46ch, 90%);
+  z-index: var(--sc-z-copy);
+}
+.seq-cap__lines { position: relative; min-height: 2.7em; }
+.seq-cap__line {
+  position: absolute; inset-inline-start: 0; top: 0;
+  display: block;
+  opacity: min(
+    clamp(0, calc(((var(--seqP) - var(--k)) + 0.5) * 3), 1),
+    clamp(0, calc(((var(--k) - var(--seqP)) + 0.5) * 3), 1)
+  );
+  font-family: var(--sc-font-display);
+  font-size: clamp(1.3rem, 1rem + 1.3vw, 2.2rem);
+  font-weight: 500; line-height: 1.12; letter-spacing: -0.015em;
+  color: #F3ECDF;
+  max-width: 22ch;
+  text-shadow: 0 1px 18px rgba(0,0,0,0.55);
+}
+.seq-cap__line:nth-child(1) { --k: 0; }
+.seq-cap__line:nth-child(2) { --k: 1; }
+.seq-cap__line:nth-child(3) { --k: 2; }
+.seq-cap__line:nth-child(4) { --k: 3; }
+.seq-cap__line:nth-child(5) { --k: 4; }
+.seq-cap__line:nth-child(6) { --k: 5; }
+.seq-cap__line:nth-child(7) { --k: 6; }
+.seq-cap__note {
+  display: block;
+  margin-top: var(--sc-5);
+  font-family: var(--sc-font-display);
+  font-size: 0.64rem; letter-spacing: 0.15em; text-transform: uppercase;
+  line-height: 1.5;
+  color: #A99C87;
+  max-width: 34ch;
+}
+.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 6);
+  position: absolute; left: calc(var(--folio-w) + var(--sc-6)); right: var(--sc-6);
+  bottom: var(--sc-4); height: 1px;
+  background: rgba(239,231,216,0.18);
+}
+.seq-progress i {
+  display: block; height: 100%; width: calc(var(--seqP, 0) / 6 * 100%);
+  background: #EFE7D8;
+}
+
+/* ---------- chapter 02: the plate ---------- */
+.plate-ch { padding-block: clamp(4rem, 10vh, 7rem) clamp(5rem, 12vh, 9rem); }
+.plate {
+  display: grid; gap: var(--sc-6);
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  align-items: end;
+}
+@media (max-width: 900px) { .plate { grid-template-columns: 1fr; } }
+.plate figure { margin: 0; }
+.plate img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule);
+  box-shadow: 0 18px 44px -28px var(--sc-shadow-color);
+}
+.plate figcaption {
+  margin-top: var(--sc-4);
+  font-family: var(--sc-font-display);
+  font-size: 0.74rem; letter-spacing: 0.06em;
+  color: var(--sc-ink-soft);
+}
+.plate__say { font-size: clamp(1.3rem, 1rem + 1.3vw, 2.1rem); line-height: 1.16; }
+.plate__meta { margin-top: var(--sc-5); display: grid; gap: var(--sc-3); }
+.plate__meta div { display: flex; gap: var(--sc-4); border-top: 1px solid var(--rule); padding-top: var(--sc-3); }
+.plate__meta dt, .plate__meta .k {
+  font-family: var(--sc-font-display); font-size: 0.68rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sc-ink-soft); min-width: 8.5rem;
+}
+.plate__meta .v { font-family: var(--sc-font-display); font-weight: 500; }
+
+/* ---------- chapter 03: the record ---------- */
+.rec { border-top: 1px solid var(--rule); }
+.rec__row {
+  display: grid; gap: var(--sc-5) var(--sc-7);
+  grid-template-columns: 5.5rem minmax(0, 1.6fr) minmax(0, 1fr);
+  padding-block: clamp(2rem, 4.5vh, 3.4rem);
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.rec__row--wide { grid-template-columns: 5.5rem minmax(0, 1fr); }
+@media (max-width: 860px) {
+  .rec__row, .rec__row--wide { grid-template-columns: 3.2rem minmax(0, 1fr); }
+  .rec__fig { grid-column: 2; }
+}
+.rec__no {
+  font-family: var(--sc-font-display); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.14em; color: var(--sc-ink-soft); padding-top: 0.45rem;
+}
+.rec__t { font-size: clamp(1.25rem, 1.05rem + 0.85vw, 1.85rem); }
+.rec__d { margin-top: var(--sc-3); color: var(--sc-ink-soft); max-width: 52ch; }
+.rec__label { margin-top: var(--sc-4); display: grid; gap: 0.35rem; }
+.rec__label > div { display: flex; gap: var(--sc-3); font-family: var(--sc-font-display); font-size: 0.82rem; }
+.rec__label .k { color: var(--sc-ink-soft); min-width: 7rem; letter-spacing: 0.04em; }
+.rec__label .v { font-weight: 500; }
+.rec__fig { margin: 0; }
+.rec__fig img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule);
+  filter: saturate(0.94);
+}
+.rec__fig figcaption { margin-top: var(--sc-2); font-family: var(--sc-font-display); font-size: 0.68rem; color: var(--sc-ink-soft); }
+.tag {
+  display: inline-block;
+  font-family: var(--sc-font-display); font-size: 0.64rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border: 1px solid var(--rule);
+  color: var(--sc-ink-soft);
+}
+.tag--on { color: var(--sc-accent); border-color: color-mix(in srgb, var(--sc-accent) 45%, transparent); }
+.est { color: var(--sc-ink-soft); }
+
+/* ---------- chapter 04: measures ---------- */
+.meas { display: grid; gap: var(--sc-7) var(--sc-8); grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.meas__n {
+  font-family: var(--sc-font-display); font-weight: 600;
+  font-size: clamp(2.4rem, 1.4rem + 3.4vw, 4.4rem);
+  line-height: 0.94; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  display: block; padding-bottom: 0.06em;
+}
+.meas__k { margin-top: var(--sc-3); font-family: var(--sc-font-display); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft); }
+.foot-note { margin-top: var(--sc-6); font-size: 0.86rem; color: var(--sc-ink-soft); max-width: 62ch; }
+
+.kurum { margin-top: clamp(3rem, 7vh, 5rem); border-top: 1px solid var(--rule); padding-top: var(--sc-6); }
+.kurum__list { display: flex; flex-wrap: wrap; gap: var(--sc-6) var(--sc-8); align-items: center; margin-top: var(--sc-5); }
+.kurum__list img { height: 34px; width: auto; opacity: 0.72; filter: grayscale(1) contrast(0.9); }
+.ch--desk .kurum__list img { filter: grayscale(1) invert(1) contrast(0.85); opacity: 0.62; }
+
+/* ---------- areas of work ---------- */
+.work { display: grid; gap: var(--sc-6) var(--sc-8); grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-top: var(--sc-6); }
+.work section { border-top: 2px solid var(--sc-ink); padding-top: var(--sc-4); }
+.work h3 { font-size: 1.06rem; }
+.work p { margin-top: var(--sc-3); color: var(--sc-ink-soft); font-size: 0.95rem; }
+
+/* ---------- colophon ---------- */
+.colo { padding-block: clamp(5rem, 12vh, 9rem) clamp(3rem, 6vh, 4rem); }
+.colo__say { font-size: clamp(1.6rem, 1.1rem + 2.2vw, 3rem); max-width: 18ch; }
+.colo__body { margin-top: var(--sc-6); max-width: 54ch; color: var(--sc-ink-soft); }
+.colo__body a { color: var(--sc-ink); text-decoration: underline; text-underline-offset: 0.24em; text-decoration-thickness: 1px; }
+.colo__body a:hover { color: var(--sc-accent); }
+.colo__grid { margin-top: clamp(3rem, 7vh, 4.5rem); display: grid; gap: var(--sc-6) var(--sc-8); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); border-top: 1px solid var(--rule); padding-top: var(--sc-6); }
+.colo__grid h3 { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-ink-soft); font-weight: 600; }
+.colo__grid p, .colo__grid a { margin-top: var(--sc-3); display: block; font-family: var(--sc-font-display); font-size: 0.95rem; }
+.colo__grid a { color: var(--sc-ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 2px; width: fit-content; }
+.colo__grid a:hover { border-color: var(--sc-accent); color: var(--sc-accent); }
+.colo__fine { margin-top: clamp(3rem, 6vh, 4rem); font-size: 0.8rem; color: var(--sc-ink-soft); display: flex; flex-wrap: wrap; gap: var(--sc-3) var(--sc-6); }
+
+
+/* ============================================================
+   Scroll beyond the sequence chapter.
+   Everything here is driven from --ep, an element's own progress
+   through the viewport, written by the helper at the foot of the
+   page. transform and opacity only, per the taste floor.
+   ============================================================ */
+
+/* The first line. Drawn under the headline on the very first notch of
+   scroll, so the page states its idea before the sequence does. */
+.title-rule {
+  margin-top: var(--sc-6);
+  height: 1px; background: var(--sc-ink);
+  transform: scaleX(var(--ep, 0)); transform-origin: left center;
+  opacity: 0.55;
+}
+
+/* Chapter boundaries wipe. The grammar asks for a cut here, not a fade. */
+.ch-open__no, .ch-open__t, .ch-open__d {
+  clip-path: inset(0 calc(100% - var(--ep, 0) * 100%) 0 0);
+}
+.ch-open__t { transition: none; }
+
+/* Dimension lines. The record is measured in drafting notation: each bar's
+   length is the project's area against the largest in the portfolio, so the
+   line carries data rather than decoration. */
+.dim {
+  display: block; margin-top: var(--sc-4);
+  height: 9px; position: relative;
+  border-left: 1px solid var(--rule);
+  border-right: 0;
+}
+.dim i {
+  position: absolute; left: 0; top: 4px; height: 1px; right: 0;
+  background: var(--sc-accent);
+  transform: scaleX(calc(var(--w, 0) * var(--ep, 0)));
+  transform-origin: left center;
+}
+.dim i::after {
+  content: ""; position: absolute; right: 0; top: -4px;
+  width: 1px; height: 9px; background: var(--sc-accent);
+}
+.dim--total { height: 14px; margin-top: var(--sc-6); }
+.dim--total i { top: 6px; height: 2px; }
+.dim--total i::after { top: -6px; height: 14px; width: 2px; }
+
+/* Parallax inside the media column: the frame holds, the picture drifts.
+   Never on type. */
+.rec__fig { overflow: hidden; }
+.rec__fig img {
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -34px), 0) scale(1.075);
+  will-change: transform;
+}
+.plate figure { overflow: hidden; }
+.plate figure img {
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -26px), 0) scale(1.06);
+}
+
+/* Record rows arrive as the reader reaches them. */
+.rec__row > div, .rec__no {
+  opacity: clamp(0.25, calc(var(--ep, 1) * 2.4), 1);
+  transform: translateY(calc((1 - clamp(0, calc(var(--ep, 1) * 1.8), 1)) * 14px));
+}
+
+/* Institution marks settle one after another. */
+.kurum__list img {
+  opacity: calc(0.72 * clamp(0, calc((var(--ep, 1) - var(--i, 0) * 0.06) * 3), 1));
+  transform: translateY(calc((1 - clamp(0, calc(var(--ep, 1) * 2), 1)) * 10px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-rule { transform: scaleX(1); }
+  .ch-open__no, .ch-open__t, .ch-open__d { clip-path: none; }
+  .dim i { transform: scaleX(var(--w, 1)); }
+  .rec__fig img, .plate figure img { transform: none; }
+  .rec__row > div, .rec__no, .kurum__list img { opacity: 1; transform: none; }
+}
+
+/* A twelve-entry record is inherently long on a narrow screen. Tighten the
+   rhythm there rather than cutting entries: the record is the argument. */
+@media (max-width: 700px) {
+  .rec__row, .rec__row--wide { padding-block: clamp(1.4rem, 3vh, 2.1rem); gap: var(--sc-4); }
+  .rec__fig img { aspect-ratio: 16 / 9; object-fit: cover; height: auto; }
+  .ch-open { padding-block: clamp(3rem, 8vh, 5rem) clamp(1.6rem, 3vh, 2.4rem); }
+  .rec__d { font-size: 0.96rem; }
+  .colo { padding-block: clamp(3rem, 8vh, 5rem) clamp(2rem, 4vh, 3rem); }
+  .plate-ch { padding-block: clamp(2.5rem, 6vh, 4rem) clamp(3rem, 8vh, 5rem); }
+}
+
+
+/* Contents. A twelve-entry record is a document, so it gets the device a
+   document uses: a list you can jump from. Nothing is hidden behind it. */
+.idx { margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+.idx ol {
+  list-style: none; margin: 0; padding: 0;
+  columns: 2; column-gap: var(--sc-8);
+  border-top: 1px solid var(--rule); padding-top: var(--sc-4);
+}
+@media (max-width: 700px) { .idx ol { columns: 1; } }
+.idx li { break-inside: avoid; }
+.idx a {
+  display: flex; gap: var(--sc-4); align-items: baseline;
+  padding: 0.42rem 0;
+  font-family: var(--sc-font-display); font-size: 0.9rem;
+  color: var(--sc-ink); text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.idx a span { color: var(--sc-ink-soft); font-size: 0.72rem; letter-spacing: 0.1em; min-width: 1.6rem; }
+.idx a:hover { color: var(--sc-accent); }
+.idx a:hover span { color: var(--sc-accent); }
+.rec__row { scroll-margin-top: var(--sc-6); }
+
+:where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .seq-cap__line { transition: none; }
+  .folio__mark img { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
+<a class="skip" href="#bolum-3">Proje kaydına atla</a>
+
+<!-- The chrome of this grammar: a folio in the margin, not a bar on top. -->
+<div class="folio" aria-hidden="true">
+  <div class="folio__mark">
+    <img class="folio__mark--ghost" src="assets/logo-main.png" alt="">
+    <img id="markFill" src="assets/logo-main.png" alt="">
+  </div>
+  <span class="folio__now"><b id="folioNo">—</b> &nbsp;·&nbsp; <span id="folioName">Başlık</span></span>
+</div>
+
+<main id="top">
+
+  <!-- ================= TITLE PAGE · type on paper, no media ================= -->
+  <header class="title-page ch" data-ch="—" data-ch-name="Başlık" data-mark="0.16">
+    <div class="wrap">
+      <div class="title-page__mark sc-stack" data-sc-in>
+        <img src="assets/logo-main.png" width="2381" height="842" alt="Global HD İnşaat A.Ş.">
+      </div>
+      <div class="sc-stack" data-sc-in data-sc-stagger="70">
+        <h1>Güçlü yapılar,<br><em>güvenilir mühendislik.</em></h1>
+        <p class="title-page__lede">Kamu kurumları ve özel sektör için üstyapı, altyapı, restorasyon ve
+          çevre düzenleme projelerini anahtar teslim yürütüyoruz.</p>
+      </div>
+      <div class="title-rule" data-ep data-ep-range="0 0.9"></div>
+      <div class="title-page__foot sc-stack" data-sc-in data-sc-stagger="60">
+        <p class="eyebrow">Ankara merkezli · Mühendislik ve taahhüt</p>
+        <p>On iki proje. Millî Savunma Bakanlığı, Yükseköğretim Kurulu, Diyanet İşleri
+          Başkanlığı, Kültür Varlıkları ve Müzeler Genel Müdürlüğü ve belediyeler için.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= BÖLÜM 01 · ÇİZGİ (the one scrub chapter) ============= -->
+  <div class="ch--desk ch" id="bolum-1" data-ch="01" data-ch-name="Çizgi" data-mark="0.46">
+    <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
+      <span class="ch-open__no">Bölüm bir</span>
+      <h2 class="ch-open__t sc-stack" data-sc-in>Her yapı bir çizgiyle başlar.</h2>
+      <p class="ch-open__d sc-stack" data-sc-in>Kâğıtta verilen bir ölçü kararı, yıllar sonra
+        ayakta duracak olan şeyi belirler. Çizgi ile beton arasındaki mesafeyi kapatan tek şey,
+        her aşamada aynı titizliğin gösterilmesidir: hesabın doğru yapılması, şartnameye
+        uyulması, işin ehline bırakılması.</p>
+      <p class="ch-open__d ch-open__d--after sc-stack" data-sc-in>Bir yapı teslim edildikten sonra
+        onu kimin, nasıl yaptığı görünmez olur. Görünen tek şey, yapının durup durmadığıdır.</p>
+    </div>
+
+    <section data-sc-act="pin" data-sc-span="3.6" data-sc-drift="#16130E" id="dizi"
+             aria-label="Çizimden yapıya dönüşüm dizisi">
+      <div data-sc-stage>
+        <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
+          <div class="seq-stage__frames" id="seqFrames">
+            <img src="assets/seq-web/01-A0.jpg" srcset="assets/seq-web/01-A0-m.jpg 900w, assets/seq-web/01-A0.jpg 1600w" sizes="100vw" width="1600" height="900" alt="Mimar masasında pergelle kâğıda çizilen ilk yay." fetchpriority="high">
+            <img data-src="assets/seq-web/02-A1.jpg" data-srcset="assets/seq-web/02-A1-m.jpg 900w, assets/seq-web/02-A1.jpg 1600w" sizes="100vw" alt="Kâğıt üzerinde tamamlanmış kat planı; bir kenarı üç boyuta yükselmeye başlıyor." aria-hidden="true">
+            <img data-src="assets/seq-web/03-A.jpg" data-srcset="assets/seq-web/03-A-m.jpg 900w, assets/seq-web/03-A.jpg 1600w" sizes="100vw" alt="Plandan yükselen ilk temel duvarları ve kolon başlangıçları." aria-hidden="true">
+            <img data-src="assets/seq-web/04-B.jpg" data-srcset="assets/seq-web/04-B-m.jpg 900w, assets/seq-web/04-B.jpg 1600w" sizes="100vw" alt="Model ölçeğinde betonarme karkas, açıkta donatı, kalıp ve iskele." aria-hidden="true">
+            <img data-src="assets/seq-web/05-C.jpg" data-srcset="assets/seq-web/05-C-m.jpg 900w, assets/seq-web/05-C.jpg 1600w" sizes="100vw" alt="Kule vinç, malzeme yığınları ve çalışma ışıklarıyla canlanan şantiye." aria-hidden="true">
+            <img data-src="assets/seq-web/06-D.jpg" data-srcset="assets/seq-web/06-D-m.jpg 900w, assets/seq-web/06-D.jpg 1600w" sizes="100vw" alt="Yapı fotoğrafik ölçeğe geçerken kâğıt ve masa çerçevenin dışına çıkıyor." aria-hidden="true">
+            <img data-src="assets/seq-web/07-E.jpg" data-srcset="assets/seq-web/07-E-m.jpg 900w, assets/seq-web/07-E.jpg 1600w" sizes="100vw" alt="Masa ve çizim tamamen kaybolmuş; aktif bir betonarme şantiye." aria-hidden="true">
+          </div>
+          <div class="sc-scrim sc-scrim--bottom" aria-hidden="true"></div>
+          <div class="seq-cap">
+            <div class="seq-cap__lines">
+              <span class="seq-cap__line">Bir yay.</span>
+              <span class="seq-cap__line">Bir plan.</span>
+              <span class="seq-cap__line">İlk kolonlar.</span>
+              <span class="seq-cap__line">Beton ve demir.</span>
+              <span class="seq-cap__line">Şantiye kurulur.</span>
+              <span class="seq-cap__line">Kâğıt geride kalır.</span>
+              <span class="seq-cap__line">Ve yapı ayakta durur.</span>
+            </div>
+            <span class="seq-cap__note">Kavramsal görsel anlatım. Belirli bir projeyi belgelemez.</span>
+          </div>
+          <div class="seq-progress" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= BÖLÜM 02 · GERÇEK (the peak) ========================= -->
+  <div class="ch--desk ch plate-ch" id="bolum-2" data-ch="02" data-ch-name="Gerçek" data-mark="0.62">
+    <div class="wrap">
+      <span class="ch-open__no">Bölüm iki</span>
+      <div class="plate">
+        <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.06 0.5">
+          <img src="assets/proje/karargah-ve-yemekhane-binasi-detail.webp"
+               width="1200" height="800"
+               alt="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
+          <figcaption>Karargâh ve Yemekhane Binası, K.K.T.C. Şantiye, havadan.</figcaption>
+        </figure>
+        <div class="sc-stack" data-sc-in data-sc-stagger="70">
+          <h2 class="plate__say">Yukarıdaki çizimdi. Bu, gerçekten yaptığımız iş.</h2>
+          <div class="plate__meta">
+            <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
+            <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
+            <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
+            <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BÖLÜM 03 · SİCİL (the record, densest) =============== -->
+  <div class="ch" id="bolum-3" data-ch="03" data-ch-name="Sicil" data-mark="0.80">
+    <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
+      <span class="ch-open__no">Bölüm üç</span>
+      <h2 class="ch-open__t">On iki proje.</h2>
+      <p class="ch-open__d">Tamamlanan ve devam eden işler. Her kayıt işvereni, alanı ve
+        durumuyla birlikte verilmiştir.</p>
+    </div>
+
+    <div class="wrap">
+      <nav class="idx" aria-label="Proje kaydı içindekiler">
+        <ol>
+          <li><a href="#kayit-01"><span>01</span>Merkezi Derslik Projesi</a></li>
+          <li><a href="#kayit-02"><span>02</span>Karargâh ve Yemekhane Binası</a></li>
+          <li><a href="#kayit-03"><span>03</span>Peyzaj Projeleri</a></li>
+          <li><a href="#kayit-04"><span>04</span>Otel ve Peyzaj Alanı</a></li>
+          <li><a href="#kayit-05"><span>05</span>Park ve Bahçe Projeleri</a></li>
+          <li><a href="#kayit-06"><span>06</span>Belediye Hizmet Binası</a></li>
+          <li><a href="#kayit-07"><span>07</span>Kuran Kursu Binası</a></li>
+          <li><a href="#kayit-08"><span>08</span>Konak Restorasyonu</a></li>
+          <li><a href="#kayit-09"><span>09</span>Mezbahane ve Hayvan Pazarı</a></li>
+          <li><a href="#kayit-10"><span>10</span>Olimpik Yüzme Havuzu</a></li>
+          <li><a href="#kayit-11"><span>11</span>Meslek Yüksekokulu Projesi</a></li>
+          <li><a href="#kayit-12"><span>12</span>Laboratuvar, Kütüphane, Sinema ve Konferans Salonları</a></li>
+        </ol>
+      </nav>
+
+      <div class="rec">
+
+        <article id="kayit-01" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">01</span>
+          <div>
+            <h3 class="rec__t">Merkezi Derslik Projesi</h3>
+            <p class="rec__d">Yükseköğretim Kurulu bünyesinde yürütülen, farklı bloklardan oluşan
+              derslik ve akademik kullanım alanlarını kapsayan bir eğitim kampüsü projesi.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
+              <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.800"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/merkezi-derslik-projesi-card.webp" srcset="assets/proje/merkezi-derslik-projesi-card-480.webp 480w, assets/proje/merkezi-derslik-projesi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Merkezi derslik projesi şantiyesi, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-02" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">02</span>
+          <div>
+            <h3 class="rec__t">Karargâh ve Yemekhane Binası</h3>
+            <p class="rec__d">K.K.T.C.'de Millî Savunma Bakanlığı için yemekhane ve idari birimleri
+              kapsayan karargâh kompleksi projesi devam etmektedir.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
+              <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
+              <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.123"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/karargah-ve-yemekhane-binasi-card.webp" srcset="assets/proje/karargah-ve-yemekhane-binasi-card-480.webp 480w, assets/proje/karargah-ve-yemekhane-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Karargâh ve yemekhane projesi şantiyesi, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-03" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">03</span>
+          <div>
+            <h3 class="rec__t">Peyzaj Projeleri</h3>
+            <p class="rec__d">Hitit Üniversitesi kampüsünde yürütülen çevre düzenleme, sert zemin ve
+              yeşil alan uygulamaları.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Hitit Üniversitesi</span></div>
+              <div><span class="k">Alan</span><span class="v">32.500 m² <span class="est">*</span></span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 1.000"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/peyzaj-projeleri-card.webp" srcset="assets/proje/peyzaj-projeleri-card-480.webp 480w, assets/proje/peyzaj-projeleri-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-04" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">04</span>
+          <div>
+            <h3 class="rec__t">Otel ve Peyzaj Alanı</h3>
+            <p class="rec__d">Global HD İnşaat'ın kendi kaynaklarıyla geliştirdiği otel binası ve
+              çevre peyzaj alanı.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Global HD İnşaat (öz kaynaklı)</span></div>
+              <div><span class="k">Alan</span><span class="v">18.350 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.565"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/otel-ve-peyzaj-alani-card.webp" srcset="assets/proje/otel-ve-peyzaj-alani-card-480.webp 480w, assets/proje/otel-ve-peyzaj-alani-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Yamaç üzerinde otel binası ve çevre peyzajı, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-05" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">05</span>
+          <div>
+            <h3 class="rec__t">Park ve Bahçe Projeleri</h3>
+            <p class="rec__d">Kentsel yaşam alanlarını güçlendiren park ve oyun alanı düzenlemeleri.</p>
+            <div class="rec__label">
+              <div><span class="k">Alan</span><span class="v">14.500 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.446"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/park-ve-bahce-projeleri-card.webp" srcset="assets/proje/park-ve-bahce-projeleri-card-480.webp 480w, assets/proje/park-ve-bahce-projeleri-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Park içinde yürüyüş yolları ve oyun alanı, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-06" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">06</span>
+          <div>
+            <h3 class="rec__t">Belediye Hizmet Binası</h3>
+            <p class="rec__d">Beypazarı Belediyesi için vatandaşa hizmet veren idari birimleri tek
+              çatı altında toplayan hizmet binası.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
+              <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
+              <div><span class="k">Alan</span><span class="v">10.500 m² <span class="est">*</span></span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.323"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/belediye-hizmet-binasi-card.webp" srcset="assets/proje/belediye-hizmet-binasi-card-480.webp 480w, assets/proje/belediye-hizmet-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Beypazarı Belediyesi hizmet binası, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-07" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">07</span>
+          <div>
+            <h3 class="rec__t">Kuran Kursu Binası</h3>
+            <p class="rec__d">Diyanet İşleri Başkanlığı için Çorum'da yürütülen, eğitim blokları ve
+              idari birimlerden oluşan din eğitimi tesisi.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Diyanet İşleri Başkanlığı</span></div>
+              <div><span class="k">Yer</span><span class="v">Çorum</span></div>
+              <div><span class="k">Alan</span><span class="v">10.465 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.322"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/kuran-kursu-binasi-card.webp" srcset="assets/proje/kuran-kursu-binasi-card-480.webp 480w, assets/proje/kuran-kursu-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Kuran kursu binası cephesi." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-08" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">08</span>
+          <div>
+            <h3 class="rec__t">Konak Restorasyonu</h3>
+            <p class="rec__d">Tescilli tarihi bir konağın özgün dokusu korunarak yürütülen
+              restorasyon ve tadilat çalışması.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Kültür Varlıkları ve Müzeler Genel Müdürlüğü</span></div>
+              <div><span class="k">Alan</span><span class="v">8.800 m² <span class="est">*</span></span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.271"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/konak-restorasyonu-card.webp" srcset="assets/proje/konak-restorasyonu-card-480.webp 480w, assets/proje/konak-restorasyonu-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Restore edilmiş tarihi konaklar, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-09" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">09</span>
+          <div>
+            <h3 class="rec__t">Mezbahane ve Hayvan Pazarı</h3>
+            <p class="rec__d">Beypazarı Belediyesi için mezbahane ve hayvan pazarı tesisi.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
+              <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
+              <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.185"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/mezbahane-ve-hayvan-pazari-card.webp" srcset="assets/proje/mezbahane-ve-hayvan-pazari-card-480.webp 480w, assets/proje/mezbahane-ve-hayvan-pazari-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Mezbahane ve hayvan pazarı tesisi, havadan görünüm." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-10" class="rec__row" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">10</span>
+          <div>
+            <h3 class="rec__t">Olimpik Yüzme Havuzu</h3>
+            <p class="rec__d">Çok kulvarlı yüzme havuzu; tribün, soyunma ve destek birimleriyle
+              birlikte tamamlanan spor tesisi projesi.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
+              <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
+              <div><span class="k">Alan</span><span class="v">1.275 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.039"><i></i></div>
+          </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/proje/olimpik-yuzme-havuzu-card.webp" srcset="assets/proje/olimpik-yuzme-havuzu-card-480.webp 480w, assets/proje/olimpik-yuzme-havuzu-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Çok kulvarlı kapalı yüzme havuzu." loading="lazy">
+          </figure>
+        </article>
+
+        <article id="kayit-11" class="rec__row rec__row--wide" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">11</span>
+          <div>
+            <h3 class="rec__t">Meslek Yüksekokulu Projesi</h3>
+            <p class="rec__d">Yükseköğretim Kurulu için yürütülen meslek yüksekokulu yapım işi.</p>
+            <div class="rec__label">
+              <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
+              <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+              <div class="dim" style="--w: 0.185"><i></i></div>
+          </div>
+        </article>
+
+        <article id="kayit-12" class="rec__row rec__row--wide" data-ep data-ep-range="0.92 0.6">
+          <span class="rec__no">12</span>
+          <div>
+            <h3 class="rec__t">Laboratuvar, Kütüphane, Sinema ve Konferans Salonları</h3>
+            <p class="rec__d">Eğitim ve kültür yapıları bünyesinde laboratuvar, kütüphane, sinema ve
+              konferans salonu imalatları.</p>
+            <div class="rec__label">
+              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BÖLÜM 04 · ÖLÇÜ ===================================== -->
+  <div class="ch--desk ch" id="bolum-4" data-ch="04" data-ch-name="Ölçü" data-mark="0.92">
+    <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
+      <span class="ch-open__no">Bölüm dört</span>
+      <h2 class="ch-open__t">Rakamlarla.</h2>
+    </div>
+    <div class="wrap" style="padding-bottom: clamp(4rem, 10vh, 7rem)">
+      <div class="meas sc-stack" data-sc-in data-sc-stagger="80">
+        <div>
+          <span class="meas__n" data-sc-count="0 12" data-sc-count-at="0.05 0.5">12</span>
+          <span class="meas__k">Toplam proje</span>
+        </div>
+        <div>
+          <span class="meas__n" data-sc-count="0 10" data-sc-count-at="0.05 0.5">10</span>
+          <span class="meas__k">Tamamlanan</span>
+        </div>
+        <div>
+          <span class="meas__n" data-sc-count="0 2" data-sc-count-at="0.05 0.5">2</span>
+          <span class="meas__k">Devam eden</span>
+        </div>
+        <div>
+          <span class="meas__n" data-sc-count="0 138.390" data-sc-count-at="0.05 0.62">138.390</span>
+          <span class="meas__k">Toplam proje alanı m²</span>
+        </div>
+      </div>
+      <div class="dim dim--total" data-ep data-ep-range="0.9 0.4" style="--w: 1"><i></i></div>
+      <p class="foot-note">* Proje portföyündeki yaklaşık uygulama alanlarının toplamıdır. Belediye
+        Hizmet Binası, Konak Restorasyonu ve Peyzaj Projeleri kalemlerinin alan değerleri sunum
+        tahminidir ve şirket onayıyla kesinleşecektir.</p>
+
+      <div class="kurum">
+        <p class="eyebrow">İşveren kurumlar</p>
+        <div class="kurum__list" data-ep data-ep-range="0.92 0.55">
+          <img style="--i: 0" src="assets/kurum/ref-msb-logo.png" alt="T.C. Millî Savunma Bakanlığı" loading="lazy">
+          <img style="--i: 1" src="assets/kurum/ref-yok.png" alt="Yükseköğretim Kurulu" loading="lazy">
+          <img style="--i: 2" src="assets/kurum/ref-diyanetis.png" alt="Diyanet İşleri Başkanlığı" loading="lazy">
+          <img style="--i: 3" src="assets/kurum/ref-hitit-universitesi.png" alt="Hitit Üniversitesi" loading="lazy">
+        </div>
+      </div>
+
+      <div style="margin-top: clamp(3rem, 7vh, 5rem)">
+        <p class="eyebrow">Faaliyet alanları</p>
+        <div class="work">
+          <section>
+            <h3>İnşaat ve Taahhüt</h3>
+            <p>Kamu ve özel sektör için anahtar teslim yapım işleri; ihale sürecinden teslim
+              aşamasına kadar tek elden yürütülür.</p>
+          </section>
+          <section>
+            <h3>Üstyapı ve Altyapı</h3>
+            <p>Bina inşaatının yanı sıra elektrik, mekanik, zayıf akım ve altyapı sistemlerinin
+              uygulanması.</p>
+          </section>
+          <section>
+            <h3>Restorasyon ve Tadilat</h3>
+            <p>Tescilli tarihi yapılarda koruma kurulları ve teknik şartnamelere uygun restorasyon
+              ve rehabilitasyon çalışmaları.</p>
+          </section>
+          <section>
+            <h3>Peyzaj ve Çevre Düzenleme</h3>
+            <p>Yeşil alan planlaması, sert zemin uygulamaları, aydınlatma ve çevre düzenleme
+              işleri.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= KOLOFON ============================================= -->
+  <footer class="ch colo" id="iletisim" data-ch="—" data-ch-name="Künye" data-mark="1">
+    <div class="wrap">
+      <h2 class="colo__say sc-stack" data-sc-in>Proje görüşmesi için bize ulaşın.</h2>
+      <p class="colo__body sc-stack" data-sc-in>Dijital iletişim formumuz hazırlanmaktadır. Bu süreçte
+        <a href="tel:+903122854585">0312 285 45 85</a> numarasından veya
+        <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a> adresinden bize
+        doğrudan ulaşabilirsiniz.</p>
+
+      <div class="colo__grid">
+        <div>
+          <h3>Adres</h3>
+          <p>Kızılırmak Mah. 1446 Cad.<br>No:12 İç Kapı No:21<br>Çankaya / Ankara</p>
+        </div>
+        <div>
+          <h3>Telefon</h3>
+          <a href="tel:+903122854585">0312 285 45 85</a>
+        </div>
+        <div>
+          <h3>E-posta</h3>
+          <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a>
+        </div>
+        <div>
+          <h3>Kurum</h3>
+          <p>Global HD İnşaat A.Ş.<br>Ankara merkezli mühendislik ve taahhüt</p>
+        </div>
+      </div>
+
+      <p class="colo__fine">
+        <span>© 2026 Global HD İnşaat A.Ş.</span>
+        <span>Bu sayfa bir iç sunum çalışmasıdır ve arama motorlarına kapalıdır.</span>
+      </p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>
+ScrollCraft.mount(document.body);
+
+/* ------------------------------------------------------------------
+   Bespoke 1 · the frame sequence.
+   The kit's scrub device drives a <video>; we have stills, which is the
+   right call for iOS, where a scroll-driven clip freezes. The crossfade
+   itself is CSS off the act's own --sc-p (see .seq-stage__frames), so it
+   has no timing of its own and cannot be photographed mid-swap. All this
+   script does is fetch the frames after the first one has painted.
+   ------------------------------------------------------------------ */
+(function () {
+  const box = document.getElementById('seqFrames');
+  const act = document.getElementById('dizi');
+  if (!box || !act) return;
+  const imgs = [...box.querySelectorAll('img')];
+  let i = 1;
+  (function next() {
+    if (i >= imgs.length) return;
+    const img = imgs[i++];
+    img.onload = img.onerror = next;
+    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+    img.src = img.dataset.src;
+  })();
+
+  /* The stage's visual state lives in CSS, which the verification harness
+     cannot read. Publish it so dead-scroll detection sees the sequence
+     advancing instead of skipping the whole chapter, and declare the closing
+     hold so the authored silence is not reported as a defect. */
+  const stage = act.querySelector('.seq-stage');
+  const N = imgs.length;
+  let raf = 0;
+  function publish() {
+    raf = 0;
+    const p = parseFloat(getComputedStyle(act).getPropertyValue('--sc-p')) || 0;
+    const t = Math.min(1, p / 0.88) * (N - 1);
+    stage.setAttribute('data-sc-verify-state', 'kare:' + t.toFixed(2));
+    stage.setAttribute('data-sc-verify-hold', p > 0.88 ? 'true' : 'false');
+  }
+  addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(publish); }, { passive: true });
+  addEventListener('resize', publish);
+  publish();
+})();
+
+/* ------------------------------------------------------------------
+   Bespoke 2 · the signature move: "künye çizimi".
+   The mark is uncovered from the ground up, one part per chapter, so the
+   company's mark completes exactly as the argument does. The real artwork
+   is clipped, never redrawn, so it is never approximated.
+   Swap this for a stroke-draw the day the vector logo arrives.
+   ------------------------------------------------------------------ */
+(function () {
+  const fill = document.getElementById('markFill');
+  const no   = document.getElementById('folioNo');
+  const name = document.getElementById('folioName');
+  const chapters = [...document.querySelectorAll('.ch')];
+  if (!fill || !chapters.length) return;
+
+  let target = 0.16, shown = 0.16, raf = 0;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      target = parseFloat(el.dataset.mark) || 0;
+      if (no)   no.textContent   = el.dataset.ch || '—';
+      if (name) name.textContent = el.dataset.chName || '';
+      const folio = document.querySelector('.folio');
+      if (folio) folio.classList.toggle('is-dark', el.classList.contains('ch--desk'));
+    });
+  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+  chapters.forEach((c) => io.observe(c));
+
+  function tick() {
+    shown += (target - shown) * 0.12;
+    fill.style.setProperty('--mark-p', shown.toFixed(4));
+    raf = Math.abs(target - shown) > 0.001 ? requestAnimationFrame(tick) : 0;
+  }
+  const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  addEventListener('scroll', kick, { passive: true });
+  kick();
+})();
+
+/* ------------------------------------------------------------------
+   Bespoke 3 · element progress.
+   The pinned act gets --sc-p from the engine. Flow sections get nothing,
+   which is why every chapter outside the sequence sat still. This writes
+   --ep (0 to 1) for an element's own travel through the viewport, so the
+   dimension lines, the chapter wipes and the media parallax are all
+   driven by scroll rather than by a one-shot entrance.
+   data-ep-range="a b": ep is 0 when the element's top sits at a * vh and
+   1 when it reaches b * vh.
+   ------------------------------------------------------------------ */
+(function () {
+  const els = [...document.querySelectorAll('[data-ep]')];
+  if (!els.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const items = els.map((el) => {
+    const [a, b] = (el.dataset.epRange || '0.9 0.5').split(/\s+/).map(Number);
+    return { el, a, b };
+  });
+
+  if (reduced) {
+    items.forEach(({ el }) => el.style.setProperty('--ep', '1'));
+    return;
+  }
+
+  let raf = 0;
+  function paint() {
+    raf = 0;
+    const vh = innerHeight;
+    for (const it of items) {
+      const top = it.el.getBoundingClientRect().top / vh;
+      let p = (it.a - top) / (it.a - it.b);
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      it.el.style.setProperty('--ep', p.toFixed(4));
+    }
+  }
+  const kick = () => { if (!raf) raf = requestAnimationFrame(paint); };
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', kick);
+  document.fonts && document.fonts.ready.then(kick);
+  paint();
+})();
+</script>
+</body>
+</html>
