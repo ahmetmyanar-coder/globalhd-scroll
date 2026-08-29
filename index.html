@@ -446,6 +446,9 @@ p { text-wrap: pretty; }
 
 .kurum { margin-top: clamp(3rem, 7vh, 5rem); border-top: 1px solid var(--rule); padding-top: var(--sc-6); }
 .kurum__list { display: flex; flex-wrap: wrap; gap: var(--sc-6) var(--sc-8); align-items: center; margin-top: var(--sc-5); }
+.kurum__list a { display: inline-flex; border-bottom: 1px solid transparent; padding-bottom: 4px; }
+.kurum__list a:hover { border-color: var(--sc-accent); }
+.kurum__list a:hover img { opacity: 1; }
 .kurum__list img { height: 34px; width: auto; opacity: 0.72; filter: grayscale(1) contrast(0.9); }
 .ch--desk .kurum__list img { filter: grayscale(1) invert(1) contrast(0.85); opacity: 0.62; }
 
@@ -644,6 +647,41 @@ p { text-wrap: pretty; }
 .rec__lead .rec__label > div { font-size: 0.9rem; }
 .rec__lead .dim { margin-top: var(--sc-5); }
 @media (prefers-reduced-motion: reduce) { .rec__lead img { transform: none; } }
+
+/* The "in use" beat. A contractor's real proof is not the handover photo,
+   it is the room working: benches, shelves, seats. It lives inside the
+   record rather than as its own chapter, so the page's spine is unchanged. */
+.rec__lead--use .use-grid {
+  display: grid; gap: var(--sc-3);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "a a b" "a a c" "d d d";
+  margin-bottom: var(--sc-6);
+}
+.rec__lead--use .use-grid figure:nth-child(1) { grid-area: a; }
+.rec__lead--use .use-grid figure:nth-child(2) { grid-area: b; }
+.rec__lead--use .use-grid figure:nth-child(3) { grid-area: c; }
+.rec__lead--use .use-grid figure:nth-child(4) { grid-area: d; }
+.rec__lead--use .use-grid figure { margin: 0; overflow: hidden; position: relative; }
+.rec__lead--use .use-grid img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  border: 1px solid var(--rule); aspect-ratio: 3/2;
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -22px), 0) scale(1.06);
+}
+.rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 1/1; }
+.rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 32/9; }
+.rec__lead--use .use-grid figcaption {
+  position: absolute; left: 0; bottom: 0;
+  padding: 0.3rem 0.55rem;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  font-family: var(--sc-font-mono); font-size: 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc-ink);
+}
+@media (max-width: 700px) {
+  .rec__lead--use .use-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "a a" "b c" "d d"; }
+  .rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 3/2; }
+  .rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 2/1; }
+}
+@media (prefers-reduced-motion: reduce) { .rec__lead--use .use-grid img { transform: none; } }
 
 /* A twelve-entry record is inherently long on a narrow screen. Tighten the
    rhythm there rather than cutting entries: the record is the argument. */
@@ -858,10 +896,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
         <article class="rec__lead" id="kayit-01" data-ep data-ep-range="1.05 -0.05">
           <figure>
-            <img src="assets/proje/merkezi-derslik-projesi-detail.webp"
-                 srcset="assets/proje/merkezi-derslik-projesi-card.webp 800w, assets/proje/merkezi-derslik-projesi-detail.webp 1200w"
+            <img src="assets/saha-web/merkezi-derslik-04.jpg"
+                 srcset="assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w"
                  sizes="(max-width: 860px) 92vw, 74vw"
-                 width="1200" height="800" loading="lazy"
+                 width="1600" height="1067" loading="lazy"
                  alt="Merkezi derslik projesi şantiyesi, havadan görünüm.">
           </figure>
           <div class="rec__lead-body">
@@ -930,7 +968,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 1.000"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/peyzaj-projeleri-card.webp" srcset="assets/proje/peyzaj-projeleri-card-480.webp 480w, assets/proje/peyzaj-projeleri-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi." loading="lazy">
+            <img src="assets/saha-web/peyzaj-01.jpg" srcset="assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi." loading="lazy">
           </figure>
         </article>
 
@@ -948,7 +986,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.565"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/otel-ve-peyzaj-alani-card.webp" srcset="assets/proje/otel-ve-peyzaj-alani-card-480.webp 480w, assets/proje/otel-ve-peyzaj-alani-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Yamaç üzerinde otel binası ve çevre peyzajı, havadan görünüm." loading="lazy">
+            <img src="assets/saha-web/otel-01.jpg" srcset="assets/saha-web/otel-01-800.jpg 800w, assets/saha-web/otel-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Yamaç üzerinde otel binası ve çevre peyzajı, havadan görünüm." loading="lazy">
           </figure>
         </article>
 
@@ -983,7 +1021,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.323"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/belediye-hizmet-binasi-card.webp" srcset="assets/proje/belediye-hizmet-binasi-card-480.webp 480w, assets/proje/belediye-hizmet-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Beypazarı Belediyesi hizmet binası, havadan görünüm." loading="lazy">
+            <img src="assets/saha-web/belediye-01.jpg" srcset="assets/saha-web/belediye-01-800.jpg 800w, assets/saha-web/belediye-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Beypazarı Belediyesi hizmet binası, havadan görünüm." loading="lazy">
           </figure>
         </article>
 
@@ -1002,7 +1040,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.322"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/kuran-kursu-binasi-card.webp" srcset="assets/proje/kuran-kursu-binasi-card-480.webp 480w, assets/proje/kuran-kursu-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Kuran kursu binası cephesi." loading="lazy">
+            <img src="assets/saha-web/kuran-01.jpg" srcset="assets/saha-web/kuran-01-800.jpg 800w, assets/saha-web/kuran-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Kuran kursu binası cephesi." loading="lazy">
           </figure>
         </article>
 
@@ -1020,7 +1058,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.271"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/konak-restorasyonu-card.webp" srcset="assets/proje/konak-restorasyonu-card-480.webp 480w, assets/proje/konak-restorasyonu-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Restore edilmiş tarihi konaklar, havadan görünüm." loading="lazy">
+            <img src="assets/saha-web/konak-06.jpg" srcset="assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Restore edilmiş tarihi konaklar, havadan görünüm." loading="lazy">
           </figure>
         </article>
 
@@ -1038,7 +1076,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.185"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/mezbahane-ve-hayvan-pazari-card.webp" srcset="assets/proje/mezbahane-ve-hayvan-pazari-card-480.webp 480w, assets/proje/mezbahane-ve-hayvan-pazari-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Mezbahane ve hayvan pazarı tesisi, havadan görünüm." loading="lazy">
+            <img src="assets/saha-web/mezbahane-01.jpg" srcset="assets/saha-web/mezbahane-01-800.jpg 800w, assets/saha-web/mezbahane-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Mezbahane ve hayvan pazarı tesisi, havadan görünüm." loading="lazy">
           </figure>
         </article>
 
@@ -1057,11 +1095,11 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="dim" style="--w: 0.039"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/olimpik-yuzme-havuzu-card.webp" srcset="assets/proje/olimpik-yuzme-havuzu-card-480.webp 480w, assets/proje/olimpik-yuzme-havuzu-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Çok kulvarlı kapalı yüzme havuzu." loading="lazy">
+            <img src="assets/saha-web/havuz-01.jpg" srcset="assets/saha-web/havuz-01-800.jpg 800w, assets/saha-web/havuz-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Çok kulvarlı kapalı yüzme havuzu." loading="lazy">
           </figure>
         </article>
 
-        <article id="kayit-11" class="rec__row rec__row--wide" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-11" class="rec__row" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">11</span>
           <div>
             <h3 class="rec__t">Meslek Yüksekokulu Projesi</h3>
@@ -1075,14 +1113,26 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </div>
         </article>
 
-        <article id="kayit-12" class="rec__row rec__row--wide" data-ep data-ep-range="0.92 0.6">
-          <span class="rec__no">12</span>
-          <div>
-            <h3 class="rec__t">Laboratuvar, Kütüphane, Sinema ve Konferans Salonları</h3>
-            <p class="rec__d">Eğitim ve kültür yapıları bünyesinde laboratuvar, kütüphane, sinema ve
-              konferans salonu imalatları.</p>
-            <div class="rec__label">
-              <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+        <article id="kayit-12" class="rec__lead rec__lead--use" data-ep data-ep-range="1.05 -0.05">
+          <div class="use-grid">
+            <figure><img src="assets/saha-web/laboratuvar-01.jpg" srcset="assets/saha-web/laboratuvar-01-800.jpg 800w, assets/saha-web/laboratuvar-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="Tezgâhları ve cihazlarıyla donatılmış laboratuvar."><figcaption>Laboratuvar</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-05.jpg" srcset="assets/saha-web/laboratuvar-05-800.jpg 800w, assets/saha-web/laboratuvar-05.jpg 1600w" sizes="(max-width: 860px) 92vw, 24vw" width="1600" height="1067" loading="lazy" alt="Raflarıyla birlikte tamamlanmış kütüphane."><figcaption>Kütüphane</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-08.jpg" srcset="assets/saha-web/laboratuvar-08-800.jpg 800w, assets/saha-web/laboratuvar-08.jpg 1600w" sizes="(max-width: 860px) 92vw, 24vw" width="1600" height="1067" loading="lazy" alt="Koltukları döşenmiş konferans ve sinema salonu."><figcaption>Konferans salonu</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-03.jpg" srcset="assets/saha-web/laboratuvar-03-800.jpg 800w, assets/saha-web/laboratuvar-03.jpg 1600w" sizes="(max-width: 860px) 92vw, 24vw" width="1600" height="1067" loading="lazy" alt="Donanımı tamamlanmış derslik."><figcaption>Derslik</figcaption></figure>
+          </div>
+          <div class="rec__lead-body">
+            <div>
+              <span class="rec__no">12</span>
+              <h3 class="rec__t">Laboratuvar, Kütüphane, Sinema ve Konferans Salonları</h3>
+              <p class="rec__d">Eğitim ve kültür yapıları bünyesinde laboratuvar, kütüphane, sinema ve
+                konferans salonu imalatları. Kaba yapı teslim edildikten sonra biten iş değil, başlayan
+                kullanımdır: bu mekânların hepsi donanımıyla birlikte teslim edildi.</p>
+            </div>
+            <div>
+              <div class="rec__label">
+                <div><span class="k">Kapsam</span><span class="v">İç mekân imalatları</span></div>
+                <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
+              </div>
             </div>
           </div>
         </article>
@@ -1126,10 +1176,14 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div class="kurum">
         <p class="eyebrow">İşveren kurumlar</p>
         <div class="kurum__list" data-ep data-ep-range="0.92 0.55">
-          <img style="--i: 0" src="assets/kurum/ref-msb-logo.png" alt="T.C. Millî Savunma Bakanlığı" loading="lazy">
-          <img style="--i: 1" src="assets/kurum/ref-yok.png" alt="Yükseköğretim Kurulu" loading="lazy">
-          <img style="--i: 2" src="assets/kurum/ref-diyanetis.png" alt="Diyanet İşleri Başkanlığı" loading="lazy">
-          <img style="--i: 3" src="assets/kurum/ref-hitit-universitesi.png" alt="Hitit Üniversitesi" loading="lazy">
+          <a href="#kayit-02" title="Karargâh ve Yemekhane Binası kaydına git">
+            <img style="--i: 0" src="assets/kurum/ref-msb-logo.png" alt="T.C. Millî Savunma Bakanlığı" loading="lazy"></a>
+          <a href="#kayit-01" title="Merkezi Derslik Projesi kaydına git">
+            <img style="--i: 1" src="assets/kurum/ref-yok.png" alt="Yükseköğretim Kurulu" loading="lazy"></a>
+          <a href="#kayit-07" title="Kuran Kursu Binası kaydına git">
+            <img style="--i: 2" src="assets/kurum/ref-diyanetis.png" alt="Diyanet İşleri Başkanlığı" loading="lazy"></a>
+          <a href="#kayit-03" title="Peyzaj Projeleri kaydına git">
+            <img style="--i: 3" src="assets/kurum/ref-hitit-universitesi.png" alt="Hitit Üniversitesi" loading="lazy"></a>
         </div>
       </div>
 
@@ -1193,9 +1247,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           restorasyon ve rehabilitasyon</p>
         <div class="dim" style="--w: 0.136"><i></i></div>
         <figure class="sorumluluk__fig">
-          <img src="assets/proje/konak-restorasyonu-card.webp"
-               srcset="assets/proje/konak-restorasyonu-card-480.webp 480w, assets/proje/konak-restorasyonu-card.webp 800w"
-               sizes="(max-width: 860px) 92vw, 46vw"
+          <img src="assets/saha-web/konak-06.jpg" srcset="assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
                width="800" height="513" loading="lazy"
                alt="Restore edilmiş tescilli konaklar, havadan görünüm.">
           <figcaption>Konak Restorasyonu · Kültür Varlıkları ve Müzeler Genel Müdürlüğü</figcaption>
@@ -1213,9 +1265,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="sorumluluk__kirilim">Hitit Üniversitesi 32.500 m²<span class="est">*</span> ·
           park ve bahçe 14.500 m² · otel peyzaj alanı 17.500 m²</p>
         <figure class="sorumluluk__fig">
-          <img src="assets/proje/peyzaj-projeleri-card.webp"
-               srcset="assets/proje/peyzaj-projeleri-card-480.webp 480w, assets/proje/peyzaj-projeleri-card.webp 800w"
-               sizes="(max-width: 860px) 92vw, 46vw"
+          <img src="assets/saha-web/peyzaj-01.jpg" srcset="assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
                width="800" height="513" loading="lazy"
                alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi.">
           <figcaption>Peyzaj Projeleri · Hitit Üniversitesi</figcaption>
@@ -1281,6 +1331,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <p class="colo__fine">
         <span>© 2026 Global HD İnşaat A.Ş.</span>
         <span>Bu sayfa bir iç sunum çalışmasıdır ve arama motorlarına kapalıdır.</span>
+        <span>Proje fotoğrafları <a href="https://www.globalhdinsaat.com/" rel="noopener">globalhdinsaat.com</a> proje sayfalarından alınmıştır.</span>
       </p>
     </div>
   </footer>
