@@ -7,9 +7,10 @@
 <meta name="description" content="Ankara merkezli mühendislik ve taahhüt firması. Kamu kurumları ve özel sektör için üstyapı, altyapı, restorasyon ve çevre düzenleme projeleri.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A160F'/><path d='M10 24V9l7 4v11' fill='none' stroke='%23E8E0D2' stroke-width='2'/></svg>">
+<script>document.documentElement.className += " js";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Global HD İnşaat A.Ş.">
 <meta property="og:title" content="Global HD İnşaat · Güçlü yapılar, güvenilir mühendislik">
@@ -319,10 +320,11 @@ p { text-wrap: pretty; }
 }
 
 /* ---------- chapter 02: the plate ---------- */
-.plate-ch { padding-block: clamp(4rem, 10vh, 7rem) clamp(5rem, 12vh, 9rem); }
+.plate-ch { padding-block: clamp(6rem, 16vh, 11rem) clamp(7rem, 18vh, 12rem); }
+.plate-ch .ch-open__no { margin-bottom: var(--sc-7); }
 .plate {
-  display: grid; gap: var(--sc-6);
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  display: grid; gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   align-items: end;
 }
 @media (max-width: 900px) { .plate { grid-template-columns: 1fr; } }
@@ -338,8 +340,9 @@ p { text-wrap: pretty; }
   font-size: 0.74rem; letter-spacing: 0.06em;
   color: var(--sc-ink-soft);
 }
-.plate__say { font-size: clamp(1.3rem, 1rem + 1.3vw, 2.1rem); line-height: 1.16; }
-.plate__meta { margin-top: var(--sc-5); display: grid; gap: var(--sc-3); }
+.plate__say { font-size: clamp(1.55rem, 1.1rem + 2vw, 2.9rem); line-height: 1.1; }
+.plate__say--turn { color: var(--sc-accent); }
+.plate__meta { margin-top: var(--sc-6); display: grid; gap: var(--sc-3); }
 .plate__meta div { display: flex; gap: var(--sc-4); border-top: 1px solid var(--rule); padding-top: var(--sc-3); }
 .plate__meta dt, .plate__meta .k {
   font-family: var(--sc-font-display); font-size: 0.68rem;
@@ -586,6 +589,14 @@ p { text-wrap: pretty; }
 }
 .standard__body { margin-top: var(--sc-4); color: var(--sc-ink-soft); }
 
+/* The engine hides every [data-sc-in] element with opacity:0 and reveals it
+   from script. With JavaScript unavailable that leaves the h1, the lede, the
+   peak's copy and the closing heading permanently invisible: ten elements,
+   most of the page's argument. Only hide them when script is actually
+   running. The head sets .js synchronously, so nothing flashes. */
+html:not(.js) [data-sc-in],
+html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !important; }
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -696,7 +707,7 @@ p { text-wrap: pretty; }
           <figcaption>Karargâh ve Yemekhane Binası, K.K.T.C. Şantiye, havadan.</figcaption>
         </figure>
         <div class="sc-stack" data-sc-in data-sc-stagger="70">
-          <h2 class="plate__say">Yukarıdaki çizimdi. Bu, gerçekten yaptığımız iş.</h2>
+          <h2 class="plate__say">Yukarısı çizimdi.<br><span class="plate__say--turn">Buradan sonrası kayıt.</span></h2>
           <div class="plate__meta">
             <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
             <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
@@ -1093,14 +1104,33 @@ ScrollCraft.mount(document.body);
   const act = document.getElementById('dizi');
   if (!box || !act) return;
   const imgs = [...box.querySelectorAll('img')];
-  let i = 1;
-  (function next() {
-    if (i >= imgs.length) return;
-    const img = imgs[i++];
-    img.onload = img.onerror = next;
-    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-    img.src = img.dataset.src;
-  })();
+
+  /* Six of the seven frames are 2.4MB together. Fetching them on load costs
+     a phone that much data before the title page has even been read, and the
+     sequence is a full viewport away. Start the chain when the reader is
+     within roughly a screen and a half of it, which still lands every frame
+     long before it is needed. */
+  let started = false;
+  function preload() {
+    if (started) return;
+    started = true;
+    let i = 1;
+    (function next() {
+      if (i >= imgs.length) return;
+      const img = imgs[i++];
+      img.onload = img.onerror = next;
+      if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+      img.src = img.dataset.src;
+    })();
+  }
+  function maybe() {
+    if (act.getBoundingClientRect().top < innerHeight * 1.5) {
+      preload();
+      removeEventListener('scroll', maybe);
+    }
+  }
+  addEventListener('scroll', maybe, { passive: true });
+  maybe();
 
   /* The stage's visual state lives in CSS, which the verification harness
      cannot read. Publish it so dead-scroll detection sees the sequence
