@@ -480,6 +480,19 @@ p { text-wrap: pretty; }
   .rec__row > div, .rec__no, .kurum__list img { opacity: 1; transform: none; }
 }
 
+/* On a phone a 16:9 frame under object-fit: cover keeps only the middle
+   ~44% of the width, which cuts the hand off one side and the paper's edge
+   off the other: the composition the whole sequence depends on. Letterbox
+   it instead and give the caption the dark band underneath. It reads as a
+   plate on a page, which is what this grammar wants anyway. */
+@media (max-width: 700px) {
+  .seq-stage__frames img { object-fit: contain; object-position: center 26%; }
+  /* Sit the caption directly under the plate instead of at the foot of the
+     stage, or the phone shows 340px of empty ground between them. */
+  .seq-cap { top: 46%; bottom: auto; padding-bottom: var(--sc-5); }
+  .seq-cap__line { font-size: clamp(1.25rem, 1rem + 2.2vw, 1.8rem); }
+}
+
 /* A twelve-entry record is inherently long on a narrow screen. Tighten the
    rhythm there rather than cutting entries: the record is the argument. */
 @media (max-width: 700px) {
