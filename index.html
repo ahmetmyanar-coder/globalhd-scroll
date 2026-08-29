@@ -390,6 +390,29 @@ p { text-wrap: pretty; }
 .work p { margin-top: var(--sc-3); color: var(--sc-ink-soft); font-size: 0.95rem; }
 
 /* ---------- colophon ---------- */
+/* The close lands on the same desk the page opened on, work finished and the
+   sheet put away. Media still sits in its own plate with a caption: this
+   grammar never lays type across a photograph. */
+.colo__plate {
+  display: grid; gap: var(--sc-7);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+}
+@media (max-width: 900px) { .colo__plate { grid-template-columns: 1fr; } }
+.colo__plate figure { margin: 0; overflow: hidden; }
+.colo__plate img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule);
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -22px), 0) scale(1.05);
+}
+.colo__plate figcaption {
+  margin-top: var(--sc-3);
+  font-family: var(--sc-font-display); font-size: 0.64rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft);
+}
+.colo__head .colo__say { margin-top: 0; }
+@media (prefers-reduced-motion: reduce) { .colo__plate img { transform: none; } }
+
 .colo { padding-block: clamp(5rem, 12vh, 9rem) clamp(3rem, 6vh, 4rem); }
 .colo__say { font-size: clamp(1.6rem, 1.1rem + 2.2vw, 3rem); max-width: 18ch; }
 .colo__body { margin-top: var(--sc-6); max-width: 54ch; color: var(--sc-ink-soft); }
@@ -984,13 +1007,25 @@ p { text-wrap: pretty; }
   </div>
 
   <!-- ================= KOLOFON ============================================= -->
-  <footer class="ch colo" id="iletisim" data-ch="—" data-ch-name="Künye" data-mark="1">
+  <footer class="ch ch--desk colo" id="iletisim" data-ch="—" data-ch-name="Künye" data-mark="1">
     <div class="wrap">
-      <h2 class="colo__say sc-stack" data-sc-in>Proje görüşmesi için bize ulaşın.</h2>
-      <p class="colo__body sc-stack" data-sc-in>Dijital iletişim formumuz hazırlanmaktadır. Bu süreçte
-        <a href="tel:+903122854585">0312 285 45 85</a> numarasından veya
-        <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a> adresinden bize
-        doğrudan ulaşabilirsiniz.</p>
+      <div class="colo__plate">
+        <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.5">
+          <img src="assets/seq-web/08-F.jpg"
+               srcset="assets/seq-web/08-F-m.jpg 900w, assets/seq-web/08-F.jpg 1600w"
+               sizes="(max-width: 900px) 92vw, 52vw"
+               width="1600" height="900" loading="lazy"
+               alt="Aynı mimar masası, iş bitmiş: çizim rulo yapılıp kaldırılmış, kalem cetvelin yanında duruyor.">
+          <figcaption>Kavramsal görsel anlatım. Belirli bir projeyi belgelemez.</figcaption>
+        </figure>
+        <div class="colo__head">
+          <h2 class="colo__say sc-stack" data-sc-in>Proje görüşmesi için bize ulaşın.</h2>
+          <p class="colo__body sc-stack" data-sc-in>Dijital iletişim formumuz hazırlanmaktadır. Bu süreçte
+            <a href="tel:+903122854585">0312 285 45 85</a> numarasından veya
+            <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a> adresinden bize
+            doğrudan ulaşabilirsiniz.</p>
+        </div>
+      </div>
 
       <div class="colo__grid">
         <div>
@@ -1079,27 +1114,35 @@ ScrollCraft.mount(document.body);
   const chapters = [...document.querySelectorAll('.ch')];
   if (!fill || !chapters.length) return;
 
-  let target = 0.16, shown = 0.16, raf = 0;
+  let target = 0.16, shown = 0.16, raf = 0, current = null;
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      target = parseFloat(el.dataset.mark) || 0;
-      if (no)   no.textContent   = el.dataset.ch || '—';
-      if (name) name.textContent = el.dataset.chName || '';
-      document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
-    });
-  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-  chapters.forEach((c) => io.observe(c));
-
-  function tick() {
-    shown += (target - shown) * 0.12;
-    fill.style.setProperty('--mark-p', shown.toFixed(4));
-    raf = Math.abs(target - shown) > 0.001 ? requestAnimationFrame(tick) : 0;
+  /* Which chapter owns the middle of the viewport. Computed rather than
+     observed: an IntersectionObserver never fires for a reader who lands
+     straight on #iletisim from a link, and the folio then reads "Başlık"
+     on the closing screen. */
+  function owner() {
+    const mid = innerHeight / 2;
+    let best = chapters[0];
+    for (const el of chapters) {
+      const r = el.getBoundingClientRect();
+      if (r.top <= mid && r.bottom >= mid) best = el;
+    }
+    return best;
   }
-  const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+  function sync() {
+    const el = owner();
+    if (el === current) return;
+    current = el;
+    target = parseFloat(el.dataset.mark) || 0;
+    if (no)   no.textContent   = el.dataset.ch || '—';
+    if (name) name.textContent = el.dataset.chName || '';
+    document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
+  }
+
+  const kick = () => { sync(); if (!raf) raf = requestAnimationFrame(tick); };
   addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', kick);
   kick();
 })();
 
