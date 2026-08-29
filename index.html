@@ -535,13 +535,13 @@ p { text-wrap: pretty; }
 .title-rule {
   margin-top: var(--sc-6);
   height: 1px; background: var(--sc-ink);
-  transform: scaleX(var(--ep, 1)); transform-origin: left center;
+  transform: scaleX(var(--epL, 1)); transform-origin: left center;
   opacity: 0.55;
 }
 
 /* Chapter boundaries wipe. The grammar asks for a cut here, not a fade. */
 .ch-open__no, .ch-open__t, .ch-open__d {
-  clip-path: inset(0 calc(100% - var(--ep, 1) * 100%) 0 0);
+  clip-path: inset(0 calc(100% - var(--epL, 1) * 100%) 0 0);
 }
 .ch-open__t { transition: none; }
 
@@ -557,7 +557,7 @@ p { text-wrap: pretty; }
 .dim i {
   position: absolute; left: 0; top: 4px; height: 1px; right: 0;
   background: var(--sc-accent);
-  transform: scaleX(calc(var(--w, 0) * var(--ep, 1)));
+  transform: scaleX(calc(var(--w, 0) * var(--epL, 1)));
   transform-origin: left center;
 }
 .dim i::after {
@@ -582,14 +582,14 @@ p { text-wrap: pretty; }
 
 /* Record rows arrive as the reader reaches them. */
 .rec__row > div, .rec__no {
-  opacity: clamp(0.25, calc(var(--ep, 1) * 2.4), 1);
-  transform: translateY(calc((1 - clamp(0, calc(var(--ep, 1) * 1.8), 1)) * 14px));
+  opacity: clamp(0.25, calc(var(--epL, 1) * 2.4), 1);
+  transform: translateY(calc((1 - clamp(0, calc(var(--epL, 1) * 1.8), 1)) * 14px));
 }
 
 /* Institution marks settle one after another. */
 .kurum__list img {
-  opacity: calc(0.72 * clamp(0, calc((var(--ep, 1) - var(--i, 0) * 0.06) * 3), 1));
-  transform: translateY(calc((1 - clamp(0, calc(var(--ep, 1) * 2), 1)) * 10px));
+  opacity: calc(0.72 * clamp(0, calc((var(--epL, 1) - var(--i, 0) * 0.06) * 3), 1));
+  transform: translateY(calc((1 - clamp(0, calc(var(--epL, 1) * 2), 1)) * 10px));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -727,7 +727,7 @@ p { text-wrap: pretty; }
   font-family: var(--sc-font-display); font-weight: 500;
   font-size: clamp(1.2rem, 1rem + 1.1vw, 1.9rem); line-height: 1.2;
   letter-spacing: -0.012em;
-  clip-path: inset(0 calc(100% - var(--ep, 1) * 100%) 0 0);
+  clip-path: inset(0 calc(100% - var(--epL, 1) * 100%) 0 0);
 }
 .standard__body { margin-top: var(--sc-4); color: var(--sc-ink-soft); }
 
@@ -1341,6 +1341,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 <script src="scrollcraft.js"></script>
 <script>
 ScrollCraft.mount(document.body);
+</script>
+<script>
 
 /* ------------------------------------------------------------------
    Bespoke 1 · the frame sequence.
@@ -1402,6 +1404,8 @@ ScrollCraft.mount(document.body);
   publish();
 })();
 
+</script>
+<script>
 /* ------------------------------------------------------------------
    Bespoke 2 · the signature move: "künye çizimi".
    The mark is uncovered from the ground up, one part per chapter, so the
@@ -1442,12 +1446,24 @@ ScrollCraft.mount(document.body);
     document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
   }
 
+  /* Walks the mark's fill toward the chapter's target so it eases rather
+     than snapping at each boundary. This was lost in an earlier rewrite and
+     the resulting ReferenceError aborted the whole script block, which took
+     the element-progress helper below down with it. */
+  function tick() {
+    shown += (target - shown) * 0.12;
+    fill.style.setProperty('--mark-p', shown.toFixed(4));
+    raf = Math.abs(target - shown) > 0.001 ? requestAnimationFrame(tick) : 0;
+  }
+
   const kick = () => { sync(); if (!raf) raf = requestAnimationFrame(tick); };
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick);
   kick();
 })();
 
+</script>
+<script>
 /* ------------------------------------------------------------------
    Bespoke 3 · element progress.
    The pinned act gets --sc-p from the engine. Flow sections get nothing,
@@ -1465,11 +1481,11 @@ ScrollCraft.mount(document.body);
 
   const items = els.map((el) => {
     const [a, b] = (el.dataset.epRange || '0.9 0.5').split(/\s+/).map(Number);
-    return { el, a, b };
+    return { el, a, b, max: 0 };
   });
 
   if (reduced) {
-    items.forEach(({ el }) => el.style.setProperty('--ep', '1'));
+    items.forEach(({ el }) => { el.style.setProperty('--ep', '1'); el.style.setProperty('--epL', '1'); });
     return;
   }
 
@@ -1482,6 +1498,15 @@ ScrollCraft.mount(document.body);
       let p = (it.a - top) / (it.a - it.b);
       p = p < 0 ? 0 : p > 1 ? 1 : p;
       it.el.style.setProperty('--ep', p.toFixed(4));
+      /* --epL latches: it only ever goes up. Reveals read this one, so
+         scrolling back up does not un-draw a dimension line or re-wipe a
+         chapter title. devices.md: content that re-hides on the way up is
+         a defect, not an effect. Parallax keeps reading the live --ep,
+         because a layer that stopped tracking position would stick. */
+      if (p > it.max) {
+        it.max = p;
+        it.el.style.setProperty('--epL', p.toFixed(4));
+      }
     }
   }
   const kick = () => { if (!raf) raf = requestAnimationFrame(paint); };
