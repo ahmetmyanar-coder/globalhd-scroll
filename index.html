@@ -10,6 +10,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Global HD İnşaat A.Ş.">
+<meta property="og:title" content="Global HD İnşaat · Güçlü yapılar, güvenilir mühendislik">
+<meta property="og:description" content="Ankara merkezli mühendislik ve taahhüt firması. On iki proje; Millî Savunma Bakanlığı, Yükseköğretim Kurulu, Diyanet İşleri Başkanlığı ve belediyeler için.">
+<meta property="og:url" content="https://ahmetmyanar-coder.github.io/globalhd-scroll/">
+<meta property="og:image" content="https://ahmetmyanar-coder.github.io/globalhd-scroll/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="scrollcraft.css">
 <style>
 /* ============================================================
@@ -114,7 +125,7 @@ p { text-wrap: pretty; }
   width: 100%; height: auto; display: block;
   /* The signature move: the real artwork is uncovered from the ground up,
      never redrawn, so the mark is never approximated. */
-  clip-path: inset(calc(100% - var(--mark-p, 0) * 100%) 0 0 0);
+  clip-path: inset(calc(100% - var(--mark-p, 1) * 100%) 0 0 0);
   transition: clip-path 260ms var(--sc-ease-out);
 }
 .folio__mark--ghost {
@@ -176,8 +187,11 @@ p { text-wrap: pretty; }
 
 /* skip link + the one nav we do keep: a jump list, keyboard reachable */
 .skip {
+  /* Fixed colours, not theme tokens: the engine's drift rewrites --sc-canvas
+     as the page travels, which made this link's text the same colour as its
+     own background at some scroll positions. */
   position: absolute; left: -9999px; top: 0;
-  background: var(--sc-ink); color: var(--sc-canvas);
+  background: #16130E; color: #F3ECDF;
   padding: var(--sc-3) var(--sc-4); z-index: 999;
   font-family: var(--sc-font-display);
 }
@@ -447,13 +461,13 @@ p { text-wrap: pretty; }
 .title-rule {
   margin-top: var(--sc-6);
   height: 1px; background: var(--sc-ink);
-  transform: scaleX(var(--ep, 0)); transform-origin: left center;
+  transform: scaleX(var(--ep, 1)); transform-origin: left center;
   opacity: 0.55;
 }
 
 /* Chapter boundaries wipe. The grammar asks for a cut here, not a fade. */
 .ch-open__no, .ch-open__t, .ch-open__d {
-  clip-path: inset(0 calc(100% - var(--ep, 0) * 100%) 0 0);
+  clip-path: inset(0 calc(100% - var(--ep, 1) * 100%) 0 0);
 }
 .ch-open__t { transition: none; }
 
@@ -469,7 +483,7 @@ p { text-wrap: pretty; }
 .dim i {
   position: absolute; left: 0; top: 4px; height: 1px; right: 0;
   background: var(--sc-accent);
-  transform: scaleX(calc(var(--w, 0) * var(--ep, 0)));
+  transform: scaleX(calc(var(--w, 0) * var(--ep, 1)));
   transform-origin: left center;
 }
 .dim i::after {
