@@ -409,6 +409,41 @@ p { text-wrap: pretty; }
 .meas__k { margin-top: var(--sc-3); font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft); }
 .foot-note { margin-top: var(--sc-6); font-size: 0.86rem; color: var(--sc-ink-soft); max-width: 62ch; }
 
+/* The total is the largest real number on the page. It was one of four equal
+   cells, which is where the chapter went flat. */
+.meas-total { margin-bottom: clamp(3rem, 8vh, 5rem); }
+.meas-total__n {
+  font-family: var(--sc-font-display); font-weight: 600;
+  font-size: clamp(3.4rem, 1.5rem + 9vw, 11rem);
+  line-height: 0.86; letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+.meas-total__u {
+  font-family: var(--sc-font-display); font-weight: 500;
+  font-size: clamp(1.2rem, 0.9rem + 1.4vw, 2.4rem);
+  color: var(--sc-ink-soft); margin-left: var(--sc-3);
+}
+.meas-total__k {
+  display: block; margin-top: var(--sc-4);
+  font-family: var(--sc-font-mono); font-size: 0.68rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-ink-soft);
+}
+.meas-total .dim { margin-top: var(--sc-5); }
+
+/* Each verified claim in the responsibility chapter carries the actual
+   project it is drawn from. The text was the whole chapter and it read flat. */
+.sorumluluk__fig { margin: var(--sc-6) 0 0 0; max-width: 34rem; }
+.sorumluluk__fig img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule); filter: saturate(0.94);
+}
+.sorumluluk__fig figcaption {
+  margin-top: var(--sc-3);
+  font-family: var(--sc-font-mono); font-size: 0.66rem;
+  letter-spacing: 0.06em; color: var(--sc-ink-soft);
+}
+
 .kurum { margin-top: clamp(3rem, 7vh, 5rem); border-top: 1px solid var(--rule); padding-top: var(--sc-6); }
 .kurum__list { display: flex; flex-wrap: wrap; gap: var(--sc-6) var(--sc-8); align-items: center; margin-top: var(--sc-5); }
 .kurum__list img { height: 34px; width: auto; opacity: 0.72; filter: grayscale(1) contrast(0.9); }
@@ -573,6 +608,42 @@ p { text-wrap: pretty; }
   .seq-cap { padding-left: var(--sc-6); }
   .seq-cap__line { font-size: clamp(1.25rem, 1rem + 2.2vw, 1.8rem); }
 }
+
+
+/* The record was twelve identical rows: one section shown twelve times, and
+   the quietest stretch of a page whose brief asked for its density here.
+   A monograph does not do that. The two ongoing works get a full spread,
+   the completed ten stay as compact register entries, and the chapter gets
+   an internal structure with a climax at its head. */
+.rec__group { margin-top: clamp(2.5rem, 6vh, 4rem); }
+.rec__group-h {
+  font-family: var(--sc-font-mono);
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sc-ink-soft);
+  border-bottom: 1px solid var(--rule); padding-bottom: var(--sc-3);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.rec__lead { padding-block: clamp(2.5rem, 6vh, 4.5rem); border-bottom: 1px solid var(--rule); }
+.rec__lead figure { margin: 0 0 var(--sc-6) 0; overflow: hidden; }
+.rec__lead img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule);
+  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -30px), 0) scale(1.06);
+}
+.rec__lead-body {
+  display: grid; gap: var(--sc-6) clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+}
+@media (max-width: 860px) { .rec__lead-body { grid-template-columns: 1fr; } }
+.rec__lead h3 {
+  font-size: clamp(1.7rem, 1.2rem + 2.4vw, 3.2rem);
+  line-height: 1.02;
+}
+.rec__lead .rec__d { margin-top: var(--sc-4); font-size: 1.06rem; max-width: 46ch; }
+.rec__lead .rec__label > div { font-size: 0.9rem; }
+.rec__lead .dim { margin-top: var(--sc-5); }
+@media (prefers-reduced-motion: reduce) { .rec__lead img { transform: none; } }
 
 /* A twelve-entry record is inherently long on a narrow screen. Tighten the
    rhythm there rather than cutting entries: the record is the argument. */
@@ -779,45 +850,72 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         </ol>
       </nav>
 
+      <div class="rec__group">
+        <p class="rec__group-h"><span>Devam eden işler</span><span>2</span></p>
+      </div>
+
       <div class="rec">
 
-        <article id="kayit-01" class="rec__row" data-ep data-ep-range="0.92 0.6">
-          <span class="rec__no">01</span>
-          <div>
-            <h3 class="rec__t">Merkezi Derslik Projesi</h3>
-            <p class="rec__d">Yükseköğretim Kurulu bünyesinde yürütülen, farklı bloklardan oluşan
-              derslik ve akademik kullanım alanlarını kapsayan bir eğitim kampüsü projesi.</p>
-            <div class="rec__label">
-              <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
-              <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
-              <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+        <article class="rec__lead" id="kayit-01" data-ep data-ep-range="1.05 -0.05">
+          <figure>
+            <img src="assets/proje/merkezi-derslik-projesi-detail.webp"
+                 srcset="assets/proje/merkezi-derslik-projesi-card.webp 800w, assets/proje/merkezi-derslik-projesi-detail.webp 1200w"
+                 sizes="(max-width: 860px) 92vw, 74vw"
+                 width="1200" height="800" loading="lazy"
+                 alt="Merkezi derslik projesi şantiyesi, havadan görünüm.">
+          </figure>
+          <div class="rec__lead-body">
+            <div>
+              <span class="rec__no">01</span>
+              <h3 class="rec__t">Merkezi Derslik Projesi</h3>
+              <p class="rec__d">Yükseköğretim Kurulu bünyesinde yürütülen, farklı bloklardan oluşan
+                derslik ve akademik kullanım alanlarını kapsayan bir eğitim kampüsü projesi.</p>
             </div>
+            <div>
+              <div class="rec__label">
+                <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
+                <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
+                <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+              </div>
               <div class="dim" style="--w: 0.800"><i></i></div>
-          </div>
-          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/merkezi-derslik-projesi-card.webp" srcset="assets/proje/merkezi-derslik-projesi-card-480.webp 480w, assets/proje/merkezi-derslik-projesi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Merkezi derslik projesi şantiyesi, havadan görünüm." loading="lazy">
-          </figure>
-        </article>
-
-        <article id="kayit-02" class="rec__row" data-ep data-ep-range="0.92 0.6">
-          <span class="rec__no">02</span>
-          <div>
-            <h3 class="rec__t">Karargâh ve Yemekhane Binası</h3>
-            <p class="rec__d">K.K.T.C.'de Millî Savunma Bakanlığı için yemekhane ve idari birimleri
-              kapsayan karargâh kompleksi projesi devam etmektedir.</p>
-            <div class="rec__label">
-              <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
-              <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
-              <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
-              <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
             </div>
-              <div class="dim" style="--w: 0.123"><i></i></div>
           </div>
-          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/proje/karargah-ve-yemekhane-binasi-card.webp" srcset="assets/proje/karargah-ve-yemekhane-binasi-card-480.webp 480w, assets/proje/karargah-ve-yemekhane-binasi-card.webp 800w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Karargâh ve yemekhane projesi şantiyesi, havadan görünüm." loading="lazy">
-          </figure>
         </article>
 
+        <article class="rec__lead" id="kayit-02" data-ep data-ep-range="1.05 -0.05">
+          <figure>
+            <img src="assets/proje/karargah-ve-yemekhane-binasi-detail.webp"
+                 srcset="assets/proje/karargah-ve-yemekhane-binasi-card.webp 800w, assets/proje/karargah-ve-yemekhane-binasi-detail.webp 1200w"
+                 sizes="(max-width: 860px) 92vw, 74vw"
+                 width="1200" height="800" loading="lazy"
+                 alt="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
+          </figure>
+          <div class="rec__lead-body">
+            <div>
+              <span class="rec__no">02</span>
+              <h3 class="rec__t">Karargâh ve Yemekhane Binası</h3>
+              <p class="rec__d">K.K.T.C.'de Millî Savunma Bakanlığı için yemekhane ve idari birimleri
+                kapsayan karargâh kompleksi projesi devam etmektedir.</p>
+            </div>
+            <div>
+              <div class="rec__label">
+                <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
+                <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
+                <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
+                <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
+              </div>
+              <div class="dim" style="--w: 0.123"><i></i></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="rec__group">
+        <p class="rec__group-h"><span>Tamamlanan işler</span><span>10</span></p>
+      </div>
+
+      <div class="rec">
         <article id="kayit-03" class="rec__row" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">03</span>
           <div>
@@ -1000,6 +1098,13 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <h2 class="ch-open__t">Rakamlarla.</h2>
     </div>
     <div class="wrap" style="padding-bottom: clamp(4rem, 10vh, 7rem)">
+      <div class="meas-total" data-ep data-ep-range="0.92 0.42">
+        <span class="meas-total__n" data-sc-count="0 138.390" data-sc-count-at="0.05 0.62">138.390</span>
+        <span class="meas-total__u">m²</span>
+        <div class="dim dim--total" style="--w: 1"><i></i></div>
+        <span class="meas-total__k">Toplam proje alanı</span>
+      </div>
+
       <div class="meas sc-stack" data-sc-in data-sc-stagger="80">
         <div>
           <span class="meas__n" data-sc-count="0 12" data-sc-count-at="0.05 0.5">12</span>
@@ -1013,12 +1118,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <span class="meas__n" data-sc-count="0 2" data-sc-count-at="0.05 0.5">2</span>
           <span class="meas__k">Devam eden</span>
         </div>
-        <div>
-          <span class="meas__n" data-sc-count="0 138.390" data-sc-count-at="0.05 0.62">138.390</span>
-          <span class="meas__k">Toplam proje alanı m²</span>
-        </div>
       </div>
-      <div class="dim dim--total" data-ep data-ep-range="0.9 0.4" style="--w: 1"><i></i></div>
       <p class="foot-note">* Proje portföyündeki yaklaşık uygulama alanlarının toplamıdır. Belediye
         Hizmet Binası, Konak Restorasyonu ve Peyzaj Projeleri kalemlerinin alan değerleri sunum
         tahminidir ve şirket onayıyla kesinleşecektir.</p>
@@ -1092,6 +1192,14 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="sorumluluk__olcu"><b>8.800 m²<span class="est">*</span></b> tescilli yapıda
           restorasyon ve rehabilitasyon</p>
         <div class="dim" style="--w: 0.136"><i></i></div>
+        <figure class="sorumluluk__fig">
+          <img src="assets/proje/konak-restorasyonu-card.webp"
+               srcset="assets/proje/konak-restorasyonu-card-480.webp 480w, assets/proje/konak-restorasyonu-card.webp 800w"
+               sizes="(max-width: 860px) 92vw, 46vw"
+               width="800" height="513" loading="lazy"
+               alt="Restore edilmiş tescilli konaklar, havadan görünüm.">
+          <figcaption>Konak Restorasyonu · Kültür Varlıkları ve Müzeler Genel Müdürlüğü</figcaption>
+        </figure>
       </section>
 
       <section class="sorumluluk__blok" data-ep data-ep-range="0.9 0.5">
@@ -1104,6 +1212,14 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <div class="dim" style="--w: 1"><i></i></div>
         <p class="sorumluluk__kirilim">Hitit Üniversitesi 32.500 m²<span class="est">*</span> ·
           park ve bahçe 14.500 m² · otel peyzaj alanı 17.500 m²</p>
+        <figure class="sorumluluk__fig">
+          <img src="assets/proje/peyzaj-projeleri-card.webp"
+               srcset="assets/proje/peyzaj-projeleri-card-480.webp 480w, assets/proje/peyzaj-projeleri-card.webp 800w"
+               sizes="(max-width: 860px) 92vw, 46vw"
+               width="800" height="513" loading="lazy"
+               alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi.">
+          <figcaption>Peyzaj Projeleri · Hitit Üniversitesi</figcaption>
+        </figure>
       </section>
 
       <section class="sorumluluk__beyan" data-ep data-ep-range="0.92 0.55">
