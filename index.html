@@ -419,6 +419,34 @@ p { text-wrap: pretty; }
 /* The close lands on the same desk the page opened on, work finished and the
    sheet put away. Media still sits in its own plate with a caption: this
    grammar never lays type across a photograph. */
+/* Bölüm 05 · sorumluluk. Ölçü çizgileri kayıttakiyle aynı ölçekte:
+   uzunluk, portföydeki en büyük peyzaj kalemine oranı. */
+.sorumluluk { padding-bottom: clamp(4rem, 10vh, 7rem); }
+.sorumluluk__blok, .sorumluluk__beyan {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--sc-5);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  max-width: 62ch;
+}
+.sorumluluk__blok h3, .sorumluluk__beyan h3 {
+  margin-top: var(--sc-3);
+  font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem);
+}
+.sorumluluk__blok p, .sorumluluk__beyan p { margin-top: var(--sc-4); color: var(--sc-ink-soft); }
+.sorumluluk__olcu {
+  margin-top: var(--sc-5) !important;
+  font-family: var(--sc-font-display); color: var(--sc-ink) !important;
+}
+.sorumluluk__olcu b {
+  font-weight: 600; font-size: clamp(1.2rem, 1rem + 0.9vw, 1.7rem);
+  font-variant-numeric: tabular-nums; margin-right: var(--sc-3);
+}
+.sorumluluk__kirilim {
+  margin-top: var(--sc-4) !important;
+  font-family: var(--sc-font-display); font-size: 0.8rem; letter-spacing: 0.02em;
+}
+.sorumluluk__beyan { border-top-width: 2px; border-top-color: var(--sc-ink); }
+
 .colo__plate {
   display: grid; gap: var(--sc-7);
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -1035,6 +1063,57 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </section>
         </div>
       </div>
+    </div>
+  </div>
+
+
+  <!-- ================= BÖLÜM 05 · SORUMLULUK ============================== -->
+  <div class="ch" id="bolum-5" data-ch="05" data-ch-name="Sorumluluk" data-mark="0.96">
+    <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
+      <span class="ch-open__no">Bölüm beş</span>
+      <h2 class="ch-open__t">En düşük etkili yapı, yeniden kullanılan yapıdır.</h2>
+      <p class="ch-open__d">İnşaatta çevresel etkiyi belirleyen en büyük karar, yeni yapı yapılıp
+        yapılmayacağıdır. Bir yapıyı yıkıp yerine yenisini koymak, o yapıya kadar harcanmış bütün
+        malzemeyi ve emeği de birlikte harcamaktır.</p>
+    </div>
+
+    <div class="wrap sorumluluk">
+      <section class="sorumluluk__blok" data-ep data-ep-range="0.9 0.5">
+        <p class="eyebrow">Yeniden kullanım</p>
+        <h3>Tescilli yapı yıkılmadı, ayakta tutuldu.</h3>
+        <p>Kültür Varlıkları ve Müzeler Genel Müdürlüğü için yürütülen konak restorasyonunda yapı
+          yapısal olarak güçlendirildi; taş ve ahşap dokusu onarıldı, cephesi rehabilite edildi,
+          teknik altyapısı yenilendi.</p>
+        <p class="sorumluluk__olcu"><b>8.800 m²<span class="est">*</span></b> tescilli yapıda
+          restorasyon ve rehabilitasyon</p>
+        <div class="dim" style="--w: 0.136"><i></i></div>
+      </section>
+
+      <section class="sorumluluk__blok" data-ep data-ep-range="0.9 0.5">
+        <p class="eyebrow">Yeşil alan ve su</p>
+        <h3>Portföyün üçte biri çevre düzenlemesi.</h3>
+        <p>Peyzaj işlerinin kapsamı yeşil alan planlamasının yanı sıra sulama ve drenaj
+          altyapısını, sert zemin ve aydınlatma uygulamalarını içeriyor.</p>
+        <p class="sorumluluk__olcu"><b>64.500 m²<span class="est">*</span></b> peyzaj ve çevre
+          düzenlemesi</p>
+        <div class="dim" style="--w: 1"><i></i></div>
+        <p class="sorumluluk__kirilim">Hitit Üniversitesi 32.500 m²<span class="est">*</span> ·
+          park ve bahçe 14.500 m² · otel peyzaj alanı 17.500 m²</p>
+      </section>
+
+      <section class="sorumluluk__beyan" data-ep data-ep-range="0.92 0.55">
+        <p class="eyebrow">Beyan disiplini</p>
+        <h3>Belgelenmemiş hiçbir çevre iddiası yayımlamıyoruz.</h3>
+        <p>Sıfır atık, karbon hedefi, enerji performansı ve çevre yönetim sistemi belgeleri
+          bu sayfada yer almıyor. Sebebi bu çalışmaların yapılmıyor olması değil, henüz
+          belgelenmiş olmamalarıdır. Belgesiz bir çevre iddiası, ihale dosyasında da
+          kamuoyunda da taşınamaz.</p>
+        <p>Bu bölümde yalnızca yapılmış işten doğrulanabilen bilgiler var. Belgeler
+          tamamlandığında kaynağıyla birlikte burada yayımlanacaktır.</p>
+      </section>
+
+      <p class="foot-note">* Konak Restorasyonu ve Hitit Üniversitesi peyzaj alanlarının m²
+        değerleri sunum tahminidir, şirket onayıyla kesinleşecektir.</p>
     </div>
   </div>
 
