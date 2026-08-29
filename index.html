@@ -88,7 +88,7 @@ p { text-wrap: pretty; }
   color: var(--sc-accent);
   display: block; margin-bottom: var(--sc-4);
 }
-.ch-open__t { font-size: clamp(2rem, 1.2rem + 3.4vw, 3.9rem); }
+.ch-open__t { font-size: clamp(2.2rem, 1.1rem + 4.6vw, 5.2rem); }
 .ch-open__d {
   margin-top: var(--sc-5);
   max-width: 52ch; color: var(--sc-ink-soft);
@@ -136,9 +136,43 @@ p { text-wrap: pretty; }
 
 /* The folio is fixed over grounds that hard-cut light to dark, so the mark
    carries a mono treatment on dark rather than a colour that vanishes. */
-.folio.is-dark .folio__mark img { filter: brightness(0) invert(1); }
-.folio.is-dark .folio__now   { color: #A99C87; }
-.folio.is-dark .folio__now b { color: #EFE7D8; }
+:root.on-desk .folio .folio__mark img { filter: brightness(0) invert(1); }
+:root.on-desk .folio .folio__now   { color: #A99C87; }
+:root.on-desk .folio .folio__now b { color: #EFE7D8; }
+
+
+/* The drafting grid. Persistent chrome, hairline weight, sitting on the same
+   margins the text column uses so it reads as the sheet the page is set on
+   rather than as decoration. Ticks mark the intersections the way a drawing
+   marks a datum. */
+.grid { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+.grid__inner {
+  position: absolute; inset: 0;
+  max-width: 78rem; margin-inline: auto;
+  padding-inline: var(--sc-gutter);
+}
+.grid i, .grid b {
+  position: absolute; display: block;
+  background: var(--grid-ink, rgba(22,19,14,0.13));
+}
+.grid__v { top: 0; bottom: 0; width: 1px; }
+.grid__v--l { left: var(--sc-gutter); }
+.grid__v--r { right: var(--sc-gutter); }
+.grid__h { left: 0; right: 0; height: 1px; }
+.grid__h--t { top: clamp(58px, 7vh, 84px); }
+.grid__h--b { bottom: clamp(58px, 7vh, 84px); }
+.grid__x { position: absolute; width: 9px; height: 9px; }
+.grid__x::before, .grid__x::after {
+  content: ""; position: absolute; background: var(--grid-ink, rgba(22,19,14,0.13));
+}
+.grid__x::before { left: 4px; top: 0; width: 1px; height: 9px; }
+.grid__x::after  { top: 4px; left: 0; height: 1px; width: 9px; }
+.grid__x--tl { left: calc(var(--sc-gutter) - 4px); top: calc(clamp(58px, 7vh, 84px) - 4px); }
+.grid__x--tr { right: calc(var(--sc-gutter) - 4px); top: calc(clamp(58px, 7vh, 84px) - 4px); }
+.grid__x--bl { left: calc(var(--sc-gutter) - 4px); bottom: calc(clamp(58px, 7vh, 84px) - 4px); }
+.grid__x--br { right: calc(var(--sc-gutter) - 4px); bottom: calc(clamp(58px, 7vh, 84px) - 4px); }
+:root.on-desk { --grid-ink: rgba(239,231,216,0.16); }
+@media (max-width: 700px) { .grid__h--t, .grid__h--b, .grid__x { display: none; } }
 
 /* skip link + the one nav we do keep: a jump list, keyboard reachable */
 .skip {
@@ -480,6 +514,20 @@ p { text-wrap: pretty; }
 .idx a:hover span { color: var(--sc-accent); }
 .rec__row { scroll-margin-top: var(--sc-6); }
 
+.standard {
+  margin-top: clamp(3rem, 7vh, 5rem);
+  border-top: 1px solid var(--rule); padding-top: var(--sc-6);
+  max-width: 62ch;
+}
+.standard__say {
+  margin-top: var(--sc-4);
+  font-family: var(--sc-font-display); font-weight: 500;
+  font-size: clamp(1.2rem, 1rem + 1.1vw, 1.9rem); line-height: 1.2;
+  letter-spacing: -0.012em;
+  clip-path: inset(0 calc(100% - var(--ep, 1) * 100%) 0 0);
+}
+.standard__body { margin-top: var(--sc-4); color: var(--sc-ink-soft); }
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -493,6 +541,15 @@ p { text-wrap: pretty; }
 <span data-sc-progress></span>
 <div class="sc-grain" aria-hidden="true"></div>
 <a class="skip" href="#bolum-3">Proje kaydına atla</a>
+
+<div class="grid" aria-hidden="true">
+  <div class="grid__inner">
+    <i class="grid__v grid__v--l"></i><i class="grid__v grid__v--r"></i>
+    <span class="grid__x grid__x--tl"></span><span class="grid__x grid__x--tr"></span>
+    <span class="grid__x grid__x--bl"></span><span class="grid__x grid__x--br"></span>
+  </div>
+  <i class="grid__h grid__h--t"></i><i class="grid__h grid__h--b"></i>
+</div>
 
 <!-- The chrome of this grammar: a folio in the margin, not a bar on top. -->
 <div class="folio" aria-hidden="true">
@@ -875,6 +932,16 @@ p { text-wrap: pretty; }
         </div>
       </div>
 
+
+      <div class="standard" data-ep data-ep-range="0.9 0.5">
+        <p class="eyebrow">Çalışma ölçütü</p>
+        <p class="standard__say">Tescilli bir yapıda çalışmak, koruma kurulu kararına uymak
+          demektir. Kamu ihalesinde çalışmak, şartnamenin harfine uymak demektir.</p>
+        <p class="standard__body">Bu işlerde hız uygunluğun önüne geçtiğinde ortaya çıkan şey
+          tasarruf değil, yeniden yapımdır. Bir imalatın doğru yapılıp yapılmadığı teslimde
+          değil, yıllar sonra anlaşılır.</p>
+      </div>
+
       <div style="margin-top: clamp(3rem, 7vh, 5rem)">
         <p class="eyebrow">Faaliyet alanları</p>
         <div class="work">
@@ -1008,8 +1075,7 @@ ScrollCraft.mount(document.body);
       target = parseFloat(el.dataset.mark) || 0;
       if (no)   no.textContent   = el.dataset.ch || '—';
       if (name) name.textContent = el.dataset.chName || '';
-      const folio = document.querySelector('.folio');
-      if (folio) folio.classList.toggle('is-dark', el.classList.contains('ch--desk'));
+      document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
     });
   }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
   chapters.forEach((c) => io.observe(c));
