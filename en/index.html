@@ -74,7 +74,10 @@ addEventListener('load', function () {
   --desk:       #16130E;
   --desk-soft:  #221D15;
   --rule:       color-mix(in srgb, var(--sc-ink) 18%, transparent);
-  --folio-w:    clamp(0px, 17vw, 238px);
+  /* Colophon yalnız 1080px üstünde görünür; altında payı da olmamalı, yoksa
+     başlık sayfası var olmayan bir sütun için sağa kayar ve dar ekranda
+     yatay taşma yapar. */
+  --folio-w:    0px;
 }
 
 /* Dark chapters restate ink AND color, per taste.md: redefining the token
@@ -154,6 +157,7 @@ p { text-wrap: pretty; }
   mix-blend-mode: normal;
 }
 @media (min-width: 1080px) {
+  :root { --folio-w: clamp(184px, 17vw, 238px); }
   .folio { display: flex; }
   /* Colophon 132px'ten 238px'e genişleyince içeriğin üstüne bindi. Kenar
      boşluğu artık gerçekten ayrılmış bir sütun: sayfa gövdesi onun
@@ -306,7 +310,7 @@ p { text-wrap: pretty; }
    to rescue the text. This grammar does not lay type over media anyway. */
 .seq-stage { --cap-band: clamp(150px, 22vh, 220px);
   position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--desk); }
-.seq-stage__frames { position: absolute; inset: 0 0 var(--cap-band) 0; }
+.seq-stage__frames { position: absolute; inset: 0 0 var(--cap-band) 0; overflow: hidden; }
 /* The crossfade is pure CSS off the act's own --sc-p, so a frame is correct
    the instant the engine writes progress. Driving it from a rAF callback made
    the harness photograph the page before the swap had run. */
@@ -449,7 +453,12 @@ p { text-wrap: pretty; }
 .rec__t { font-size: clamp(1.25rem, 1.05rem + 0.85vw, 1.85rem); }
 .rec__d { margin-top: var(--sc-3); color: var(--sc-ink-soft); max-width: 52ch; }
 .rec__label { margin-top: var(--sc-4); display: grid; gap: 0.35rem; }
-.rec__label > div { display: flex; gap: var(--sc-3); font-family: var(--sc-font-display); font-size: 0.82rem; }
+.rec__label > div {
+  display: flex; gap: var(--sc-3); font-family: var(--sc-font-display); font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+.rec__label .v { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .rec__label .k { min-width: 5.5rem; } }
 .rec__label .k { font-family: var(--sc-font-mono); color: var(--sc-ink-soft); min-width: 7rem; letter-spacing: 0.02em; font-size: 0.76rem; }
 .rec__label .v { font-weight: 500; }
 .rec__fig { margin: 0; }
@@ -773,7 +782,10 @@ p { text-wrap: pretty; }
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   align-items: start;
 }
-@media (max-width: 860px) { .rec__lead-body { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .rec__lead-body,
+  .rec__lead--quiet .rec__lead-body { grid-template-columns: 1fr; }
+}
 .rec__lead h3 {
   font-size: clamp(1.7rem, 1.2rem + 2.4vw, 3.2rem);
   line-height: 1.02;
@@ -1029,8 +1041,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 <!-- The chrome of this grammar: a folio in the margin, not a bar on top. -->
 <nav class="folio" aria-label="Chapters">
   <a class="folio__mark" href="#top" aria-label="Back to top">
-    <img class="folio__mark--ghost" src="/assets/logo-main.png" alt="">
-    <img id="markFill" src="/assets/logo-main.png" alt="">
+    <img class="folio__mark--ghost" src="/assets/logo-main.png" alt="" aria-hidden="true">
+    <img id="markFill" src="/assets/logo-main.png" alt="" aria-hidden="true">
   </a>
   <ol class="folio__list">
     <li><a href="#top"           data-fo="—"><span>—</span>Start</a></li>
@@ -1057,16 +1069,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= TITLE PAGE · type on paper, no media ================= -->
   <header class="title-page ch" data-ch="—" data-ch-name="Title" data-mark="0.16">
     <div class="wrap">
-      <div class="title-page__mark sc-stack" data-sc-in>
+      <div class="title-page__mark">
         <img src="/assets/logo-main.png" width="2381" height="842" alt="Global HD İnşaat A.Ş.">
       </div>
-      <div class="sc-stack" data-sc-in data-sc-stagger="70">
+      <div>
         <h1>Sound structures,<br><em>dependable engineering.</em></h1>
         <p class="title-page__lede">We deliver superstructure, infrastructure, restoration and landscaping
           projects on a turnkey basis for public institutions and the private sector.</p>
       </div>
       <div class="title-rule" data-ep data-ep-range="0 0.9"></div>
-      <div class="title-page__foot sc-stack" data-sc-in data-sc-stagger="60">
+      <div class="title-page__foot">
         <p class="eyebrow">Ankara based · Engineering and contracting</p>
             <a class="dil" href="/" hreflang="tr" lang="tr">Türkçe</a>
         <p>Twelve projects, for the Ministry of National Defence, the Council of Higher
@@ -1129,7 +1141,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <img src="/assets/saha-web/merkezi-derslik-04.jpg"
                srcset="/assets/saha-web/merkezi-derslik-04-800.jpg 800w, /assets/saha-web/merkezi-derslik-04.jpg 1600w"
                sizes="(max-width: 900px) 92vw, 56vw"
-               width="1600" height="1067"
+               width="1600" height="1067" loading="lazy" decoding="async"
                alt="The Central Classroom Project site, blocks nearing completion, seen from the air.">
           <figcaption>Central Classroom Project. Site, from the air.</figcaption>
         </figure>
