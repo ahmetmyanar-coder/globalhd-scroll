@@ -123,10 +123,14 @@ p { text-wrap: pretty; }
 
 /* Chapter opener plate: the intertitle that makes this a book. */
 .ch-open { padding-block: clamp(5rem, 12vh, 9rem) clamp(2.5rem, 5vh, 4rem); }
+/* Chaptersin "Chapter one / iki / üç" künyeleri kaldırıldı: numara zaten
+   kenar navigasyonunda duruyor ve sayfada tekrar edilince bilgi değil süs
+   oluyordu. Bölüm sınırını artık sert zemin kesmesi ve başlığın kendisi
+   taşıyor. Sınıf, sorumluluk bölümündeki alt başlıklar için kalıyor. */
 .ch-open__no {
   font-family: var(--sc-font-mono);
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.28em; text-transform: uppercase;
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--sc-accent);
   display: block; margin-bottom: var(--sc-4);
 }
@@ -149,7 +153,14 @@ p { text-wrap: pretty; }
   pointer-events: none;
   mix-blend-mode: normal;
 }
-@media (min-width: 1080px) { .folio { display: flex; } }
+@media (min-width: 1080px) {
+  .folio { display: flex; }
+  /* Colophon 132px'ten 238px'e genişleyince içeriğin üstüne bindi. Kenar
+     boşluğu artık gerçekten ayrılmış bir sütun: sayfa gövdesi onun
+     sağından başlıyor, tıpkı kenar notlu bir kitapta olduğu gibi. */
+  main { padding-left: var(--folio-w); }
+  .title-page { padding-left: 0; }
+}
 
 .folio__mark { width: 62px; pointer-events: auto; }
 .folio__mark img {
@@ -318,7 +329,7 @@ p { text-wrap: pretty; }
   position: absolute; left: 0; right: 0; bottom: 0;
   height: var(--cap-band);
   display: flex; flex-direction: column; justify-content: center;
-  padding: 0 var(--sc-6) 0 calc(var(--folio-w) + var(--sc-6));
+  padding: 0 var(--sc-6);
   z-index: var(--sc-z-copy);
 }
 .seq-cap__lines { position: relative; min-height: 2.7em; }
@@ -352,7 +363,7 @@ p { text-wrap: pretty; }
   max-width: 34ch;
 }
 .seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5);
-  position: absolute; left: calc(var(--folio-w) + var(--sc-6)); right: var(--sc-6);
+  position: absolute; left: var(--sc-6); right: var(--sc-6);
   bottom: calc(var(--cap-band) - 1px); height: 1px;
   background: rgba(239,231,216,0.18);
 }
@@ -1047,7 +1058,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= BÖLÜM 01 · ÇİZGİ (the one scrub chapter) ============= -->
   <div class="ch--desk ch" id="bolum-1" data-ch="01" data-ch-name="Line" data-mark="0.46">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
-      <span class="ch-open__no">Chapter one</span>
       <h2 class="ch-open__t sc-stack" data-sc-in>Every building begins as a line.</h2>
       <p class="ch-open__d sc-stack" data-sc-in>A dimension decided on paper determines what will still
         be standing years later. The only thing that closes the distance between the line and
@@ -1089,7 +1099,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= BÖLÜM 02 · GERÇEK (the peak) ========================= -->
   <div class="ch--desk ch plate-ch" id="bolum-2" data-ch="02" data-ch-name="Reality" data-mark="0.62">
     <div class="wrap">
-      <span class="ch-open__no">Chapter two</span>
       <div class="plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.06 0.5">
           <img src="/assets/saha-web/merkezi-derslik-04.jpg"
@@ -1114,7 +1123,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= BÖLÜM 03 · SİCİL (the record, densest) =============== -->
   <div class="ch" id="bolum-3" data-ch="03" data-ch-name="Record" data-mark="0.80">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
-      <span class="ch-open__no">Chapter three</span>
       <h2 class="ch-open__t">Twelve projects.</h2>
       <p class="ch-open__d">Completed and ongoing works. Each entry is given with its client, its area and
         its status.</p>
@@ -1394,7 +1402,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= BÖLÜM 04 · ÖLÇÜ ===================================== -->
   <div class="ch" id="bolum-4" data-ch="04" data-ch-name="The firm" data-mark="0.92">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
-      <span class="ch-open__no">Chapter four</span>
       <h2 class="ch-open__t">An Ankara-based engineering and contracting firm.</h2>
       <p class="kurumsal__p">Global HD İnşaat A.Ş. is based in Ankara and delivers superstructure, infrastructure, restoration and landscaping projects for public institutions and the private sector.</p>
       <p class="kurumsal__p">The completed and ongoing projects delivered for the Ministry of National Defence, the Council of Higher Education, the Presidency of Religious Affairs, the General Directorate of Cultural Heritage and Museums and municipalities are listed in the project record above.</p>
@@ -1493,7 +1500,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <!-- ================= BÖLÜM 05 · SORUMLULUK ============================== -->
   <div class="ch" id="bolum-5" data-ch="05" data-ch-name="Sustainability" data-mark="0.96">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
-      <span class="ch-open__no">Chapter five</span>
       <h2 class="ch-open__t">The lowest-impact building is the one that is reused.</h2>
       <p class="ch-open__d">The largest environmental decision in construction is whether to build anew at all.
         To demolish a building and put another in its place is to spend, along with it, every
