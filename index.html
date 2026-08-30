@@ -1,4 +1,20 @@
-<!doctype html>
+<div class="meas-total" data-ep data-ep-range="0.92 0.42">
+        <div class="meas-total__pair">
+          <div>
+            <span class="meas-total__n" data-sc-count="0 73.890" data-sc-count-at="0.05 0.6">73.890</span>
+            <span class="meas-total__u">m²</span>
+            <div class="dim dim--total" style="--w: 1"><i></i></div>
+            <span class="meas-total__k">Kapalı yapı alanı</span>
+          </div>
+          <div>
+            <span class="meas-total__n meas-total__n--b" data-sc-count="0 64.500" data-sc-count-at="0.05 0.6">64.500</span>
+            <span class="meas-total__u">m²</span>
+            <div class="dim dim--total" style="--w: 0.873"><i></i></div>
+            <span class="meas-total__k">Çevre düzenleme alanı</span>
+          </div>
+        </div>
+        <p class="meas-total__sum">Toplam <b>138.390 m²</b> uygulama alanı</p>
+      </div><!doctype html>
 <html lang="tr">
 <head>
 <meta charset="utf-8">
@@ -8,6 +24,15 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A160F'/><path d='M10 24V9l7 4v11' fill='none' stroke='%23E8E0D2' stroke-width='2'/></svg>">
 <script>document.documentElement.className += " js";</script>
+<link rel="canonical" href="https://globalhd-scroll.vercel.app/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"GeneralContractor",
+"name":"Global HD İnşaat A.Ş.","url":"https://globalhd-scroll.vercel.app/",
+"telephone":"+90 312 285 45 85","email":"bilgi@globalhdinsaat.com",
+"address":{"@type":"PostalAddress","streetAddress":"Kızılırmak Mah. 1446 Cad. No:12 İç Kapı No:21","addressLocality":"Çankaya","addressRegion":"Ankara","addressCountry":"TR"},
+"areaServed":["TR","CY"],
+"knowsAbout":["İnşaat ve taahhüt","Üstyapı ve altyapı uygulamaları","Tescilli yapı restorasyonu","Peyzaj ve çevre düzenleme"]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
@@ -15,8 +40,8 @@
 <meta property="og:site_name" content="Global HD İnşaat A.Ş.">
 <meta property="og:title" content="Global HD İnşaat · Güçlü yapılar, güvenilir mühendislik">
 <meta property="og:description" content="Ankara merkezli mühendislik ve taahhüt firması. On iki proje; Millî Savunma Bakanlığı, Yükseköğretim Kurulu, Diyanet İşleri Başkanlığı ve belediyeler için.">
-<meta property="og:url" content="https://ahmetmyanar-coder.github.io/globalhd-scroll/">
-<meta property="og:image" content="https://ahmetmyanar-coder.github.io/globalhd-scroll/assets/og.jpg">
+<meta property="og:url" content="https://globalhd-scroll.vercel.app/">
+<meta property="og:image" content="https://globalhd-scroll.vercel.app/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="K.K.T.C.'de yürütülen karargâh ve yemekhane projesi şantiye alanı, havadan görünüm.">
@@ -231,6 +256,13 @@ p { text-wrap: pretty; }
   align-items: baseline;
   border-top: 1px solid var(--rule); padding-top: var(--sc-5);
 }
+.title-page__pos {
+  flex: 1 1 100%; margin-top: var(--sc-5) !important;
+  padding-top: var(--sc-5); border-top: 1px solid var(--rule);
+  max-width: 58ch; color: var(--sc-ink) !important;
+  font-size: clamp(1.02rem, 0.95rem + 0.4vw, 1.22rem) !important;
+  line-height: 1.5;
+}
 .title-page__foot p { margin: 0; color: var(--sc-ink-soft); font-size: 0.95rem; }
 .title-page__foot .eyebrow { color: var(--sc-ink); }
 @media (max-width: 700px) {
@@ -391,6 +423,12 @@ p { text-wrap: pretty; }
    learns what this firm actually does. Set as a specification line, the way
    a drawing carries one, rather than as another label row. */
 .rec__scope { margin-top: var(--sc-5); border-top: 1px solid var(--rule); padding-top: var(--sc-3); }
+.rec__area {
+  float: right; color: var(--sc-accent); text-transform: none;
+  letter-spacing: 0.06em; font-size: 0.62rem;
+}
+.work__link { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); }
+.work__link:hover { color: var(--sc-accent); border-color: var(--sc-accent); }
 .rec__scope .k {
   display: block; font-family: var(--sc-font-mono); font-size: 0.64rem;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft);
@@ -426,6 +464,22 @@ p { text-wrap: pretty; }
 
 /* The total is the largest real number on the page. It was one of four equal
    cells, which is where the chapter went flat. */
+.meas-total__pair {
+  display: grid; gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.meas-total__n--b { color: var(--sc-ink-soft); }
+.meas-total__sum {
+  margin-top: clamp(2rem, 4vh, 3rem); padding-top: var(--sc-5);
+  border-top: 1px solid var(--rule);
+  font-family: var(--sc-font-mono); font-size: 0.8rem; letter-spacing: 0.04em;
+  color: var(--sc-ink-soft);
+}
+.meas-total__sum b { color: var(--sc-ink); font-weight: 500; }
+.tag--own {
+  margin-left: var(--sc-3); color: var(--sc-accent);
+  border-color: color-mix(in srgb, var(--sc-accent) 45%, transparent);
+}
 .meas-total { margin-bottom: clamp(3rem, 8vh, 5rem); }
 .meas-total__n {
   font-family: var(--sc-font-display); font-weight: 600;
@@ -826,6 +880,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="eyebrow">Ankara merkezli · Mühendislik ve taahhüt</p>
         <p>On iki proje. Millî Savunma Bakanlığı, Yükseköğretim Kurulu, Diyanet İşleri
           Başkanlığı, Kültür Varlıkları ve Müzeler Genel Müdürlüğü ve belediyeler için.</p>
+        <p class="title-page__pos">Tescilli bir konağın restorasyonundan askerî bir karargâha,
+          olimpik havuzdan üniversite laboratuvarına. Bu on iki işin ortak yanı ölçekleri değil:
+          hepsinde kuralı başkası koyuyor. Koruma kurulu kararı, askerî tesis şartı, kamu ihale
+          şartnamesi.</p>
       </div>
     </div>
   </header>
@@ -889,7 +947,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <h2 class="plate__say">Bir çizim, ancak sahada karşılığı varsa iş sayılır.</h2>
           <div class="plate__meta">
             <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
-            <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
+            <div><span class="k">Kapalı alan</span><span class="v">26.000 m²</span></div>
             <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
           </div>
         </div>
@@ -948,10 +1006,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <div>
               <div class="rec__label">
                 <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
-                <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
+                <div><span class="k">Kapalı alan</span><span class="v">26.000 m²</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
               </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj işleri · Aydınlatma sistemleri</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj işleri · Aydınlatma sistemleri</p></div>
               <div class="dim" style="--w: 0.800"><i></i></div>
             </div>
           </div>
@@ -976,10 +1034,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__label">
                 <div><span class="k">İşveren</span><span class="v">T.C. Millî Savunma Bakanlığı</span></div>
                 <div><span class="k">Yer</span><span class="v">K.K.T.C.</span></div>
-                <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
+                <div><span class="k">Kapalı alan</span><span class="v">4.000 m²</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
               </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Altyapı uygulamaları · Üstyapı uygulamaları · Elektrik ve düşük akım · Çevre düzenlemesi · Aydınlatma sistemleri · Mekanik uygulaması</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Altyapı uygulamaları · Üstyapı uygulamaları · Elektrik ve düşük akım · Çevre düzenlemesi · Aydınlatma sistemleri · Mekanik uygulaması</p></div>
               <div class="dim" style="--w: 0.123"><i></i></div>
             </div>
           </div>
@@ -1000,10 +1058,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               yeşil alan uygulamaları.</p>
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Hitit Üniversitesi</span></div>
-              <div><span class="k">Alan</span><span class="v">32.500 m² <span class="est">*</span></span></div>
+              <div><span class="k">Peyzaj alanı</span><span class="v">32.500 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Yeşil alan planlaması · Sulama ve drenaj altyapısı · Sert zemin uygulamaları · Aydınlatma ve tabela sistemleri</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Peyzaj ve Çevre</span></span><p>Yeşil alan planlaması · Sulama ve drenaj altyapısı · Sert zemin uygulamaları · Aydınlatma ve tabela sistemleri</p></div>
               <div class="dim" style="--w: 1.000"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1015,14 +1073,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <span class="rec__no">04</span>
           <div>
             <h3 class="rec__t">Otel ve Peyzaj Alanı</h3>
-            <p class="rec__d">Global HD İnşaat'ın kendi kaynaklarıyla geliştirdiği otel binası ve
-              çevre peyzaj alanı.</p>
+            <p class="rec__d">Global HD İnşaat'ın kendi kaynaklarıyla geliştirdiği otel binası ve çevre
+              peyzaj alanı. Portföydeki tek işveren, şirketin kendisi: yüklenici olarak değil,
+              yatırımcı olarak yapılmış bir iş.</p>
             <div class="rec__label">
-              <div><span class="k">İşveren</span><span class="v">Global HD İnşaat (öz kaynaklı)</span></div>
-              <div><span class="k">Alan</span><span class="v">18.350 m²</span></div>
+              <div><span class="k">İşveren</span><span class="v">Global HD İnşaat<span class="tag tag--own">Öz kaynaklı yatırım</span></span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">850 m²</span></div>
+                <div><span class="k">Peyzaj alanı</span><span class="v">17.500 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Otel binası inşaatı · İç mekân uygulamaları · Çevre peyzaj düzenlemesi</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Otel binası inşaatı · İç mekân uygulamaları · Çevre peyzaj düzenlemesi</p></div>
               <div class="dim" style="--w: 0.565"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1036,10 +1096,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <h3 class="rec__t">Park ve Bahçe Projeleri</h3>
             <p class="rec__d">Kentsel yaşam alanlarını güçlendiren park ve oyun alanı düzenlemeleri.</p>
             <div class="rec__label">
-              <div><span class="k">Alan</span><span class="v">14.500 m²</span></div>
+              <div><span class="k">Peyzaj alanı</span><span class="v">14.500 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Peyzaj tasarımı · Yeşil alan planlaması · Sert zemin uygulamaları · Sulama ve drenaj sistemleri · Aydınlatma · Oyun ve spor alanları · Kentsel donatı</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Peyzaj ve Çevre</span></span><p>Peyzaj tasarımı · Yeşil alan planlaması · Sert zemin uygulamaları · Sulama ve drenaj sistemleri · Aydınlatma · Oyun ve spor alanları · Kentsel donatı</p></div>
               <div class="dim" style="--w: 0.446"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1056,10 +1116,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
               <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
-              <div><span class="k">Alan</span><span class="v">10.500 m² <span class="est">*</span></span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">10.500 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Betonarme ve mimari uygulama · Elektrik ve mekanik uygulamalar · İdari birimlerin tek çatı altında toplanması</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Betonarme ve mimari uygulama · Elektrik ve mekanik uygulamalar · İdari birimlerin tek çatı altında toplanması</p></div>
               <div class="dim" style="--w: 0.323"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1076,10 +1136,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Diyanet İşleri Başkanlığı</span></div>
               <div><span class="k">Yer</span><span class="v">Çorum</span></div>
-              <div><span class="k">Alan</span><span class="v">10.465 m²</span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">10.465 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım sistemleri · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj çalışmaları</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım sistemleri · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj çalışmaları</p></div>
               <div class="dim" style="--w: 0.322"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1095,10 +1155,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               restorasyon ve tadilat çalışması.</p>
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Kültür Varlıkları ve Müzeler Genel Müdürlüğü</span></div>
-              <div><span class="k">Alan</span><span class="v">8.800 m² <span class="est">*</span></span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">8.800 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Yapısal güçlendirme · Taş ve ahşap onarımı · Cephe rehabilitasyonu · Teknik altyapı yenilenmesi</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Restorasyon</span></span><p>Yapısal güçlendirme · Taş ve ahşap onarımı · Cephe rehabilitasyonu · Teknik altyapı yenilenmesi</p></div>
               <div class="dim" style="--w: 0.271"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1114,10 +1174,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
               <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
-              <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">6.000 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Betonarme ve çelik yapı · Drenaj ve atık yönetimi altyapısı · Hijyen odaklı tasarım uygulamaları</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Betonarme ve çelik yapı · Drenaj ve atık yönetimi altyapısı · Hijyen odaklı tasarım uygulamaları</p></div>
               <div class="dim" style="--w: 0.185"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1134,10 +1194,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Beypazarı Belediyesi</span></div>
               <div><span class="k">Yer</span><span class="v">Beypazarı / Ankara</span></div>
-              <div><span class="k">Alan</span><span class="v">1.275 m²</span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">1.275 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Havuz yapımı · Su yalıtımı · Mekanik ve elektrik sistemleri · Tribün ve soyunma birimleri</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Havuz yapımı · Su yalıtımı · Mekanik ve elektrik sistemleri · Tribün ve soyunma birimleri</p></div>
               <div class="dim" style="--w: 0.039"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1159,10 +1219,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <p class="rec__d">Yükseköğretim Kurulu için yürütülen meslek yüksekokulu yapım işi.</p>
             <div class="rec__label">
               <div><span class="k">İşveren</span><span class="v">Yükseköğretim Kurulu (YÖK)</span></div>
-              <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
+              <div><span class="k">Kapalı alan</span><span class="v">6.000 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Elektrik ve mekanik sistemler · Altyapı uygulamaları · Peyzaj düzenlemesi</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Elektrik ve mekanik sistemler · Altyapı uygulamaları · Peyzaj düzenlemesi</p></div>
               <div class="dim" style="--w: 0.185"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1194,7 +1254,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
                 <div><span class="k">Kapsam</span><span class="v">İç mekân imalatları</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
               </div>
-              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Akustik uygulamalar · Sahne ve teknik altyapı · Elektrik ve zayıf akım (ses, görüntü, network) · Aydınlatma · İklimlendirme</p></div>
+              <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Üstyapı ve Altyapı</span></span><p>Akustik uygulamalar · Sahne ve teknik altyapı · Elektrik ve zayıf akım (ses, görüntü, network) · Aydınlatma · İklimlendirme</p></div>
             </div>
           </div>
         </article>
@@ -1231,7 +1291,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <span class="meas__k">Devam eden</span>
         </div>
       </div>
-      <p class="foot-note">* Proje portföyündeki yaklaşık uygulama alanlarının toplamıdır. Belediye
+      <p class="foot-note">Kapalı yapı ve çevre düzenleme alanları ayrı toplanmıştır; ikisi bir arada 138.390 m² eder. Değerler yaklaşık uygulama alanlarıdır. Belediye
         Hizmet Binası, Konak Restorasyonu ve Peyzaj Projeleri kalemlerinin alan değerleri sunum
         tahminidir ve şirket onayıyla kesinleşecektir.</p>
 
@@ -1263,22 +1323,22 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="eyebrow">Faaliyet alanları</p>
         <div class="work">
           <section>
-            <h3>İnşaat ve Taahhüt</h3>
+            <h3><a class="work__link" href="#kayit-01">İnşaat ve Taahhüt</a></h3>
             <p>Kamu ve özel sektör için anahtar teslim yapım işleri; ihale sürecinden teslim
               aşamasına kadar tek elden yürütülür.</p>
           </section>
           <section>
-            <h3>Üstyapı ve Altyapı</h3>
+            <h3><a class="work__link" href="#kayit-12">Üstyapı ve Altyapı</a></h3>
             <p>Bina inşaatının yanı sıra elektrik, mekanik, zayıf akım ve altyapı sistemlerinin
               uygulanması.</p>
           </section>
           <section>
-            <h3>Restorasyon ve Tadilat</h3>
+            <h3><a class="work__link" href="#kayit-08">Restorasyon ve Tadilat</a></h3>
             <p>Tescilli tarihi yapılarda koruma kurulları ve teknik şartnamelere uygun restorasyon
               ve rehabilitasyon çalışmaları.</p>
           </section>
           <section>
-            <h3>Peyzaj ve Çevre Düzenleme</h3>
+            <h3><a class="work__link" href="#kayit-03">Peyzaj ve Çevre Düzenleme</a></h3>
             <p>Yeşil alan planlaması, sert zemin uygulamaları, aydınlatma ve çevre düzenleme
               işleri.</p>
           </section>

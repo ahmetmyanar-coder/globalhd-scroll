@@ -1,0 +1,6 @@
+# Bu sayfa bir iç sunum çalışmasıdır. Ana domaine geçilene ve içerik
+# onayları tamamlanana kadar arama motorlarına kapalıdır.
+User-agent: *
+Disallow: /
+
+Sitemap: https://globalhd-scroll.vercel.app/sitemap.xml
