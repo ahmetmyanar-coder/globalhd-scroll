@@ -159,6 +159,17 @@ p { text-wrap: pretty; }
      boşluğu artık gerçekten ayrılmış bir sütun: sayfa gövdesi onun
      sağından başlıyor, tıpkı kenar notlu bir kitapta olduğu gibi. */
   main { padding-left: var(--folio-w); }
+  /* Koyu bölümün zemini künye sütununun altına da uzanmalı. Uzanmazsa
+     kenar boşluğu kâğıt renginde kalır, künye yazısı ise koyu zemine göre
+     açık renge döner ve açık üstüne açık yazı çıkar. Sözde öğe, bölümün
+     kendi dikey sınırlarına birebir hizalı olduğu için geçişte kayma da
+     olmuyor. */
+  /* Sütunun tamamı künyenin kendi zeminiyle boyanıyor. Bölüm kutusuna
+     bağlı bir sözde öğe denendi ama sabitlenmiş sahne kendi kutusundan
+     taşınca altta kâğıt rengi bir şerit kalıyordu. Colophon zaten sabit ve
+     tam yükseklikte, dolayısıyla doğru yer burası. */
+  .folio { background: var(--paper); }
+  :root.on-desk .folio { background: var(--desk); }
   .title-page { padding-left: 0; }
 }
 
@@ -302,7 +313,7 @@ p { text-wrap: pretty; }
 .seq-stage__frames {
   --cap-band: clamp(150px, 22vh, 220px);
   /* hold the last frame through the final 12%: that hold is the silence */
-  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5);
+  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5);
 }
 .seq-stage__frames img {
   position: absolute; inset: 0;
@@ -320,9 +331,23 @@ p { text-wrap: pretty; }
 .seq-stage__frames img:nth-child(5) { --k: 4; }
 .seq-stage__frames img:nth-child(6) { --k: 5; }
 
+/* Dizi son karede duruyordu ve o duruş kasıtlıydı: tepe öncesi nefes.
+   Ama tamamen hareketsiz kalınca "sayfa dondu" gibi de okunabiliyordu.
+   Artık maket, duruş boyunca yavaşça yaklaşıyor: bakış nesnenin üstünde
+   kalıyor, sayfa durmuş olmuyor. Kaydırma durursa yakınlaşma da durur,
+   yani hareket okuyucunun elinde. */
+.seq-stage__frames img:nth-child(6) {
+  --kuyruk: clamp(0, calc((var(--sc-p, 0) - 0.84) / 0.16), 1);
+  transform: scale(calc(1 + var(--kuyruk) * 0.085));
+  transform-origin: 50% 46%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .seq-stage__frames img:nth-child(6) { transform: none; }
+}
+
 /* Captions switch on the same variable, harder than the images so one line
    owns the frame instead of two ghosting through each other. */
-.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5); }
+.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5); }
 
 /* Caption sits in its own plate, never laid across the picture as a banner. */
 .seq-cap {
@@ -362,7 +387,7 @@ p { text-wrap: pretty; }
   color: #A99C87;
   max-width: 34ch;
 }
-.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.88, 1) * 5);
+.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5);
   position: absolute; left: var(--sc-6); right: var(--sc-6);
   bottom: calc(var(--cap-band) - 1px); height: 1px;
   background: rgba(239,231,216,0.18);
