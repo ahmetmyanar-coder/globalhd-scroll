@@ -172,8 +172,17 @@ p { text-wrap: pretty; }
      bağlı bir sözde öğe denendi ama sabitlenmiş sahne kendi kutusundan
      taşınca altta kâğıt rengi bir şerit kalıyordu. Künye zaten sabit ve
      tam yükseklikte, dolayısıyla doğru yer burası. */
-  .folio { background: var(--paper); }
-  :root.on-desk .folio { background: var(--desk); }
+  /* Künye tek renkti ve bölüm sınırında bir anda dönüyordu: sınır ekranın
+     ortasındayken sayfa iki renk, şerit tek renk kalıyordu, göze "lap" diye
+     çarpan şey buydu. Artık şeridin zemini sayfanın GERÇEK sınır çizgisini
+     takip ediyor. --sinir o çizginin ekrandaki yeri; sınır görünmüyorken
+     0 olur ve şerit tek renge döner. Yumuşatma yok, olmamalı da: sayfanın
+     kendi geçişi sert bir kesme, kenar boşluğu ondan farklı davranamaz. */
+  .folio {
+    --g-ust: var(--paper); --g-alt: var(--paper); --sinir: 0px;
+    background: linear-gradient(to bottom,
+      var(--g-ust) 0 var(--sinir), var(--g-alt) var(--sinir) 100%);
+  }
   .title-page { padding-left: 0; }
 }
 
@@ -204,9 +213,14 @@ p { text-wrap: pretty; }
 
 /* The folio is fixed over grounds that hard-cut light to dark, so the mark
    carries a mono treatment on dark rather than a colour that vanishes. */
-:root.on-desk .folio .folio__mark img { filter: brightness(0) invert(1); }
-:root.on-desk .folio .folio__now   { color: #A99C87; }
-:root.on-desk .folio .folio__now b { color: #EFE7D8; }
+/* Mürekkep de öğe öğe döner: sınır çizgisi hangi satırın üzerinden
+   geçtiyse yalnız o satır renk değiştirir. Tüm şeridi birden çevirmek,
+   sınır ortadayken yarısını okunmaz bırakıyordu. Geçiş kısa (170ms):
+   çizgi öğenin ortasından geçerken öğe zaten iki zemine yayılmış olur. */
+.folio__mark img, .folio__list a, .folio__dil a {
+  transition: color 170ms var(--sc-ease-out), filter 170ms var(--sc-ease-out);
+}
+.folio__mark.koyu-uzeri img { filter: brightness(0) invert(1); }
 
 
 /* The drafting grid. Persistent chrome, hairline weight, sitting on the same
@@ -934,9 +948,9 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   color: var(--sc-ink); border-inline-start-color: var(--sc-accent);
   padding-inline-start: 6px;
 }
-:root.on-desk .folio__list a { color: #A99C87; }
-:root.on-desk .folio__list a[aria-current="true"] { color: #EFE7D8; }
-:root.on-desk .folio__list a:hover { color: var(--sc-accent); }
+.folio__list a.koyu-uzeri { color: #A99C87; }
+.folio__list a.koyu-uzeri[aria-current="true"] { color: #EFE7D8; }
+.folio__list a.koyu-uzeri:hover { color: var(--sc-accent); }
 
 .folio__dil {
   display: flex; align-items: baseline; gap: 7px;
@@ -953,8 +967,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 .folio__dil a:hover { color: var(--sc-accent); }
 .folio__dil a[aria-current="true"] { color: var(--sc-ink); }
 .folio__dil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; }
-:root.on-desk .folio__dil a { color: #A99C87; }
-:root.on-desk .folio__dil a[aria-current="true"] { color: #EFE7D8; }
+.folio__dil a.koyu-uzeri { color: #A99C87; }
+.folio__dil a.koyu-uzeri[aria-current="true"] { color: #EFE7D8; }
 
 .minidil { display: flex; align-items: center; gap: 6px; padding: 11px 13px; flex: 0 0 auto; }
 .minidil a {
@@ -1021,6 +1035,49 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   .rec__fig:hover::before, .rec__fig:hover::after,
   .rec__lead figure:hover::before, .rec__lead figure:hover::after,
   .sorumluluk__fig:hover::before, .sorumluluk__fig:hover::after { opacity: 1; }
+}
+
+/* Dokunmatikte hover yok, yani yukarıdaki bloğun tamamı telefonda ölü:
+   fotoğraflar hiçbir şeye cevap vermiyordu. Hover'ın mobildeki karşılığı
+   dokunuş değil KONUM. Bir kare ekranın ortasına geldiğinde okunuyor
+   demektir; o kare yerine oturur, üstündeki ince perde çekilir, alt yazısı
+   tam güce çıkar. Uzaklaştıkça geri çekilir.
+
+   Jiroskop denenmedi bilerek: iOS 13'ten beri cihaz yönelimi bir izin
+   penceresinin arkasında ve ancak dokunuşla açılabiliyor; kurumsal bir
+   sunumda ziyaretçiyi izin penceresiyle karşılamak kazandırdığından
+   pahalı. Üstelik bu sayfada fotoğraflar delil, ve delil sallanmaz.
+
+   Her şey --ec üzerinden (element centre): 0 uzak, 1 tam ortada.
+   Filtre değil opaklık ve transform kullanılıyor; ikisi de telefonun
+   derleyicisinde bedava, filtre her karede görseli yeniden boyatırdı. */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .rec__fig, .rec__lead figure, .rec__inset, .sorumluluk__fig,
+  .use-grid figure, .plate figure, .colo__plate figure {
+    position: relative;
+    transform: scale(calc(0.992 + var(--ec, 1) * 0.008));
+    transition: transform 120ms linear;
+  }
+  .rec__fig::after, .rec__lead figure::after, .rec__inset::after,
+  .sorumluluk__fig::after, .plate figure::after, .colo__plate figure::after {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    pointer-events: none; background: var(--paper);
+    opacity: calc((1 - var(--ec, 1)) * 0.26);
+  }
+  .ch--desk .rec__fig::after, .ch--desk .rec__lead figure::after,
+  .ch--desk .rec__inset::after, .ch--desk .sorumluluk__fig::after,
+  .ch--desk .plate figure::after, .ch--desk .colo__plate figure::after {
+    background: var(--desk);
+  }
+  /* Alt yazı perdenin ÜSTÜNDE kalır. Perde zemin renginde ve kutunun
+     tamamını kaplıyor; altında bırakılsaydı yazı iki kez soluyordu.
+     Taban 0.78: alt yazı kontrastı bir kez ölçülüp düzeltilmişti
+     (6.87:1), onu geri bozacak kadar aşağı inilmiyor. */
+  .rec__fig figcaption, .plate figcaption, .sorumluluk__fig figcaption,
+  .colo__plate figcaption, .rec__lead figcaption {
+    position: relative; z-index: 2;
+    opacity: calc(0.78 + var(--ec, 1) * 0.22);
+  }
 }
 
 /* ---------- kurumsal ---------- */
@@ -1124,12 +1181,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
           <div class="seq-stage__frames" id="seqFrames">
-            <img src="assets/seq-web/M1.jpg" srcset="assets/seq-web/M1-m.jpg 900w, assets/seq-web/M1.jpg 1600w" sizes="100vw" width="1600" height="900" alt="Mimar masasında kâğıda çizilen eğimli arsa sınırı, erişim yolu ve ilk uzun blok." fetchpriority="high">
-            <img data-src="assets/seq-web/M2.jpg" data-srcset="assets/seq-web/M2-m.jpg 900w, assets/seq-web/M2.jpg 1600w" sizes="100vw" alt="Paralel bloklar, bağlantı hacimleri, yollar ve kotlarla tamamlanmış vaziyet planı." aria-hidden="true">
-            <img data-src="assets/seq-web/M3.jpg" data-srcset="assets/seq-web/M3-m.jpg 900w, assets/seq-web/M3.jpg 1600w" sizes="100vw" alt="Plandan yükselen şeffaf üç boyutlu çizgisel kütle." aria-hidden="true">
-            <img data-src="assets/seq-web/M4.jpg" data-srcset="assets/seq-web/M4-m.jpg 900w, assets/seq-web/M4.jpg 1600w" sizes="100vw" alt="Maket ölçeğinde betonarme karkas, iskele ve küçük kule vinç." aria-hidden="true">
-            <img data-src="assets/seq-web/M5.jpg" data-srcset="assets/seq-web/M5-m.jpg 900w, assets/seq-web/M5.jpg 1600w" sizes="100vw" alt="Öndeki bloklarda taş kaplama ve kahverengi panel dolgu başlarken arkadakiler hâlâ ham beton." aria-hidden="true">
-            <img data-src="assets/seq-web/M6.jpg" data-srcset="assets/seq-web/M6-m.jpg 900w, assets/seq-web/M6.jpg 1600w" sizes="100vw" alt="Kâğıdın üzerinde duran, peyzajı ve yollarıyla tamamlanmış mimari maket." aria-hidden="true">
+            <img src="assets/seq-web/M1.webp" srcset="assets/seq-web/M1-m.webp 900w, assets/seq-web/M1.webp 1600w" sizes="100vw" width="1600" height="900" alt="Mimar masasında kâğıda çizilen eğimli arsa sınırı, erişim yolu ve ilk uzun blok." fetchpriority="high">
+            <img data-src="assets/seq-web/M2.webp" data-srcset="assets/seq-web/M2-m.webp 900w, assets/seq-web/M2.webp 1600w" sizes="100vw" alt="Paralel bloklar, bağlantı hacimleri, yollar ve kotlarla tamamlanmış vaziyet planı." aria-hidden="true">
+            <img data-src="assets/seq-web/M3.webp" data-srcset="assets/seq-web/M3-m.webp 900w, assets/seq-web/M3.webp 1600w" sizes="100vw" alt="Plandan yükselen şeffaf üç boyutlu çizgisel kütle." aria-hidden="true">
+            <img data-src="assets/seq-web/M4.webp" data-srcset="assets/seq-web/M4-m.webp 900w, assets/seq-web/M4.webp 1600w" sizes="100vw" alt="Maket ölçeğinde betonarme karkas, iskele ve küçük kule vinç." aria-hidden="true">
+            <img data-src="assets/seq-web/M5.webp" data-srcset="assets/seq-web/M5-m.webp 900w, assets/seq-web/M5.webp 1600w" sizes="100vw" alt="Öndeki bloklarda taş kaplama ve kahverengi panel dolgu başlarken arkadakiler hâlâ ham beton." aria-hidden="true">
+            <img data-src="assets/seq-web/M6.webp" data-srcset="assets/seq-web/M6-m.webp 900w, assets/seq-web/M6.webp 1600w" sizes="100vw" alt="Kâğıdın üzerinde duran, peyzajı ve yollarıyla tamamlanmış mimari maket." aria-hidden="true">
           </div>
           <div class="seq-cap">
             <div class="seq-cap__lines">
@@ -1153,10 +1210,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <div class="wrap">
       <div class="plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.06 0.5">
-          <img src="assets/saha-web/merkezi-derslik-04.jpg"
-               srcset="assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w"
+          <img src="assets/saha-web/merkezi-derslik-04.webp"
+               srcset="assets/saha-web/merkezi-derslik-04-800.webp 800w, assets/saha-web/merkezi-derslik-04.webp 1600w"
                sizes="(max-width: 900px) 92vw, 56vw"
-               width="1600" height="1067" loading="lazy" decoding="async"
+               width="1200" height="800" loading="lazy" decoding="async"
                alt="Merkezi Derslik Projesi şantiyesi, tamamlanmaya yakın bloklar, havadan görünüm.">
           <figcaption>Merkezi Derslik Projesi. Saha, havadan.</figcaption>
         </figure>
@@ -1206,7 +1263,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
         <article class="rec__lead" id="kayit-01" data-ep data-ep-range="1.05 -0.05">
           <figure>
-            <img src="assets/saha-web/merkezi-derslik-04.jpg" srcset="assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w" sizes="(max-width: 860px) 92vw, 74vw" width="1600" height="1067" loading="lazy" alt="Merkezi derslik projesi şantiyesi, tamamlanmaya yakın bloklar, havadan görünüm.">
+            <img src="assets/saha-web/merkezi-derslik-04.webp" srcset="assets/saha-web/merkezi-derslik-04-800.webp 800w, assets/saha-web/merkezi-derslik-04.webp 1200w" sizes="(max-width: 860px) 92vw, 74vw" width="1200" height="800" loading="lazy" alt="Merkezi derslik projesi şantiyesi, tamamlanmaya yakın bloklar, havadan görünüm.">
           </figure>
           <div class="rec__lead-body">
             <div>
@@ -1273,7 +1330,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Peyzaj ve Çevre</span></span><p>Yeşil alan planlaması · Sulama ve drenaj altyapısı · Sert zemin uygulamaları · Aydınlatma ve tabela sistemleri</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/peyzaj-01.jpg" srcset="assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi.">
+            <img src="assets/saha-web/peyzaj-01.webp" srcset="assets/saha-web/peyzaj-01-800.webp 800w, assets/saha-web/peyzaj-01.webp 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="900" loading="lazy" alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi.">
           </figure>
         </article>
 
@@ -1292,7 +1349,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Otel binası inşaatı · İç mekân uygulamaları · Çevre peyzaj düzenlemesi</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/otel-01.jpg" srcset="assets/saha-web/otel-01-800.jpg 800w, assets/saha-web/otel-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Yamaç üzerinde otel binası ve çevre peyzajı, havadan görünüm.">
+            <img src="assets/saha-web/otel-01.webp" srcset="assets/saha-web/otel-01-800.webp 800w, assets/saha-web/otel-01.webp 1200w" sizes="(max-width: 860px) 92vw, 30vw" width="1200" height="800" loading="lazy" alt="Yamaç üzerinde otel binası ve çevre peyzajı, havadan görünüm.">
           </figure>
         </article>
 
@@ -1328,7 +1385,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Betonarme ve mimari uygulama · Elektrik ve mekanik uygulamalar · İdari birimlerin tek çatı altında toplanması</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/belediye-01.jpg" srcset="assets/saha-web/belediye-01-800.jpg 800w, assets/saha-web/belediye-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Beypazarı Belediyesi hizmet binası, havadan görünüm.">
+            <img src="assets/saha-web/belediye-01.webp" srcset="assets/saha-web/belediye-01-800.webp 800w, assets/saha-web/belediye-01.webp 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="900" loading="lazy" alt="Beypazarı Belediyesi hizmet binası, havadan görünüm.">
           </figure>
         </article>
 
@@ -1347,7 +1404,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım sistemleri · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj çalışmaları</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/kuran-01.jpg" srcset="assets/saha-web/kuran-01-800.jpg 800w, assets/saha-web/kuran-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Kuran kursu binası cephesi.">
+            <img src="assets/saha-web/kuran-01.webp" srcset="assets/saha-web/kuran-01-800.webp 800w, assets/saha-web/kuran-01.webp 1200w" sizes="(max-width: 860px) 92vw, 30vw" width="1200" height="800" loading="lazy" alt="Kuran kursu binası cephesi.">
           </figure>
         </article>
 
@@ -1365,7 +1422,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">Restorasyon</span></span><p>Yapısal güçlendirme · Taş ve ahşap onarımı · Cephe rehabilitasyonu · Teknik altyapı yenilenmesi</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/konak-06.jpg" srcset="assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Restore edilmiş tescilli konaklar, havadan görünüm.">
+            <img src="assets/saha-web/konak-06.webp" srcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06.webp 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="900" loading="lazy" alt="Restore edilmiş tescilli konaklar, havadan görünüm.">
           </figure>
         </article>
 
@@ -1384,7 +1441,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Betonarme ve çelik yapı · Drenaj ve atık yönetimi altyapısı · Hijyen odaklı tasarım uygulamaları</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/mezbahane-01.jpg" srcset="assets/saha-web/mezbahane-01-800.jpg 800w, assets/saha-web/mezbahane-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Mezbahane ve hayvan pazarı tesisi, havadan görünüm.">
+            <img src="assets/saha-web/mezbahane-01.webp" srcset="assets/saha-web/mezbahane-01-800.webp 800w, assets/saha-web/mezbahane-01.webp 1200w" sizes="(max-width: 860px) 92vw, 30vw" width="1200" height="800" loading="lazy" alt="Mezbahane ve hayvan pazarı tesisi, havadan görünüm.">
           </figure>
         </article>
 
@@ -1403,7 +1460,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Havuz yapımı · Su yalıtımı · Mekanik ve elektrik sistemleri · Tribün ve soyunma birimleri</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/havuz-01.jpg" srcset="assets/saha-web/havuz-01-800.jpg 800w, assets/saha-web/havuz-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Çok kulvarlı kapalı yüzme havuzu.">
+            <img src="assets/saha-web/havuz-01.webp" srcset="assets/saha-web/havuz-01-800.webp 800w, assets/saha-web/havuz-01.webp 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="900" loading="lazy" alt="Çok kulvarlı kapalı yüzme havuzu.">
           </figure>
         </article>
 
@@ -1421,16 +1478,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">İş kapsamı<span class="rec__area">İnşaat ve Taahhüt</span></span><p>Elektrik ve mekanik sistemler · Altyapı uygulamaları · Peyzaj düzenlemesi</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="assets/saha-web/meslek-02.jpg" srcset="assets/saha-web/meslek-02-800.jpg 800w, assets/saha-web/meslek-02.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Meslek yüksekokulu binası, havadan görünüm.">
+            <img src="assets/saha-web/meslek-02.webp" srcset="assets/saha-web/meslek-02-800.webp 800w, assets/saha-web/meslek-02.webp 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="900" loading="lazy" alt="Meslek yüksekokulu binası, havadan görünüm.">
           </figure>
         </article>
 
         <article id="kayit-12" class="rec__lead rec__lead--use" data-ep data-ep-range="1.05 -0.05">
           <div class="use-grid">
-            <figure><img src="assets/saha-web/laboratuvar-01.jpg" srcset="assets/saha-web/laboratuvar-01-800.jpg 800w, assets/saha-web/laboratuvar-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="Tezgâhları ve cihazlarıyla donatılmış laboratuvar."><figcaption>Laboratuvar</figcaption></figure>
-            <figure><img src="assets/saha-web/laboratuvar-05.jpg" srcset="assets/saha-web/laboratuvar-05-800.jpg 800w, assets/saha-web/laboratuvar-05.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="Raflarıyla birlikte tamamlanmış kütüphane."><figcaption>Kütüphane</figcaption></figure>
-            <figure><img src="assets/saha-web/laboratuvar-08.jpg" srcset="assets/saha-web/laboratuvar-08-800.jpg 800w, assets/saha-web/laboratuvar-08.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="Koltukları döşenmiş konferans ve sinema salonu."><figcaption>Konferans salonu</figcaption></figure>
-            <figure><img src="assets/saha-web/laboratuvar-03.jpg" srcset="assets/saha-web/laboratuvar-03-800.jpg 800w, assets/saha-web/laboratuvar-03.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="Donanımı tamamlanmış derslik."><figcaption>Derslik</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-01.webp" srcset="assets/saha-web/laboratuvar-01-800.webp 800w, assets/saha-web/laboratuvar-01.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Tezgâhları ve cihazlarıyla donatılmış laboratuvar."><figcaption>Laboratuvar</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-05.webp" srcset="assets/saha-web/laboratuvar-05-800.webp 800w, assets/saha-web/laboratuvar-05.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Raflarıyla birlikte tamamlanmış kütüphane."><figcaption>Kütüphane</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-08.webp" srcset="assets/saha-web/laboratuvar-08-800.webp 800w, assets/saha-web/laboratuvar-08.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Koltukları döşenmiş konferans ve sinema salonu."><figcaption>Konferans salonu</figcaption></figure>
+            <figure><img src="assets/saha-web/laboratuvar-03.webp" srcset="assets/saha-web/laboratuvar-03-800.webp 800w, assets/saha-web/laboratuvar-03.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Donanımı tamamlanmış derslik."><figcaption>Derslik</figcaption></figure>
           </div>
           <div class="rec__lead-body">
             <div>
@@ -1466,13 +1523,13 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div class="meas-total" data-ep data-ep-range="0.92 0.42">
         <div class="meas-total__pair">
           <div>
-            <span class="meas-total__n" data-sc-count="0 73.890" data-sc-count-at="0.05 0.6">73.890</span>
+            <span class="meas-total__n" data-say>73.890</span>
             <span class="meas-total__u">m²</span>
             <div class="dim dim--total" style="--w: 1"><i></i></div>
             <span class="meas-total__k">Kapalı yapı alanı</span>
           </div>
           <div>
-            <span class="meas-total__n meas-total__n--b" data-sc-count="0 64.500" data-sc-count-at="0.05 0.6">64.500</span>
+            <span class="meas-total__n meas-total__n--b" data-say>64.500</span>
             <span class="meas-total__u">m²</span>
             <div class="dim dim--total" style="--w: 0.873"><i></i></div>
             <span class="meas-total__k">Çevre düzenleme alanı</span>
@@ -1483,15 +1540,15 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
       <div class="meas sc-stack" data-sc-in data-sc-stagger="80">
         <div>
-          <span class="meas__n" data-sc-count="0 12" data-sc-count-at="0.05 0.5">12</span>
+          <span class="meas__n" data-say>12</span>
           <span class="meas__k">Toplam proje</span>
         </div>
         <div>
-          <span class="meas__n" data-sc-count="0 10" data-sc-count-at="0.05 0.5">10</span>
+          <span class="meas__n" data-say>10</span>
           <span class="meas__k">Tamamlanan</span>
         </div>
         <div>
-          <span class="meas__n" data-sc-count="0 2" data-sc-count-at="0.05 0.5">2</span>
+          <span class="meas__n" data-say>2</span>
           <span class="meas__k">Devam eden</span>
         </div>
       </div>
@@ -1572,8 +1629,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           restorasyon ve rehabilitasyon</p>
         <div class="dim" style="--w: 0.271"><i></i></div>
         <figure class="sorumluluk__fig">
-          <img src="assets/saha-web/konak-06.jpg" srcset="assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
-               width="800" height="513" loading="lazy"
+          <img src="assets/saha-web/konak-06.webp" srcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06.webp 1600w" sizes="(max-width: 860px) 92vw, 46vw"
+               width="1600" height="900" loading="lazy"
                alt="Restore edilmiş tescilli konaklar, havadan görünüm.">
           <figcaption>Konak Restorasyonu · Kültür Varlıkları ve Müzeler Genel Müdürlüğü</figcaption>
         </figure>
@@ -1590,8 +1647,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="sorumluluk__kirilim">Hitit Üniversitesi 32.500 m²<span class="est">*</span> ·
           park ve bahçe 14.500 m² · otel peyzaj alanı 17.500 m²</p>
         <figure class="sorumluluk__fig">
-          <img src="assets/saha-web/peyzaj-01.jpg" srcset="assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
-               width="800" height="513" loading="lazy"
+          <img src="assets/saha-web/peyzaj-01.webp" srcset="assets/saha-web/peyzaj-01-800.webp 800w, assets/saha-web/peyzaj-01.webp 1600w" sizes="(max-width: 860px) 92vw, 46vw"
+               width="1600" height="900" loading="lazy"
                alt="Hitit Üniversitesi kampüs girişi ve çevre düzenlemesi.">
           <figcaption>Peyzaj Projeleri · Hitit Üniversitesi</figcaption>
         </figure>
@@ -1618,8 +1675,8 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <div class="wrap">
       <div class="colo__plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.5">
-          <img src="assets/seq-web/08-F.jpg"
-               srcset="assets/seq-web/08-F-m.jpg 900w, assets/seq-web/08-F.jpg 1600w"
+          <img src="assets/seq-web/08-F.webp"
+               srcset="assets/seq-web/08-F-m.webp 900w, assets/seq-web/08-F.webp 1600w"
                sizes="(max-width: 900px) 92vw, 52vw"
                width="1600" height="900" loading="lazy"
                alt="Aynı mimar masası, iş bitmiş: çizim rulo yapılıp kaldırılmış, kalem cetvelin yanında duruyor.">
@@ -1875,6 +1932,201 @@ ScrollCraft.mount(document.body);
   }
   addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(bak); },
                    { passive: true });
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   --ec: bir medya kutusunun ekran ortasına ne kadar yakın olduğu.
+   1 tam ortada, 0 uzakta. Masaüstünde hover bu işi zaten yapıyor, o
+   yüzden burası yalnız dokunmatikte kurulur ve masaüstü hiçbir bedel
+   ödemez.
+
+   IntersectionObserver, yalnız görünür alana yaklaşan kutuları izlemeye
+   alıyor. Telefonda aynı anda iki üç kutu izleniyor, otuz iki değil;
+   kare başına okunan rect sayısı bu yüzden sabit kalıyor.
+   ------------------------------------------------------------------ */
+(function () {
+  if (!matchMedia('(hover: none)').matches) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const SEC = '.rec__fig, .rec__lead figure, .rec__inset, .sorumluluk__fig,' +
+              '.use-grid figure, .plate figure, .colo__plate figure';
+  const hepsi = [...document.querySelectorAll(SEC)];
+  if (!hepsi.length) return;
+
+  const izlenen = new Set();
+  const gozcu = new IntersectionObserver((girisler) => {
+    girisler.forEach((g) => {
+      if (g.isIntersecting) izlenen.add(g.target);
+      else { izlenen.delete(g.target); g.target.style.setProperty('--ec', '0'); }
+    });
+    if (izlenen.size) iste();
+  }, { rootMargin: '60% 0px 60% 0px' });
+  hepsi.forEach((el) => { el.style.setProperty('--ec', '0'); gozcu.observe(el); });
+
+  let raf = 0;
+  function iste() { if (!raf) raf = requestAnimationFrame(bak); }
+  function bak() {
+    raf = 0;
+    const vh = innerHeight, orta = vh / 2, bant = vh * 0.55;
+    izlenen.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const d = Math.abs(r.top + r.height / 2 - orta) / bant;
+      let v = d >= 1 ? 0 : 1 - d;
+      v = v * v * (3 - 2 * v);              /* yumuşak giriş çıkış */
+      const eski = +el.style.getPropertyValue('--ec') || 0;
+      if (Math.abs(v - eski) > 0.008) el.style.setProperty('--ec', v.toFixed(3));
+    });
+  }
+  addEventListener('scroll', iste, { passive: true });
+  addEventListener('resize', iste, { passive: true });
+  iste();
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   Rakamlar sayarak gelir.
+
+   Motorun kendi sayacı vardı ama yalnız bir act'in içindeki elemanları
+   kaydediyor; rakamlar bölümü act dışında akan bir bölüm, o yüzden o
+   öznitelikler bugüne kadar hiçbir şey yapmadı, sayılar sabit duruyordu.
+
+   Hedef sayı ayrı bir öznitelikte tutulmuyor bilerek: elemanın kendi
+   metni ZATEN doğru biçimlenmiş son değer. Rakamları oradan alıyoruz,
+   binlik ayracını da oradan öğreniyoruz. Böylece Türkçe sayfada 73.890,
+   İngilizce sayfada 73,890 kendiliğinden doğru çıkıyor; iki dil için
+   ayrı bir kural yazmaya gerek kalmıyor.
+
+   Bir kez sayar. Yukarı dönüldüğünde baştan saymaz: sayfada geri
+   kaydırırken hiçbir şeyin geri sarmaması kuralı burada da geçerli.
+   ------------------------------------------------------------------ */
+(function () {
+  const hedefler = [...document.querySelectorAll('[data-say]')];
+  if (!hedefler.length) return;
+
+  const azalt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const oku = (el) => {
+    const m = el.textContent.trim().match(/^(\d[\d.,\u00A0\s]*)$/);
+    if (!m) return null;
+    const ham = m[1];
+    const ayrac = (ham.match(/[.,\u00A0\s]/) || [''])[0];
+    const sayi = parseInt(ham.replace(/[^\d]/g, ''), 10);
+    return Number.isFinite(sayi) ? { sayi, ayrac, son: ham } : null;
+  };
+
+  const yaz = (n, ayrac) => {
+    const s = String(n);
+    if (!ayrac || s.length < 4) return s;
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, ayrac);
+  };
+
+  const gozcu = new IntersectionObserver((girisler, kendi) => {
+    girisler.forEach((g, i) => {
+      if (!g.isIntersecting) return;
+      const el = g.target;
+      kendi.unobserve(el);
+      const v = oku(el);
+      if (!v) return;
+      if (azalt || v.sayi < 2) return;          /* zaten doğru yazıyor */
+
+      const sure = 1150, gecikme = i * 110;
+      const bas = performance.now() + gecikme;
+      el.style.minWidth = el.getBoundingClientRect().width + 'px';
+      el.textContent = yaz(0, v.ayrac);
+
+      (function adim(t) {
+        const p = (t - bas) / sure;
+        if (p < 0) return requestAnimationFrame(adim);
+        if (p >= 1) { el.textContent = v.son; el.style.minWidth = ''; return; }
+        const e = 1 - Math.pow(1 - p, 3);       /* sona doğru yavaşlar */
+        el.textContent = yaz(Math.round(v.sayi * e), v.ayrac);
+        requestAnimationFrame(adim);
+      })(performance.now());
+    });
+  }, { threshold: 0.45 });
+
+  hedefler.forEach((el) => gozcu.observe(el));
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   Künyenin zemini sayfanın sınır çizgisini takip eder.
+
+   Önce şeridin tamamı bir sınıf değişimiyle bir anda dönüyordu. Sınır
+   ekranın ortasındayken sayfa yarı koyu yarı açık oluyor ama şerit tek
+   renk kalıyordu; gözü rahatsız eden şey geçişin hızı değil, o
+   uyumsuzluktu.
+
+   Şimdi iki şey yapılıyor: zemin, sınırın ekrandaki tam yerinden kesilen
+   sert bir geçişle boyanıyor; mürekkep ise öğe öğe, çizgi hangi satırın
+   ortasından geçtiyse yalnız o satır dönüyor.
+
+   on-desk sınıfı yerinde bırakıldı: onu ızgara rengi de kullanıyor.
+   ------------------------------------------------------------------ */
+(function () {
+  const folio = document.querySelector('.folio');
+  if (!folio) return;
+  const bolumler = [...document.querySelectorAll('.ch')];
+  if (!bolumler.length) return;
+
+  const ogeler = [
+    folio.querySelector('.folio__mark'),
+    ...folio.querySelectorAll('.folio__list a'),
+    ...folio.querySelectorAll('.folio__dil a'),
+  ].filter(Boolean);
+
+  let raf = 0, sonSinir = -1;
+
+  function koyuMu(kutular, y) {
+    for (const k of kutular) if (y >= k.ust && y < k.alt) return k.koyu;
+    return false;                       /* bölüm dışı her yer kâğıt */
+  }
+
+  function bak() {
+    raf = 0;
+    if (folio.offsetParent === null && getComputedStyle(folio).display === 'none') return;
+    const vh = innerHeight;
+    const kutular = bolumler.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { ust: r.top, alt: r.bottom, koyu: el.classList.contains('ch--desk') };
+    });
+
+    const ustKoyu = koyuMu(kutular, 0);
+    /* Ekranın içine düşen ilk zemin değişimi. Bölümler ekran boyundan uzun
+       olduğu için pratikte en fazla bir tane oluyor; yine de sıralayıp
+       ilkini alıyoruz ki varsayıma dayanmasın. */
+    let sinir = 0;
+    const kenarlar = [];
+    for (const k of kutular) { kenarlar.push(k.ust, k.alt); }
+    kenarlar.sort((a, b) => a - b);
+    for (const k of kenarlar) {
+      if (k <= 0 || k >= vh) continue;
+      if (koyuMu(kutular, k + 1) !== ustKoyu) { sinir = k; break; }
+    }
+
+    const KAGIT = 'var(--paper)', MASA = 'var(--desk)';
+    const altKoyu = sinir ? !ustKoyu : ustKoyu;
+    folio.style.setProperty('--g-ust', ustKoyu ? MASA : KAGIT);
+    folio.style.setProperty('--g-alt', altKoyu ? MASA : KAGIT);
+    if (sinir !== sonSinir) {
+      folio.style.setProperty('--sinir', sinir.toFixed(1) + 'px');
+      sonSinir = sinir;
+    }
+
+    for (const el of ogeler) {
+      const r = el.getBoundingClientRect();
+      el.classList.toggle('koyu-uzeri', koyuMu(kutular, r.top + r.height / 2));
+    }
+  }
+
+  function iste() { if (!raf) raf = requestAnimationFrame(bak); }
+  addEventListener('scroll', iste, { passive: true });
+  addEventListener('resize', iste, { passive: true });
+  iste();
 })();
 </script>
 </body>
