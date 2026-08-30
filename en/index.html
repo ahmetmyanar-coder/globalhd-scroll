@@ -161,29 +161,22 @@ p { text-wrap: pretty; }
   .folio { display: flex; }
   /* Colophon 132px'ten 238px'e genişleyince içeriğin üstüne bindi. Kenar
      boşluğu artık gerçekten ayrılmış bir sütun: sayfa gövdesi onun
-     sağından başlıyor, tıpkı kenar notlu bir kitapta olduğu gibi. */
-  main { padding-left: var(--folio-w); }
-  /* Koyu bölümün zemini künye sütununun altına da uzanmalı. Uzanmazsa
-     kenar boşluğu kâğıt renginde kalır, künye yazısı ise koyu zemine göre
-     açık renge döner ve açık üstüne açık yazı çıkar. Sözde öğe, bölümün
-     kendi dikey sınırlarına birebir hizalı olduğu için geçişte kayma da
-     olmuyor. */
-  /* Sütunun tamamı künyenin kendi zeminiyle boyanıyor. Bölüm kutusuna
-     bağlı bir sözde öğe denendi ama sabitlenmiş sahne kendi kutusundan
-     taşınca altta kâğıt rengi bir şerit kalıyordu. Colophon zaten sabit ve
-     tam yükseklikte, dolayısıyla doğru yer burası. */
-  /* Colophon tek renkti ve bölüm sınırında bir anda dönüyordu: sınır ekranın
-     ortasındayken sayfa iki renk, şerit tek renk kalıyordu, göze "lap" diye
-     çarpan şey buydu. Artık şeridin zemini sayfanın GERÇEK sınır çizgisini
-     takip ediyor. --sinir o çizginin ekrandaki yeri; sınır görünmüyorken
-     0 olur ve şerit tek renge döner. Yumuşatma yok, olmamalı da: sayfanın
-     kendi geçişi sert bir kesme, kenar boşluğu ondan farklı davranamaz. */
-  .folio {
-    --g-ust: var(--paper); --g-alt: var(--paper); --sinir: 0px;
-    background: linear-gradient(to bottom,
-      var(--g-ust) 0 var(--sinir), var(--g-alt) var(--sinir) 100%);
-  }
-  .title-page { padding-left: 0; }
+     sağından başlıyor, tıpkı kenar notlu bir kitapta olduğu gibi.
+
+     Boşluk main'de değil BÖLÜMLERDE duruyor, ve fark bu sayfanın en
+     önemli ayrıntılarından biri: dolgu kutunun içinde kaldığı için her
+     bölümün kendi zemini künye sütununun altına kadar uzanıyor. Yani
+     kenar boşluğunun rengini artık kimse hesaplamıyor, sayfanın kendi
+     zemini oluyor. Çocukların konumu değişmez, yalnız boya alanı büyür. */
+  .ch { padding-left: var(--folio-w); }
+  /* Colophon hiçbir şey boyamıyor. Önce tek renkti ve bölüm sınırında bir
+     anda dönüyordu; sonra sınırı JS ile takip etti ama sabitlenmiş bir
+     öğenin zeminini her karede JS'in boyaması hızlı kaydırmada bir kare
+     geride kalıyor, sayfa kayıyor şerit yetişemiyordu. Doğru cevap
+     zemini hiç boyamamak: bölümlerin dolgusu sayesinde altındaki zemin
+     zaten sayfanın kendi zemini ve onunla birlikte, aynı karede kayıyor.
+     Gecikme kavram olarak ortadan kalktı. */
+  .folio { background: transparent; }
 }
 
 .folio__mark { width: 62px; min-height: 26px; pointer-events: auto; }
@@ -213,13 +206,15 @@ p { text-wrap: pretty; }
 
 /* The folio is fixed over grounds that hard-cut light to dark, so the mark
    carries a mono treatment on dark rather than a colour that vanishes. */
-/* Mürekkep de öğe öğe döner: sınır çizgisi hangi satırın üzerinden
-   geçtiyse yalnız o satır renk değiştirir. Tüm şeridi birden çevirmek,
-   sınır ortadayken yarısını okunmaz bırakıyordu. Geçiş kısa (170ms):
-   çizgi öğenin ortasından geçerken öğe zaten iki zemine yayılmış olur. */
-.folio__mark img, .folio__list a, .folio__dil a {
-  transition: color 170ms var(--sc-ease-out), filter 170ms var(--sc-ease-out);
-}
+/* Mürekkep öğe öğe döner: sınır çizgisi hangi satırın üzerinden geçtiyse
+   yalnız o satır renk değiştirir. Tüm şeridi birden çevirmek, sınır
+   ortadayken yarısını okunmaz bırakıyordu.
+
+   Geçiş YOK, ve bu bilinçli. Önce 170ms'lik bir yumuşatma vardı; hızlı
+   kaydırmada yazı her sınırda ara tonlardan geçiyor, o 170ms boyunca iki
+   zemine göre de soluk kalıyordu. Göze "yetişemiyor" diye çarpan şey
+   geçişin kendisiydi. Sayfanın zemini sert kesiyor; kenar boşluğundaki
+   yazı da sert kesmeli, yoksa kaydırma hızlandıkça geride kalır. */
 .folio__mark.koyu-uzeri img { filter: brightness(0) invert(1); }
 
 
@@ -2051,18 +2046,15 @@ ScrollCraft.mount(document.body);
 
 <script>
 /* ------------------------------------------------------------------
-   Colophonnin zemini sayfanın sınır çizgisini takip eder.
+   Colophon mürekkebi: çizgi hangi satırın üzerinden geçtiyse o satır döner.
 
-   Önce şeridin tamamı bir sınıf değişimiyle bir anda dönüyordu. Sınır
-   ekranın ortasındayken sayfa yarı koyu yarı açık oluyor ama şerit tek
-   renk kalıyordu; gözü rahatsız eden şey geçişin hızı değil, o
-   uyumsuzluktu.
+   Zemin artık burada boyanmıyor; bölümlerin dolgusu sayesinde künyenin
+   altındaki renk sayfanın kendi zemini ve sayfayla aynı karede kayıyor.
+   Geriye yalnız yazı rengi kaldı: sabitlenmiş bir öğenin arkasında ne
+   olduğunu CSS bilemez, o yüzden bu kadarı JS'te.
 
-   Şimdi iki şey yapılıyor: zemin, sınırın ekrandaki tam yerinden kesilen
-   sert bir geçişle boyanıyor; mürekkep ise öğe öğe, çizgi hangi satırın
-   ortasından geçtiyse yalnız o satır dönüyor.
-
-   on-desk sınıfı yerinde bırakıldı: onu ızgara rengi de kullanıyor.
+   Measurem scroll olayında değil, kaydırmayı takip eden her karede
+   yapılıyor; böylece yazı da zeminle aynı karede dönüyor.
    ------------------------------------------------------------------ */
 (function () {
   const folio = document.querySelector('.folio');
@@ -2076,54 +2068,75 @@ ScrollCraft.mount(document.body);
     ...folio.querySelectorAll('.folio__dil a'),
   ].filter(Boolean);
 
-  let raf = 0, sonSinir = -1;
+  /* Öğelerin ekrandaki yeri sabit; her karede yeniden ölçmeye gerek yok.
+     Yalnızca bölüm sınırları kayıyor, onlar da belge koordinatında sabit.
+     İkisini bir kez alıp scrollY ile karşılaştırmak, kare başına tek bir
+     sayı okumak demek: layout okuması yok, dolayısıyla gecikme de yok. */
+  let ortalar = [], sinirlar = [], hazir = false;
 
-  function koyuMu(kutular, y) {
-    for (const k of kutular) if (y >= k.ust && y < k.alt) return k.koyu;
-    return false;                       /* bölüm dışı her yer kâğıt */
-  }
-
-  function bak() {
-    raf = 0;
-    if (folio.offsetParent === null && getComputedStyle(folio).display === 'none') return;
-    const vh = innerHeight;
-    const kutular = bolumler.map((el) => {
+  function olc() {
+    const yTop = scrollY;
+    ortalar = ogeler.map((el) => {
       const r = el.getBoundingClientRect();
-      return { ust: r.top, alt: r.bottom, koyu: el.classList.contains('ch--desk') };
+      return r.top + r.height / 2;                 /* ekran koordinatı */
     });
-
-    const ustKoyu = koyuMu(kutular, 0);
-    /* Ekranın içine düşen ilk zemin değişimi. Chapters ekran boyundan uzun
-       olduğu için pratikte en fazla bir tane oluyor; yine de sıralayıp
-       ilkini alıyoruz ki varsayıma dayanmasın. */
-    let sinir = 0;
-    const kenarlar = [];
-    for (const k of kutular) { kenarlar.push(k.ust, k.alt); }
-    kenarlar.sort((a, b) => a - b);
-    for (const k of kenarlar) {
-      if (k <= 0 || k >= vh) continue;
-      if (koyuMu(kutular, k + 1) !== ustKoyu) { sinir = k; break; }
-    }
-
-    const KAGIT = 'var(--paper)', MASA = 'var(--desk)';
-    const altKoyu = sinir ? !ustKoyu : ustKoyu;
-    folio.style.setProperty('--g-ust', ustKoyu ? MASA : KAGIT);
-    folio.style.setProperty('--g-alt', altKoyu ? MASA : KAGIT);
-    if (sinir !== sonSinir) {
-      folio.style.setProperty('--sinir', sinir.toFixed(1) + 'px');
-      sonSinir = sinir;
-    }
-
-    for (const el of ogeler) {
+    sinirlar = bolumler.map((el) => {
       const r = el.getBoundingClientRect();
-      el.classList.toggle('koyu-uzeri', koyuMu(kutular, r.top + r.height / 2));
+      return { ust: r.top + yTop, alt: r.bottom + yTop,
+               koyu: el.classList.contains('ch--desk') };
+    });
+    hazir = true;
+  }
+
+  function koyuMu(belgeY) {
+    for (const s of sinirlar) if (belgeY >= s.ust && belgeY < s.alt) return s.koyu;
+    return false;
+  }
+
+  let sonStatus = [];
+  function bak() {
+    if (!hazir) return;
+    const y = scrollY;
+    sonY = y;
+    for (let i = 0; i < ogeler.length; i++) {
+      const koyu = koyuMu(y + ortalar[i]);
+      if (sonStatus[i] !== koyu) {
+        ogeler[i].classList.toggle('koyu-uzeri', koyu);
+        sonStatus[i] = koyu;
+      }
     }
   }
 
-  function iste() { if (!raf) raf = requestAnimationFrame(bak); }
-  addEventListener('scroll', iste, { passive: true });
-  addEventListener('resize', iste, { passive: true });
-  iste();
+  /* Döngü yalnız kaydırma sürerken dönüyor: hareket varken her kare
+     ölçülüyor ki yazı zeminle aynı anda dönsün, hareket bitince
+     kendiliğinden duruyor ki sayfa boşuna kare harcamasın. Kare başına
+     yapılan iş tek bir scrollY okuması; layout okuması yok. */
+  let calisiyor = false, bosKare = 0;
+  function dongu() {
+    const oncekiY = sonY;
+    bak();
+    bosKare = (scrollY === oncekiY) ? bosKare + 1 : 0;
+    if (bosKare > 20) { calisiyor = false; return; }
+    requestAnimationFrame(dongu);
+  }
+  let sonY = -1;
+  function basla() {
+    bosKare = 0;
+    if (calisiyor) return;
+    calisiyor = true;
+    requestAnimationFrame(dongu);
+  }
+
+  const genis = matchMedia('(min-width: 1080px)');
+  function kur() {
+    if (!genis.matches) return;
+    olc(); bak();
+  }
+  addEventListener('scroll', basla, { passive: true });
+  addEventListener('resize', () => { kur(); basla(); }, { passive: true });
+  addEventListener('load', kur);
+  genis.addEventListener('change', kur);
+  kur();
 })();
 </script>
 </body>
