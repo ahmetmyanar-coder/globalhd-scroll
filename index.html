@@ -74,7 +74,7 @@ addEventListener('load', function () {
   --desk:       #16130E;
   --desk-soft:  #221D15;
   --rule:       color-mix(in srgb, var(--sc-ink) 18%, transparent);
-  --folio-w:    clamp(0px, 8vw, 132px);
+  --folio-w:    clamp(0px, 17vw, 238px);
 }
 
 /* Dark chapters restate ink AND color, per taste.md: redefining the token
@@ -142,16 +142,16 @@ p { text-wrap: pretty; }
 /* ---------- folio: the chrome. No fixed bar in this grammar. ---------- */
 .folio {
   position: fixed; inset-block: 0; left: 0; width: var(--folio-w);
-  display: none; flex-direction: column; align-items: center;
+  display: none; flex-direction: column; align-items: flex-start;
   justify-content: space-between;
-  padding-block: var(--sc-6);
+  padding: var(--sc-6) var(--sc-4) var(--sc-6) var(--sc-5);
   z-index: var(--sc-z-chrome);
   pointer-events: none;
   mix-blend-mode: normal;
 }
 @media (min-width: 1080px) { .folio { display: flex; } }
 
-.folio__mark { width: 46px; pointer-events: auto; }
+.folio__mark { width: 62px; pointer-events: auto; }
 .folio__mark img {
   width: 100%; height: auto; display: block;
   /* The signature move: the real artwork is uncovered from the ground up,
@@ -585,6 +585,30 @@ p { text-wrap: pretty; }
 .colo__head .colo__say { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .colo__plate img { transform: none; } }
 
+
+/* İletişim önce iki kez veriliyordu: bir kez cümlenin içinde, bir kez
+   ızgarada. Aynı bağlantıyı iki kere koymak klavyeyle gezen için de iki
+   ayrı durak demek. Artık tek yerde ve dokunulabilir bir hedef olarak. */
+.ulas { margin-top: var(--sc-6); display: grid; gap: var(--sc-4); max-width: 32rem; }
+.ulas__a {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: var(--sc-4) var(--sc-5);
+  border: 1px solid var(--rule); text-decoration: none;
+  transition: border-color 160ms var(--sc-ease-out), background 160ms var(--sc-ease-out);
+}
+.ulas__a:hover { border-color: var(--sc-accent); background: color-mix(in srgb, var(--sc-accent) 8%, transparent); }
+.ulas__k {
+  font-family: var(--sc-font-mono); font-size: 0.62rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-ink-soft);
+}
+.ulas__v {
+  font-family: var(--sc-font-display); font-weight: 500;
+  font-size: clamp(1.15rem, 0.95rem + 0.9vw, 1.6rem);
+  color: var(--sc-ink); letter-spacing: -0.01em; word-break: break-word;
+}
+.colo__form {
+  margin-top: var(--sc-6); font-size: 0.88rem; color: var(--sc-ink-soft); max-width: 54ch;
+}
 .colo { padding-block: clamp(5rem, 12vh, 9rem) clamp(3rem, 6vh, 4rem); }
 .colo__say { font-size: clamp(1.6rem, 1.1rem + 2.2vw, 3rem); max-width: 18ch; }
 .colo__body { margin-top: var(--sc-6); max-width: 54ch; color: var(--sc-ink-soft); }
@@ -748,35 +772,27 @@ p { text-wrap: pretty; }
 }
 @media (prefers-reduced-motion: reduce) { .rec__inset img { transform: none; } }
 
+/* Bu kayıt önce asimetrik bir mozaikti ve altyazılar görsellerin üstüne
+   biniyordu: dört farklı oran, dört kutu, dört gömülü etiket. Kalabalık
+   duruyordu. Kitaptaki plaka dizisi gibi eşit kareler ve altlarında düz
+   altyazı, aynı bilgiyi sakin veriyor. */
 .rec__lead--use .use-grid {
-  display: grid; gap: var(--sc-3);
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "a a b" "a a c" "d d d";
-  margin-bottom: var(--sc-6);
+  display: grid; gap: var(--sc-5) var(--sc-4);
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: var(--sc-7);
 }
-.rec__lead--use .use-grid figure:nth-child(1) { grid-area: a; }
-.rec__lead--use .use-grid figure:nth-child(2) { grid-area: b; }
-.rec__lead--use .use-grid figure:nth-child(3) { grid-area: c; }
-.rec__lead--use .use-grid figure:nth-child(4) { grid-area: d; }
-.rec__lead--use .use-grid figure { margin: 0; overflow: hidden; position: relative; }
+.rec__lead--use .use-grid figure { margin: 0; }
 .rec__lead--use .use-grid img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  border: 1px solid var(--rule); aspect-ratio: 3/2;
-  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -22px), 0) scale(1.06);
+  width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover;
+  border: 1px solid var(--rule);
 }
-.rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 1/1; }
-.rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 32/9; }
 .rec__lead--use .use-grid figcaption {
-  position: absolute; left: 0; bottom: 0;
-  padding: 0.3rem 0.55rem;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  font-family: var(--sc-font-mono); font-size: 0.6rem;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc-ink);
+  margin-top: var(--sc-3);
+  font-family: var(--sc-font-mono); font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc-ink-soft);
 }
-@media (max-width: 700px) {
-  .rec__lead--use .use-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "a a" "b c" "d d"; }
-  .rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 3/2; }
-  .rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 2/1; }
+@media (max-width: 860px) {
+  .rec__lead--use .use-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .rec__lead--use .use-grid img { transform: none; } }
 
@@ -846,18 +862,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 .folio__mark { display: block; }
 .folio__list {
   list-style: none; margin: 0; padding: 0;
-  display: flex; flex-direction: column; gap: 2px;
-  writing-mode: vertical-rl;
+  display: flex; flex-direction: column; gap: 1px;
+  width: 100%;
 }
 .folio__list a {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 2px; text-decoration: none;
-  font-family: var(--sc-font-mono); font-size: 0.62rem;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--sc-ink-soft); white-space: nowrap;
+  display: flex; align-items: baseline; gap: 9px;
+  padding: 7px 0 7px 9px; text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sc-ink-soft); line-height: 1.35;
   border-inline-start: 1px solid transparent;
 }
-.folio__list a span { font-size: 0.58rem; opacity: 0.7; }
+.folio__list a span { font-size: 0.56rem; opacity: 0.6; min-width: 1.15rem; flex: 0 0 auto; }
 .folio__list a:hover { color: var(--sc-accent); }
 .folio__list a[aria-current="true"] {
   color: var(--sc-ink); border-inline-start-color: var(--sc-accent);
@@ -868,14 +884,23 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 :root.on-desk .folio__list a:hover { color: var(--sc-accent); }
 
 .folio__dil {
-  font-family: var(--sc-font-mono); font-size: 0.6rem;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sc-ink-soft); text-decoration: none;
-  writing-mode: vertical-rl; padding: 6px 2px;
-  border-inline-start: 1px solid var(--rule);
+  display: flex; align-items: baseline; gap: 7px;
+  font-family: var(--sc-font-mono); font-size: 0.66rem;
+  letter-spacing: 0.14em; padding: 9px 0 0 9px;
+  border-top: 1px solid var(--rule); width: 100%;
 }
-.folio__dil:hover { color: var(--sc-accent); }
-:root.on-desk .folio__dil { color: #A99C87; }
+.folio__dil a { color: var(--sc-ink-soft); text-decoration: none; }
+.folio__dil a:hover { color: var(--sc-accent); }
+.folio__dil a[aria-current="true"] { color: var(--sc-ink); }
+.folio__dil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; }
+:root.on-desk .folio__dil a { color: #A99C87; }
+:root.on-desk .folio__dil a[aria-current="true"] { color: #EFE7D8; }
+
+.minidil { display: flex; align-items: center; gap: 6px; padding: 11px 13px; flex: 0 0 auto; }
+.minidil a { color: var(--sc-ink-soft); text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem; letter-spacing: 0.13em; }
+.minidil a[aria-current="true"] { color: var(--sc-ink); }
+.minidil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; font-size: 0.6rem; }
 
 .mininav {
   position: fixed; top: 0; left: 0; right: 0; z-index: var(--sc-z-chrome);
@@ -895,7 +920,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   color: var(--sc-ink-soft); border-bottom: 2px solid transparent;
 }
 .mininav a[aria-current="true"] { color: var(--sc-ink); border-bottom-color: var(--sc-accent); }
-.mininav .minidil { color: var(--sc-accent); }
+
 @media (max-width: 1079px) { .title-page { padding-top: calc(clamp(6rem,14vh,10rem) + 44px); } }
 
 /* Photographs answer the pointer. A plain zoom is the default everywhere;
@@ -906,11 +931,11 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   .rec__fig, .rec__lead figure, .rec__inset, .sorumluluk__fig,
   .use-grid figure, .plate figure, .colo__plate figure { position: relative; }
   .rec__fig img, .rec__lead figure img, .rec__inset img, .sorumluluk__fig img,
-  .use-grid img, .plate figure img, .colo__plate img {
+  .plate figure img, .colo__plate img {
     transition: transform 520ms var(--sc-ease-out), filter 320ms var(--sc-ease-out);
   }
   .rec__fig:hover img, .rec__lead figure:hover img, .rec__inset:hover img,
-  .sorumluluk__fig:hover img, .use-grid figure:hover img,
+  .sorumluluk__fig:hover img,
   .plate figure:hover img, .colo__plate figure:hover img {
     transform: scale(1.045) translate3d(0, calc((var(--ep, 0.5) - 0.5) * -34px), 0);
     filter: saturate(1.04) contrast(1.03);
@@ -980,7 +1005,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <li><a href="#bolum-5"       data-fo="05"><span>05</span>Sürdürülebilirlik</a></li>
     <li><a href="#iletisim"      data-fo="—"><span>·</span>İletişim</a></li>
   </ol>
-  <a class="folio__dil" href="/en/" hreflang="en" lang="en">EN</a>
+  <div class="folio__dil"><a href="/" hreflang="tr" lang="tr" aria-current="true">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en">EN</a></div>
 </nav>
 
 <!-- Dar ekranda kenar künyesi sığmaz; aynı bağlantılar üstte ince bir
@@ -988,7 +1013,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
      dönünce görünür. -->
 <nav class="mininav" aria-label="Bölümler">
   <a href="#top">Başlangıç</a><a href="#bolum-1">Çizgi</a><a href="#bolum-3">Projeler</a><a href="#bolum-4">Kurumsal</a><a href="#bolum-5">Sürdürülebilirlik</a><a href="#iletisim">İletişim</a>
-  <a class="minidil" href="/en/" hreflang="en" lang="en">EN</a>
+  <div class="minidil"><a href="/" hreflang="tr" lang="tr" aria-current="true">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en">EN</a></div>
 </nav>
 
 <main id="top">
@@ -1543,10 +1568,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         </figure>
         <div class="colo__head">
           <h2 class="colo__say sc-stack" data-sc-in>Proje görüşmesi için bize ulaşın.</h2>
-          <p class="colo__body sc-stack" data-sc-in>Dijital iletişim formumuz hazırlanmaktadır. Bu süreçte
-            <a href="tel:+903122854585">0312 285 45 85</a> numarasından veya
-            <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a> adresinden bize
-            doğrudan ulaşabilirsiniz.</p>
+          <div class="ulas sc-stack" data-sc-in data-sc-stagger="70">
+            <a class="ulas__a" href="tel:+903122854585">
+              <span class="ulas__k">Telefon</span>
+              <span class="ulas__v">0312 285 45 85</span>
+            </a>
+            <a class="ulas__a" href="mailto:bilgi@globalhdinsaat.com">
+              <span class="ulas__k">E-posta</span>
+              <span class="ulas__v">bilgi@globalhdinsaat.com</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -1556,18 +1587,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <p>Kızılırmak Mah. 1446 Cad.<br>No:12 İç Kapı No:21<br>Çankaya / Ankara</p>
         </div>
         <div>
-          <h3>Telefon</h3>
-          <a href="tel:+903122854585">0312 285 45 85</a>
-        </div>
-        <div>
-          <h3>E-posta</h3>
-          <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a>
-        </div>
-        <div>
           <h3>Kurum</h3>
           <p>Global HD İnşaat A.Ş.<br>Ankara merkezli mühendislik ve taahhüt</p>
         </div>
       </div>
+      <p class="colo__form">Dijital iletişim formumuz hazırlanmaktadır; bu süreçte telefon ve
+        e-posta doğrudan çalışmaktadır.</p>
 
       <p class="colo__fine">
         <span>© 2026 Global HD İnşaat A.Ş.</span>

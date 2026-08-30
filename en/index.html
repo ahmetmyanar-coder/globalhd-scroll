@@ -74,7 +74,7 @@ addEventListener('load', function () {
   --desk:       #16130E;
   --desk-soft:  #221D15;
   --rule:       color-mix(in srgb, var(--sc-ink) 18%, transparent);
-  --folio-w:    clamp(0px, 8vw, 132px);
+  --folio-w:    clamp(0px, 17vw, 238px);
 }
 
 /* Dark chapters restate ink AND color, per taste.md: redefining the token
@@ -142,16 +142,16 @@ p { text-wrap: pretty; }
 /* ---------- folio: the chrome. No fixed bar in this grammar. ---------- */
 .folio {
   position: fixed; inset-block: 0; left: 0; width: var(--folio-w);
-  display: none; flex-direction: column; align-items: center;
+  display: none; flex-direction: column; align-items: flex-start;
   justify-content: space-between;
-  padding-block: var(--sc-6);
+  padding: var(--sc-6) var(--sc-4) var(--sc-6) var(--sc-5);
   z-index: var(--sc-z-chrome);
   pointer-events: none;
   mix-blend-mode: normal;
 }
 @media (min-width: 1080px) { .folio { display: flex; } }
 
-.folio__mark { width: 46px; pointer-events: auto; }
+.folio__mark { width: 62px; pointer-events: auto; }
 .folio__mark img {
   width: 100%; height: auto; display: block;
   /* The signature move: the real artwork is uncovered from the ground up,
@@ -585,6 +585,30 @@ p { text-wrap: pretty; }
 .colo__head .colo__say { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .colo__plate img { transform: none; } }
 
+
+/* Contact önce iki kez veriliyordu: bir kez cümlenin içinde, bir kez
+   ızgarada. Aynı bağlantıyı iki kere koymak klavyeyle gezen için de iki
+   ayrı durak demek. Artık tek yerde ve dokunulabilir bir hedef olarak. */
+.ulas { margin-top: var(--sc-6); display: grid; gap: var(--sc-4); max-width: 32rem; }
+.ulas__a {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: var(--sc-4) var(--sc-5);
+  border: 1px solid var(--rule); text-decoration: none;
+  transition: border-color 160ms var(--sc-ease-out), background 160ms var(--sc-ease-out);
+}
+.ulas__a:hover { border-color: var(--sc-accent); background: color-mix(in srgb, var(--sc-accent) 8%, transparent); }
+.ulas__k {
+  font-family: var(--sc-font-mono); font-size: 0.62rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-ink-soft);
+}
+.ulas__v {
+  font-family: var(--sc-font-display); font-weight: 500;
+  font-size: clamp(1.15rem, 0.95rem + 0.9vw, 1.6rem);
+  color: var(--sc-ink); letter-spacing: -0.01em; word-break: break-word;
+}
+.colo__form {
+  margin-top: var(--sc-6); font-size: 0.88rem; color: var(--sc-ink-soft); max-width: 54ch;
+}
 .colo { padding-block: clamp(5rem, 12vh, 9rem) clamp(3rem, 6vh, 4rem); }
 .colo__say { font-size: clamp(1.6rem, 1.1rem + 2.2vw, 3rem); max-width: 18ch; }
 .colo__body { margin-top: var(--sc-6); max-width: 54ch; color: var(--sc-ink-soft); }
@@ -748,35 +772,27 @@ p { text-wrap: pretty; }
 }
 @media (prefers-reduced-motion: reduce) { .rec__inset img { transform: none; } }
 
+/* Bu kayıt önce asimetrik bir mozaikti ve altyazılar görsellerin üstüne
+   biniyordu: dört farklı oran, dört kutu, dört gömülü etiket. Kalabalık
+   duruyordu. Kitaptaki plaka dizisi gibi eşit kareler ve altlarında düz
+   altyazı, aynı bilgiyi sakin veriyor. */
 .rec__lead--use .use-grid {
-  display: grid; gap: var(--sc-3);
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "a a b" "a a c" "d d d";
-  margin-bottom: var(--sc-6);
+  display: grid; gap: var(--sc-5) var(--sc-4);
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: var(--sc-7);
 }
-.rec__lead--use .use-grid figure:nth-child(1) { grid-area: a; }
-.rec__lead--use .use-grid figure:nth-child(2) { grid-area: b; }
-.rec__lead--use .use-grid figure:nth-child(3) { grid-area: c; }
-.rec__lead--use .use-grid figure:nth-child(4) { grid-area: d; }
-.rec__lead--use .use-grid figure { margin: 0; overflow: hidden; position: relative; }
+.rec__lead--use .use-grid figure { margin: 0; }
 .rec__lead--use .use-grid img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  border: 1px solid var(--rule); aspect-ratio: 3/2;
-  transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -22px), 0) scale(1.06);
+  width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover;
+  border: 1px solid var(--rule);
 }
-.rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 1/1; }
-.rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 32/9; }
 .rec__lead--use .use-grid figcaption {
-  position: absolute; left: 0; bottom: 0;
-  padding: 0.3rem 0.55rem;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  font-family: var(--sc-font-mono); font-size: 0.6rem;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc-ink);
+  margin-top: var(--sc-3);
+  font-family: var(--sc-font-mono); font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc-ink-soft);
 }
-@media (max-width: 700px) {
-  .rec__lead--use .use-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "a a" "b c" "d d"; }
-  .rec__lead--use .use-grid figure:nth-child(1) img { aspect-ratio: 3/2; }
-  .rec__lead--use .use-grid figure:nth-child(4) img { aspect-ratio: 2/1; }
+@media (max-width: 860px) {
+  .rec__lead--use .use-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .rec__lead--use .use-grid img { transform: none; } }
 
@@ -846,18 +862,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 .folio__mark { display: block; }
 .folio__list {
   list-style: none; margin: 0; padding: 0;
-  display: flex; flex-direction: column; gap: 2px;
-  writing-mode: vertical-rl;
+  display: flex; flex-direction: column; gap: 1px;
+  width: 100%;
 }
 .folio__list a {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 2px; text-decoration: none;
-  font-family: var(--sc-font-mono); font-size: 0.62rem;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--sc-ink-soft); white-space: nowrap;
+  display: flex; align-items: baseline; gap: 9px;
+  padding: 7px 0 7px 9px; text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sc-ink-soft); line-height: 1.35;
   border-inline-start: 1px solid transparent;
 }
-.folio__list a span { font-size: 0.58rem; opacity: 0.7; }
+.folio__list a span { font-size: 0.56rem; opacity: 0.6; min-width: 1.15rem; flex: 0 0 auto; }
 .folio__list a:hover { color: var(--sc-accent); }
 .folio__list a[aria-current="true"] {
   color: var(--sc-ink); border-inline-start-color: var(--sc-accent);
@@ -868,14 +884,23 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 :root.on-desk .folio__list a:hover { color: var(--sc-accent); }
 
 .folio__dil {
-  font-family: var(--sc-font-mono); font-size: 0.6rem;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sc-ink-soft); text-decoration: none;
-  writing-mode: vertical-rl; padding: 6px 2px;
-  border-inline-start: 1px solid var(--rule);
+  display: flex; align-items: baseline; gap: 7px;
+  font-family: var(--sc-font-mono); font-size: 0.66rem;
+  letter-spacing: 0.14em; padding: 9px 0 0 9px;
+  border-top: 1px solid var(--rule); width: 100%;
 }
-.folio__dil:hover { color: var(--sc-accent); }
-:root.on-desk .folio__dil { color: #A99C87; }
+.folio__dil a { color: var(--sc-ink-soft); text-decoration: none; }
+.folio__dil a:hover { color: var(--sc-accent); }
+.folio__dil a[aria-current="true"] { color: var(--sc-ink); }
+.folio__dil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; }
+:root.on-desk .folio__dil a { color: #A99C87; }
+:root.on-desk .folio__dil a[aria-current="true"] { color: #EFE7D8; }
+
+.minidil { display: flex; align-items: center; gap: 6px; padding: 11px 13px; flex: 0 0 auto; }
+.minidil a { color: var(--sc-ink-soft); text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem; letter-spacing: 0.13em; }
+.minidil a[aria-current="true"] { color: var(--sc-ink); }
+.minidil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; font-size: 0.6rem; }
 
 .mininav {
   position: fixed; top: 0; left: 0; right: 0; z-index: var(--sc-z-chrome);
@@ -895,7 +920,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   color: var(--sc-ink-soft); border-bottom: 2px solid transparent;
 }
 .mininav a[aria-current="true"] { color: var(--sc-ink); border-bottom-color: var(--sc-accent); }
-.mininav .minidil { color: var(--sc-accent); }
+
 @media (max-width: 1079px) { .title-page { padding-top: calc(clamp(6rem,14vh,10rem) + 44px); } }
 
 /* Photographs answer the pointer. A plain zoom is the default everywhere;
@@ -906,11 +931,11 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   .rec__fig, .rec__lead figure, .rec__inset, .sorumluluk__fig,
   .use-grid figure, .plate figure, .colo__plate figure { position: relative; }
   .rec__fig img, .rec__lead figure img, .rec__inset img, .sorumluluk__fig img,
-  .use-grid img, .plate figure img, .colo__plate img {
+  .plate figure img, .colo__plate img {
     transition: transform 520ms var(--sc-ease-out), filter 320ms var(--sc-ease-out);
   }
   .rec__fig:hover img, .rec__lead figure:hover img, .rec__inset:hover img,
-  .sorumluluk__fig:hover img, .use-grid figure:hover img,
+  .sorumluluk__fig:hover img,
   .plate figure:hover img, .colo__plate figure:hover img {
     transform: scale(1.045) translate3d(0, calc((var(--ep, 0.5) - 0.5) * -34px), 0);
     filter: saturate(1.04) contrast(1.03);
@@ -980,7 +1005,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <li><a href="#bolum-5"       data-fo="05"><span>05</span>Sustainability</a></li>
     <li><a href="#iletisim"      data-fo="—"><span>·</span>Contact</a></li>
   </ol>
-  <a class="folio__dil" href="/" hreflang="tr" lang="tr">TR</a>
+  <div class="folio__dil"><a href="/" hreflang="tr" lang="tr">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
 </nav>
 
 <!-- Dar ekranda kenar künyesi sığmaz; aynı bağlantılar üstte ince bir
@@ -988,7 +1013,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
      dönünce görünür. -->
 <nav class="mininav" aria-label="Chapters">
   <a href="#top">Start</a><a href="#bolum-1">Line</a><a href="#bolum-3">Projects</a><a href="#bolum-4">The firm</a><a href="#bolum-5">Sustainability</a><a href="#iletisim">Contact</a>
-  <a class="minidil" href="/" hreflang="tr" lang="tr">TR</a>
+  <div class="minidil"><a href="/" hreflang="tr" lang="tr">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
 </nav>
 
 <main id="top">
@@ -1037,12 +1062,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
           <div class="seq-stage__frames" id="seqFrames">
-            <img src="/assets/seq-web/M1.jpg" srcset="/assets/seq-web/M1-m.jpg 900w, assets/seq-web/M1.jpg 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil." fetchpriority="high">
-            <img data-src="/assets/seq-web/M2.jpg" data-srcset="/assets/seq-web/M2-m.jpg 900w, assets/seq-web/M2.jpg 1600w" sizes="100vw" alt="A completed site plan with parallel blocks, link volumes, roads and contours." aria-hidden="true">
-            <img data-src="/assets/seq-web/M3.jpg" data-srcset="/assets/seq-web/M3-m.jpg 900w, assets/seq-web/M3.jpg 1600w" sizes="100vw" alt="A transparent three-dimensional line massing rising from the plan." aria-hidden="true">
-            <img data-src="/assets/seq-web/M4.jpg" data-srcset="/assets/seq-web/M4-m.jpg 900w, assets/seq-web/M4.jpg 1600w" sizes="100vw" alt="A reinforced concrete frame at model scale, with scaffolding and a small tower crane." aria-hidden="true">
-            <img data-src="/assets/seq-web/M5.jpg" data-srcset="/assets/seq-web/M5-m.jpg 900w, assets/seq-web/M5.jpg 1600w" sizes="100vw" alt="Stone cladding and brown panel infill beginning on the front blocks while those behind remain bare concrete." aria-hidden="true">
-            <img data-src="/assets/seq-web/M6.jpg" data-srcset="/assets/seq-web/M6-m.jpg 900w, assets/seq-web/M6.jpg 1600w" sizes="100vw" alt="A completed architectural model on the drafting paper, with its landscaping and roads." aria-hidden="true">
+            <img src="/assets/seq-web/M1.jpg" srcset="/assets/seq-web/M1-m.jpg 900w, /assets/seq-web/M1.jpg 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil." fetchpriority="high">
+            <img data-src="/assets/seq-web/M2.jpg" data-srcset="/assets/seq-web/M2-m.jpg 900w, /assets/seq-web/M2.jpg 1600w" sizes="100vw" alt="A completed site plan with parallel blocks, link volumes, roads and contours." aria-hidden="true">
+            <img data-src="/assets/seq-web/M3.jpg" data-srcset="/assets/seq-web/M3-m.jpg 900w, /assets/seq-web/M3.jpg 1600w" sizes="100vw" alt="A transparent three-dimensional line massing rising from the plan." aria-hidden="true">
+            <img data-src="/assets/seq-web/M4.jpg" data-srcset="/assets/seq-web/M4-m.jpg 900w, /assets/seq-web/M4.jpg 1600w" sizes="100vw" alt="A reinforced concrete frame at model scale, with scaffolding and a small tower crane." aria-hidden="true">
+            <img data-src="/assets/seq-web/M5.jpg" data-srcset="/assets/seq-web/M5-m.jpg 900w, /assets/seq-web/M5.jpg 1600w" sizes="100vw" alt="Stone cladding and brown panel infill beginning on the front blocks while those behind remain bare concrete." aria-hidden="true">
+            <img data-src="/assets/seq-web/M6.jpg" data-srcset="/assets/seq-web/M6-m.jpg 900w, /assets/seq-web/M6.jpg 1600w" sizes="100vw" alt="A completed architectural model on the drafting paper, with its landscaping and roads." aria-hidden="true">
           </div>
           <div class="seq-cap">
             <div class="seq-cap__lines">
@@ -1068,7 +1093,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div class="plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.06 0.5">
           <img src="/assets/saha-web/merkezi-derslik-04.jpg"
-               srcset="/assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w"
+               srcset="/assets/saha-web/merkezi-derslik-04-800.jpg 800w, /assets/saha-web/merkezi-derslik-04.jpg 1600w"
                sizes="(max-width: 900px) 92vw, 56vw"
                width="1600" height="1067"
                alt="The Central Classroom Project site, blocks nearing completion, seen from the air.">
@@ -1121,7 +1146,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
         <article class="rec__lead" id="kayit-01" data-ep data-ep-range="1.05 -0.05">
           <figure>
-            <img src="/assets/saha-web/merkezi-derslik-04.jpg" srcset="/assets/saha-web/merkezi-derslik-04-800.jpg 800w, assets/saha-web/merkezi-derslik-04.jpg 1600w" sizes="(max-width: 860px) 92vw, 74vw" width="1600" height="1067" loading="lazy" alt="The Central Classroom Project site, blocks nearing completion, seen from the air.">
+            <img src="/assets/saha-web/merkezi-derslik-04.jpg" srcset="/assets/saha-web/merkezi-derslik-04-800.jpg 800w, /assets/saha-web/merkezi-derslik-04.jpg 1600w" sizes="(max-width: 860px) 92vw, 74vw" width="1600" height="1067" loading="lazy" alt="The Central Classroom Project site, blocks nearing completion, seen from the air.">
           </figure>
           <div class="rec__lead-body">
             <div>
@@ -1188,7 +1213,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Landscaping</span></span><p>Planting design · Irrigation and drainage infrastructure · Hardscaping · Lighting and signage systems</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/peyzaj-01.jpg" srcset="/assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The Hitit University campus entrance and its landscaping.">
+            <img src="/assets/saha-web/peyzaj-01.jpg" srcset="/assets/saha-web/peyzaj-01-800.jpg 800w, /assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The Hitit University campus entrance and its landscaping.">
           </figure>
         </article>
 
@@ -1207,7 +1232,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Hotel building construction · Interior fit-out · Landscaping of the grounds</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/otel-01.jpg" srcset="/assets/saha-web/otel-01-800.jpg 800w, assets/saha-web/otel-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The hotel building on its hillside with the surrounding landscape, seen from the air.">
+            <img src="/assets/saha-web/otel-01.jpg" srcset="/assets/saha-web/otel-01-800.jpg 800w, /assets/saha-web/otel-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The hotel building on its hillside with the surrounding landscape, seen from the air.">
           </figure>
         </article>
 
@@ -1243,7 +1268,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Reinforced concrete and architectural works · Electrical and mechanical works · Consolidation of administrative departments under one roof</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/belediye-01.jpg" srcset="/assets/saha-web/belediye-01-800.jpg 800w, assets/saha-web/belediye-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The Beypazarı Municipality service building, seen from the air.">
+            <img src="/assets/saha-web/belediye-01.jpg" srcset="/assets/saha-web/belediye-01-800.jpg 800w, /assets/saha-web/belediye-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The Beypazarı Municipality service building, seen from the air.">
           </figure>
         </article>
 
@@ -1262,7 +1287,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Mechanical installations · Electrical and extra-low-voltage systems · Infrastructure and superstructure works · Site works and landscaping</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/kuran-01.jpg" srcset="/assets/saha-web/kuran-01-800.jpg 800w, assets/saha-web/kuran-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The façade of the Quran course building.">
+            <img src="/assets/saha-web/kuran-01.jpg" srcset="/assets/saha-web/kuran-01-800.jpg 800w, /assets/saha-web/kuran-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The façade of the Quran course building.">
           </figure>
         </article>
 
@@ -1280,7 +1305,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Restoration</span></span><p>Structural strengthening · Stone and timber repair · Façade rehabilitation · Renewal of building services</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/konak-06.jpg" srcset="/assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Restored registered mansions, seen from the air.">
+            <img src="/assets/saha-web/konak-06.jpg" srcset="/assets/saha-web/konak-06-800.jpg 800w, /assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="Restored registered mansions, seen from the air.">
           </figure>
         </article>
 
@@ -1299,7 +1324,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Reinforced concrete and steel structure · Drainage and waste management infrastructure · Hygiene-led design</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/mezbahane-01.jpg" srcset="/assets/saha-web/mezbahane-01-800.jpg 800w, assets/saha-web/mezbahane-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The abattoir and livestock market facility, seen from the air.">
+            <img src="/assets/saha-web/mezbahane-01.jpg" srcset="/assets/saha-web/mezbahane-01-800.jpg 800w, /assets/saha-web/mezbahane-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The abattoir and livestock market facility, seen from the air.">
           </figure>
         </article>
 
@@ -1318,7 +1343,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Pool construction · Waterproofing · Mechanical and electrical systems · Spectator seating and changing rooms</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/havuz-01.jpg" srcset="/assets/saha-web/havuz-01-800.jpg 800w, assets/saha-web/havuz-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="A multi-lane indoor swimming pool.">
+            <img src="/assets/saha-web/havuz-01.jpg" srcset="/assets/saha-web/havuz-01-800.jpg 800w, /assets/saha-web/havuz-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="A multi-lane indoor swimming pool.">
           </figure>
         </article>
 
@@ -1336,16 +1361,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div class="rec__scope"><span class="k">Scope of work<span class="rec__area">Construction and Contracting</span></span><p>Electrical and mechanical systems · Infrastructure works · Landscaping</p></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
-            <img src="/assets/saha-web/meslek-02.jpg" srcset="/assets/saha-web/meslek-02-800.jpg 800w, assets/saha-web/meslek-02.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The vocational school building, seen from the air.">
+            <img src="/assets/saha-web/meslek-02.jpg" srcset="/assets/saha-web/meslek-02-800.jpg 800w, /assets/saha-web/meslek-02.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="1600" height="1067" loading="lazy" alt="The vocational school building, seen from the air.">
           </figure>
         </article>
 
         <article id="kayit-12" class="rec__lead rec__lead--use" data-ep data-ep-range="1.05 -0.05">
           <div class="use-grid">
-            <figure><img src="/assets/saha-web/laboratuvar-01.jpg" srcset="/assets/saha-web/laboratuvar-01-800.jpg 800w, assets/saha-web/laboratuvar-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A laboratory fitted out with its benches and equipment."><figcaption>Laboratory</figcaption></figure>
-            <figure><img src="/assets/saha-web/laboratuvar-05.jpg" srcset="/assets/saha-web/laboratuvar-05-800.jpg 800w, assets/saha-web/laboratuvar-05.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A library completed with its shelving."><figcaption>Library</figcaption></figure>
-            <figure><img src="/assets/saha-web/laboratuvar-08.jpg" srcset="/assets/saha-web/laboratuvar-08-800.jpg 800w, assets/saha-web/laboratuvar-08.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A conference and cinema hall with its seating installed."><figcaption>Conference hall</figcaption></figure>
-            <figure><img src="/assets/saha-web/laboratuvar-03.jpg" srcset="/assets/saha-web/laboratuvar-03-800.jpg 800w, assets/saha-web/laboratuvar-03.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A classroom with its fit-out complete."><figcaption>Classroom</figcaption></figure>
+            <figure><img src="/assets/saha-web/laboratuvar-01.jpg" srcset="/assets/saha-web/laboratuvar-01-800.jpg 800w, /assets/saha-web/laboratuvar-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A laboratory fitted out with its benches and equipment."><figcaption>Laboratory</figcaption></figure>
+            <figure><img src="/assets/saha-web/laboratuvar-05.jpg" srcset="/assets/saha-web/laboratuvar-05-800.jpg 800w, /assets/saha-web/laboratuvar-05.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A library completed with its shelving."><figcaption>Library</figcaption></figure>
+            <figure><img src="/assets/saha-web/laboratuvar-08.jpg" srcset="/assets/saha-web/laboratuvar-08-800.jpg 800w, /assets/saha-web/laboratuvar-08.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A conference and cinema hall with its seating installed."><figcaption>Conference hall</figcaption></figure>
+            <figure><img src="/assets/saha-web/laboratuvar-03.jpg" srcset="/assets/saha-web/laboratuvar-03-800.jpg 800w, /assets/saha-web/laboratuvar-03.jpg 1600w" sizes="(max-width: 860px) 92vw, 50vw" width="1600" height="1067" loading="lazy" alt="A classroom with its fit-out complete."><figcaption>Classroom</figcaption></figure>
           </div>
           <div class="rec__lead-body">
             <div>
@@ -1486,7 +1511,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           on a registered building</p>
         <div class="dim" style="--w: 0.271"><i></i></div>
         <figure class="sorumluluk__fig">
-          <img src="/assets/saha-web/konak-06.jpg" srcset="/assets/saha-web/konak-06-800.jpg 800w, assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
+          <img src="/assets/saha-web/konak-06.jpg" srcset="/assets/saha-web/konak-06-800.jpg 800w, /assets/saha-web/konak-06.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
                width="800" height="513" loading="lazy"
                alt="Restored registered mansions, seen from the air.">
           <figcaption>Mansion Restoration · General Directorate of Cultural Heritage and Museums</figcaption>
@@ -1504,7 +1529,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         <p class="sorumluluk__kirilim">Hitit University 32,500 m²<span class="est">*</span> ·
           parks and gardens 14,500 m² · hotel grounds 17,500 m²</p>
         <figure class="sorumluluk__fig">
-          <img src="/assets/saha-web/peyzaj-01.jpg" srcset="/assets/saha-web/peyzaj-01-800.jpg 800w, assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
+          <img src="/assets/saha-web/peyzaj-01.jpg" srcset="/assets/saha-web/peyzaj-01-800.jpg 800w, /assets/saha-web/peyzaj-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 46vw"
                width="800" height="513" loading="lazy"
                alt="The Hitit University campus entrance and its landscaping.">
           <figcaption>Landscaping Works · Hitit University</figcaption>
@@ -1532,7 +1557,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
       <div class="colo__plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.5">
           <img src="/assets/seq-web/08-F.jpg"
-               srcset="/assets/seq-web/08-F-m.jpg 900w, assets/seq-web/08-F.jpg 1600w"
+               srcset="/assets/seq-web/08-F-m.jpg 900w, /assets/seq-web/08-F.jpg 1600w"
                sizes="(max-width: 900px) 92vw, 52vw"
                width="1600" height="900" loading="lazy"
                alt="The same architect's desk, the work finished: the drawing rolled away, the pencil resting beside the ruler.">
@@ -1540,9 +1565,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         </figure>
         <div class="colo__head">
           <h2 class="colo__say sc-stack" data-sc-in>Get in touch to discuss a project.</h2>
-          <p class="colo__body sc-stack" data-sc-in>Our online enquiry form is in preparation. In the meantime you can reach us directly on
-            <a href="tel:+903122854585">0312 285 45 85</a> or at
-            <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a> .</p>
+          <div class="ulas sc-stack" data-sc-in data-sc-stagger="70">
+            <a class="ulas__a" href="tel:+903122854585">
+              <span class="ulas__k">Telephone</span>
+              <span class="ulas__v">0312 285 45 85</span>
+            </a>
+            <a class="ulas__a" href="mailto:bilgi@globalhdinsaat.com">
+              <span class="ulas__k">Email</span>
+              <span class="ulas__v">bilgi@globalhdinsaat.com</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -1552,18 +1584,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <p>Kızılırmak Mah. 1446 Cad.<br>No:12 İç Kapı No:21<br>Çankaya / Ankara</p>
         </div>
         <div>
-          <h3>Telephone</h3>
-          <a href="tel:+903122854585">0312 285 45 85</a>
-        </div>
-        <div>
-          <h3>Email</h3>
-          <a href="mailto:bilgi@globalhdinsaat.com">bilgi@globalhdinsaat.com</a>
-        </div>
-        <div>
           <h3>Company</h3>
           <p>Global HD İnşaat A.Ş.<br>Ankara-based engineering and contracting</p>
         </div>
       </div>
+      <p class="colo__form">Our online enquiry form is in preparation; in the meantime the telephone and
+        email above reach us directly.</p>
 
       <p class="colo__fine">
         <span>© 2026 Global HD İnşaat A.Ş.</span>
