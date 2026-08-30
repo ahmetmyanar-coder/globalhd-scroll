@@ -385,6 +385,23 @@ p { text-wrap: pretty; }
   filter: saturate(0.94);
 }
 .rec__fig figcaption { margin-top: var(--sc-2); font-family: var(--sc-font-mono); font-size: 0.68rem; color: var(--sc-ink-soft); }
+/* The scope lines are the most technically informative data we hold and they
+   were verified from the outset, yet the page shipped without them: an
+   engineer reading "26.000 m²" learns almost nothing, reading the scope
+   learns what this firm actually does. Set as a specification line, the way
+   a drawing carries one, rather than as another label row. */
+.rec__scope { margin-top: var(--sc-5); border-top: 1px solid var(--rule); padding-top: var(--sc-3); }
+.rec__scope .k {
+  display: block; font-family: var(--sc-font-mono); font-size: 0.64rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft);
+}
+.rec__scope p {
+  margin-top: var(--sc-3); font-family: var(--sc-font-mono);
+  font-size: 0.78rem; line-height: 1.75; color: var(--sc-ink);
+  max-width: 52ch;
+}
+.rec__lead .rec__scope p { font-size: 0.82rem; }
+
 .tag {
   display: inline-block;
   font-family: var(--sc-font-mono); font-size: 0.64rem; font-weight: 600;
@@ -934,6 +951,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
                 <div><span class="k">Alan</span><span class="v">26.000 m²</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
               </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj işleri · Aydınlatma sistemleri</p></div>
               <div class="dim" style="--w: 0.800"><i></i></div>
             </div>
           </div>
@@ -961,6 +979,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
                 <div><span class="k">Alan</span><span class="v">4.000 m²</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag tag--on">Devam ediyor</span></span></div>
               </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Altyapı uygulamaları · Üstyapı uygulamaları · Elektrik ve düşük akım · Çevre düzenlemesi · Aydınlatma sistemleri · Mekanik uygulaması</p></div>
               <div class="dim" style="--w: 0.123"><i></i></div>
             </div>
           </div>
@@ -984,6 +1003,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">32.500 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Yeşil alan planlaması · Sulama ve drenaj altyapısı · Sert zemin uygulamaları · Aydınlatma ve tabela sistemleri</p></div>
               <div class="dim" style="--w: 1.000"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1002,6 +1022,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">18.350 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Otel binası inşaatı · İç mekân uygulamaları · Çevre peyzaj düzenlemesi</p></div>
               <div class="dim" style="--w: 0.565"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1018,6 +1039,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">14.500 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Peyzaj tasarımı · Yeşil alan planlaması · Sert zemin uygulamaları · Sulama ve drenaj sistemleri · Aydınlatma · Oyun ve spor alanları · Kentsel donatı</p></div>
               <div class="dim" style="--w: 0.446"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1037,6 +1059,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">10.500 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Betonarme ve mimari uygulama · Elektrik ve mekanik uygulamalar · İdari birimlerin tek çatı altında toplanması</p></div>
               <div class="dim" style="--w: 0.323"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1056,6 +1079,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">10.465 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Mekanik tesisat imalatları · Elektrik ve zayıf akım sistemleri · Altyapı ve üstyapı uygulamaları · Çevre düzenleme ve peyzaj çalışmaları</p></div>
               <div class="dim" style="--w: 0.322"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1074,6 +1098,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">8.800 m² <span class="est">*</span></span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Yapısal güçlendirme · Taş ve ahşap onarımı · Cephe rehabilitasyonu · Teknik altyapı yenilenmesi</p></div>
               <div class="dim" style="--w: 0.271"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1092,6 +1117,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Betonarme ve çelik yapı · Drenaj ve atık yönetimi altyapısı · Hijyen odaklı tasarım uygulamaları</p></div>
               <div class="dim" style="--w: 0.185"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
@@ -1111,10 +1137,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">1.275 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Havuz yapımı · Su yalıtımı · Mekanik ve elektrik sistemleri · Tribün ve soyunma birimleri</p></div>
               <div class="dim" style="--w: 0.039"><i></i></div>
           </div>
           <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
             <img src="assets/saha-web/havuz-01.jpg" srcset="assets/saha-web/havuz-01-800.jpg 800w, assets/saha-web/havuz-01.jpg 1600w" sizes="(max-width: 860px) 92vw, 30vw" width="800" height="513" alt="Çok kulvarlı kapalı yüzme havuzu." loading="lazy">
+          </figure>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/saha-web/meslek-02.jpg"
+                 srcset="assets/saha-web/meslek-02-800.jpg 800w, assets/saha-web/meslek-02.jpg 1600w"
+                 sizes="(max-width: 860px) 92vw, 30vw"
+                 width="1600" height="900" loading="lazy"
+                 alt="Meslek yüksekokulu binası, havadan görünüm.">
           </figure>
         </article>
 
@@ -1128,8 +1162,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <div><span class="k">Alan</span><span class="v">6.000 m²</span></div>
               <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
             </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Elektrik ve mekanik sistemler · Altyapı uygulamaları · Peyzaj düzenlemesi</p></div>
               <div class="dim" style="--w: 0.185"><i></i></div>
           </div>
+          <figure class="rec__fig" data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.45">
+            <img src="assets/saha-web/meslek-02.jpg"
+                 srcset="assets/saha-web/meslek-02-800.jpg 800w, assets/saha-web/meslek-02.jpg 1600w"
+                 sizes="(max-width: 860px) 92vw, 30vw"
+                 width="1600" height="900" loading="lazy"
+                 alt="Meslek yüksekokulu binası, havadan görünüm.">
+          </figure>
         </article>
 
         <article id="kayit-12" class="rec__lead rec__lead--use" data-ep data-ep-range="1.05 -0.05">
@@ -1152,6 +1194,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
                 <div><span class="k">Kapsam</span><span class="v">İç mekân imalatları</span></div>
                 <div><span class="k">Durum</span><span class="v"><span class="tag">Tamamlandı</span></span></div>
               </div>
+              <div class="rec__scope"><span class="k">İş kapsamı</span><p>Akustik uygulamalar · Sahne ve teknik altyapı · Elektrik ve zayıf akım (ses, görüntü, network) · Aydınlatma · İklimlendirme</p></div>
             </div>
           </div>
         </article>
