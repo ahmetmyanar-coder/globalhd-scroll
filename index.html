@@ -24,6 +24,18 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A160F'/><path d='M10 24V9l7 4v11' fill='none' stroke='%23E8E0D2' stroke-width='2'/></svg>">
 <script>document.documentElement.className += " js";</script>
+<script>
+/* The browser restores the previous scroll offset when the page is revisited
+   or reloaded. On a 23-viewport document that drops the reader into the
+   middle of a chapter with no context, which is exactly what it looks like
+   when a link is opened cold. Start at the top unless the URL names an
+   anchor, in which case that anchor is what was asked for. Runs in <head>,
+   before first paint, so there is no visible jump. */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+addEventListener('load', function () {
+  if (!location.hash) scrollTo(0, 0);
+}, { once: true });
+</script>
 <link rel="canonical" href="https://globalhd-scroll.vercel.app/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"GeneralContractor",
