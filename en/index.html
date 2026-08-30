@@ -836,6 +836,112 @@ p { text-wrap: pretty; }
 html:not(.js) [data-sc-in],
 html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !important; }
 
+
+/* The folio is this grammar's chrome and it was only a readout. It is now a
+   real index: the chapter list sits in the margin, the current one is marked,
+   and it can be jumped from. A fixed top bar would have been the obvious
+   answer and this grammar forbids one, correctly: the bar belongs to a page
+   that is a tool, and this page is a document. */
+.folio { pointer-events: auto; }
+.folio__mark { display: block; }
+.folio__list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 2px;
+  writing-mode: vertical-rl;
+}
+.folio__list a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 2px; text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.62rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sc-ink-soft); white-space: nowrap;
+  border-inline-start: 1px solid transparent;
+}
+.folio__list a span { font-size: 0.58rem; opacity: 0.7; }
+.folio__list a:hover { color: var(--sc-accent); }
+.folio__list a[aria-current="true"] {
+  color: var(--sc-ink); border-inline-start-color: var(--sc-accent);
+  padding-inline-start: 6px;
+}
+:root.on-desk .folio__list a { color: #A99C87; }
+:root.on-desk .folio__list a[aria-current="true"] { color: #EFE7D8; }
+:root.on-desk .folio__list a:hover { color: var(--sc-accent); }
+
+.folio__dil {
+  font-family: var(--sc-font-mono); font-size: 0.6rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sc-ink-soft); text-decoration: none;
+  writing-mode: vertical-rl; padding: 6px 2px;
+  border-inline-start: 1px solid var(--rule);
+}
+.folio__dil:hover { color: var(--sc-accent); }
+:root.on-desk .folio__dil { color: #A99C87; }
+
+.mininav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--sc-z-chrome);
+  display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  background: color-mix(in srgb, var(--sc-canvas) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  transform: translateY(var(--mini-y, 0));
+  transition: transform 260ms var(--sc-ease-out);
+}
+.mininav::-webkit-scrollbar { display: none; }
+@media (min-width: 1080px) { .mininav { display: none; } }
+.mininav a {
+  flex: 0 0 auto; padding: 11px 13px; text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--sc-ink-soft); border-bottom: 2px solid transparent;
+}
+.mininav a[aria-current="true"] { color: var(--sc-ink); border-bottom-color: var(--sc-accent); }
+.mininav .minidil { color: var(--sc-accent); }
+@media (max-width: 1079px) { .title-page { padding-top: calc(clamp(6rem,14vh,10rem) + 44px); } }
+
+/* Photographs answer the pointer. A plain zoom is the default everywhere;
+   here the frame also draws its corner ticks, the way a technical drawing
+   marks a detail callout. Touch devices never hover, so nothing essential
+   is hidden behind it. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .rec__fig, .rec__lead figure, .rec__inset, .sorumluluk__fig,
+  .use-grid figure, .plate figure, .colo__plate figure { position: relative; }
+  .rec__fig img, .rec__lead figure img, .rec__inset img, .sorumluluk__fig img,
+  .use-grid img, .plate figure img, .colo__plate img {
+    transition: transform 520ms var(--sc-ease-out), filter 320ms var(--sc-ease-out);
+  }
+  .rec__fig:hover img, .rec__lead figure:hover img, .rec__inset:hover img,
+  .sorumluluk__fig:hover img, .use-grid figure:hover img,
+  .plate figure:hover img, .colo__plate figure:hover img {
+    transform: scale(1.045) translate3d(0, calc((var(--ep, 0.5) - 0.5) * -34px), 0);
+    filter: saturate(1.04) contrast(1.03);
+  }
+  .rec__fig::before, .rec__fig::after,
+  .rec__lead figure::before, .rec__lead figure::after,
+  .sorumluluk__fig::before, .sorumluluk__fig::after {
+    content: ""; position: absolute; width: 13px; height: 13px;
+    border: 0 solid var(--sc-accent); opacity: 0; z-index: 2;
+    transition: opacity 200ms var(--sc-ease-out);
+    pointer-events: none;
+  }
+  .rec__fig::before, .rec__lead figure::before, .sorumluluk__fig::before {
+    top: 7px; left: 7px; border-top-width: 1px; border-left-width: 1px;
+  }
+  .rec__fig::after, .rec__lead figure::after, .sorumluluk__fig::after {
+    bottom: 7px; right: 7px; border-bottom-width: 1px; border-right-width: 1px;
+  }
+  .rec__fig:hover::before, .rec__fig:hover::after,
+  .rec__lead figure:hover::before, .rec__lead figure:hover::after,
+  .sorumluluk__fig:hover::before, .sorumluluk__fig:hover::after { opacity: 1; }
+}
+
+/* ---------- kurumsal ---------- */
+.kurumsal__p { margin-top: var(--sc-5); max-width: 58ch; color: var(--sc-ink-soft); font-size: 1.05rem; }
+.kurumsal__alt {
+  margin-top: clamp(2.5rem, 6vh, 4rem); padding-top: var(--sc-5);
+  border-top: 1px solid var(--rule);
+}
+.kurumsal__alt h3 { font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem); margin-top: var(--sc-3); }
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -860,13 +966,30 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 </div>
 
 <!-- The chrome of this grammar: a folio in the margin, not a bar on top. -->
-<div class="folio" aria-hidden="true">
-  <div class="folio__mark">
+<nav class="folio" aria-label="Chapters">
+  <a class="folio__mark" href="#top" aria-label="Back to top">
     <img class="folio__mark--ghost" src="/assets/logo-main.png" alt="">
     <img id="markFill" src="/assets/logo-main.png" alt="">
-  </div>
-  <span class="folio__now"><b id="folioNo">—</b> &nbsp;·&nbsp; <span id="folioName">Title</span></span>
-</div>
+  </a>
+  <ol class="folio__list">
+    <li><a href="#top"           data-fo="—"><span>—</span>Start</a></li>
+    <li><a href="#bolum-1"       data-fo="01"><span>01</span>Line</a></li>
+    <li><a href="#bolum-2"       data-fo="02"><span>02</span>On site</a></li>
+    <li><a href="#bolum-3"       data-fo="03"><span>03</span>Projects</a></li>
+    <li><a href="#bolum-4"       data-fo="04"><span>04</span>The firm</a></li>
+    <li><a href="#bolum-5"       data-fo="05"><span>05</span>Sustainability</a></li>
+    <li><a href="#iletisim"      data-fo="—"><span>·</span>Contact</a></li>
+  </ol>
+  <a class="folio__dil" href="/" hreflang="tr" lang="tr">TR</a>
+</nav>
+
+<!-- Dar ekranda kenar künyesi sığmaz; aynı bağlantılar üstte ince bir
+     şerit olarak durur. Sabit bar değil: kaydırınca gizlenir, yukarı
+     dönünce görünür. -->
+<nav class="mininav" aria-label="Chapters">
+  <a href="#top">Start</a><a href="#bolum-1">Line</a><a href="#bolum-3">Projects</a><a href="#bolum-4">The firm</a><a href="#bolum-5">Sustainability</a><a href="#iletisim">Contact</a>
+  <a class="minidil" href="/" hreflang="tr" lang="tr">TR</a>
+</nav>
 
 <main id="top">
 
@@ -1244,12 +1367,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   </div>
 
   <!-- ================= BÖLÜM 04 · ÖLÇÜ ===================================== -->
-  <div class="ch" id="bolum-4" data-ch="04" data-ch-name="Measure" data-mark="0.92">
+  <div class="ch" id="bolum-4" data-ch="04" data-ch-name="The firm" data-mark="0.92">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
       <span class="ch-open__no">Chapter four</span>
-      <h2 class="ch-open__t">In numbers.</h2>
+      <h2 class="ch-open__t">An Ankara-based engineering and contracting firm.</h2>
+      <p class="kurumsal__p">Global HD İnşaat A.Ş. is based in Ankara and delivers superstructure, infrastructure, restoration and landscaping projects for public institutions and the private sector.</p>
+      <p class="kurumsal__p">The completed and ongoing projects delivered for the Ministry of National Defence, the Council of Higher Education, the Presidency of Religious Affairs, the General Directorate of Cultural Heritage and Museums and municipalities are listed in the project record above.</p>
     </div>
     <div class="wrap" style="padding-bottom: clamp(4rem, 10vh, 7rem)">
+      <div class="kurumsal__alt">
+        <p class="eyebrow">In numbers</p>
+      </div>
+
       <div class="meas-total" data-ep data-ep-range="0.92 0.42">
         <div class="meas-total__pair">
           <div>
@@ -1337,7 +1466,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
 
   <!-- ================= BÖLÜM 05 · SORUMLULUK ============================== -->
-  <div class="ch" id="bolum-5" data-ch="05" data-ch-name="Responsibility" data-mark="0.96">
+  <div class="ch" id="bolum-5" data-ch="05" data-ch-name="Sustainability" data-mark="0.96">
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
       <span class="ch-open__no">Chapter five</span>
       <h2 class="ch-open__t">The lowest-impact building is the one that is reused.</h2>
@@ -1526,8 +1655,7 @@ ScrollCraft.mount(document.body);
    ------------------------------------------------------------------ */
 (function () {
   const fill = document.getElementById('markFill');
-  const no   = document.getElementById('folioNo');
-  const name = document.getElementById('folioName');
+  const no = null, name = null;
   const chapters = [...document.querySelectorAll('.ch')];
   if (!fill || !chapters.length) return;
 
@@ -1547,14 +1675,26 @@ ScrollCraft.mount(document.body);
     return best;
   }
 
+  const baglar = [...document.querySelectorAll('.folio__list a, .mininav a')];
+
+  function isaretle(el) {
+    /* Bölüm bağlantısı hangi çapaya gidiyorsa onu işaretle. Title
+       sayfasının kendi id'si yok, #top ile eşleşir. */
+    const hedef = el.id ? '#' + el.id : '#top';
+    for (const a of baglar) {
+      const bu = a.getAttribute('href') === hedef;
+      if (bu) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+  }
+
   function sync() {
     const el = owner();
     if (el === current) return;
     current = el;
     target = parseFloat(el.dataset.mark) || 0;
-    if (no)   no.textContent   = el.dataset.ch || '—';
-    if (name) name.textContent = el.dataset.chName || '';
     document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
+    isaretle(el);
   }
 
   /* Walks the mark's fill toward the chapter's target so it eases rather
@@ -1625,6 +1765,28 @@ ScrollCraft.mount(document.body);
   addEventListener('resize', kick);
   document.fonts && document.fonts.ready.then(kick);
   paint();
+})();
+</script>
+<script>
+/* ------------------------------------------------------------------
+   Bespoke 4 · dar ekrandaki bölüm şeridi.
+   Sabit bir bar bu gramerde yasak ve haklı olarak: bar bir aracın
+   parçasıdır, bu sayfa bir belge. Şerit okurken yoldan çekiliyor,
+   yukarı dönünce geri geliyor; yani ancak arandığında var.
+   ------------------------------------------------------------------ */
+(function () {
+  const nav = document.querySelector('.mininav');
+  if (!nav) return;
+  let sonY = 0, raf = 0;
+  function bak() {
+    raf = 0;
+    const y = scrollY;
+    const gizle = y > 220 && y > sonY;
+    nav.style.setProperty('--mini-y', gizle ? '-100%' : '0');
+    sonY = y;
+  }
+  addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(bak); },
+                   { passive: true });
 })();
 </script>
 </body>
