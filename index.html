@@ -177,7 +177,7 @@ p { text-wrap: pretty; }
   .title-page { padding-left: 0; }
 }
 
-.folio__mark { width: 62px; pointer-events: auto; }
+.folio__mark { width: 62px; min-height: 26px; pointer-events: auto; }
 .folio__mark img {
   width: 100%; height: auto; display: block;
   /* The signature move: the real artwork is uncovered from the ground up,
@@ -291,6 +291,7 @@ p { text-wrap: pretty; }
 .title-page__foot p { margin: 0; color: var(--sc-ink-soft); font-size: 0.95rem; }
 .title-page__foot .eyebrow { color: var(--sc-ink); }
 .dil {
+  display: inline-flex; align-items: center; min-height: 30px;
   font-family: var(--sc-font-mono); font-size: 0.68rem;
   letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--sc-ink-soft); text-decoration: none;
@@ -478,7 +479,8 @@ p { text-wrap: pretty; }
   float: right; color: var(--sc-accent); text-transform: none;
   letter-spacing: 0.06em; font-size: 0.62rem;
 }
-.work__link { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); }
+.work__link { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule);
+  display: inline-block; padding-block: 3px; }
 .work__link:hover { color: var(--sc-accent); border-color: var(--sc-accent); }
 .rec__scope .k {
   display: block; font-family: var(--sc-font-mono); font-size: 0.64rem;
@@ -566,7 +568,11 @@ p { text-wrap: pretty; }
 
 .kurum { margin-top: clamp(3rem, 7vh, 5rem); border-top: 1px solid var(--rule); padding-top: var(--sc-6); }
 .kurum__list { display: flex; flex-wrap: wrap; gap: var(--sc-6) var(--sc-8); align-items: center; margin-top: var(--sc-5); }
-.kurum__list a { display: inline-flex; border-bottom: 1px solid transparent; padding-bottom: 4px; }
+.kurum__list a {
+  display: inline-flex; align-items: center;
+  border-bottom: 1px solid transparent; padding-bottom: 4px;
+  min-width: 44px; min-height: 34px;
+}
 .kurum__list a:hover { border-color: var(--sc-accent); }
 .kurum__list a:hover img { opacity: 1; }
 .kurum__list img { height: 34px; width: auto; opacity: 0.72; filter: grayscale(1) contrast(0.9); }
@@ -664,7 +670,8 @@ p { text-wrap: pretty; }
 .colo__grid p, .colo__grid a { margin-top: var(--sc-3); display: block; font-family: var(--sc-font-display); font-size: 0.95rem; }
 .colo__grid a { color: var(--sc-ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 2px; width: fit-content; }
 .colo__grid a:hover { border-color: var(--sc-accent); color: var(--sc-accent); }
-.colo__fine { margin-top: clamp(3rem, 6vh, 4rem); font-size: 0.8rem; color: var(--sc-ink-soft); display: flex; flex-wrap: wrap; gap: var(--sc-3) var(--sc-6); }
+.colo__fine { margin-top: clamp(3rem, 6vh, 4rem); font-size: 0.8rem; color: var(--sc-ink-soft); display: flex; flex-wrap: wrap; gap: var(--sc-3) var(--sc-6); align-items: center; }
+.colo__fine a { display: inline-block; padding-block: 4px; }
 
 
 /* ============================================================
@@ -937,7 +944,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   letter-spacing: 0.14em; padding: 9px 0 0 9px;
   border-top: 1px solid var(--rule); width: 100%;
 }
-.folio__dil a { color: var(--sc-ink-soft); text-decoration: none; }
+.folio__dil a {
+  color: var(--sc-ink-soft); text-decoration: none;
+  /* 16x17 piksellik bir hedef parmakla ıskalanır; en az 24x24 olmalı. */
+  min-width: 24px; min-height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
 .folio__dil a:hover { color: var(--sc-accent); }
 .folio__dil a[aria-current="true"] { color: var(--sc-ink); }
 .folio__dil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; }
@@ -945,8 +957,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 :root.on-desk .folio__dil a[aria-current="true"] { color: #EFE7D8; }
 
 .minidil { display: flex; align-items: center; gap: 6px; padding: 11px 13px; flex: 0 0 auto; }
-.minidil a { color: var(--sc-ink-soft); text-decoration: none;
-  font-family: var(--sc-font-mono); font-size: 0.6rem; letter-spacing: 0.13em; }
+.minidil a {
+  color: var(--sc-ink-soft); text-decoration: none;
+  font-family: var(--sc-font-mono); font-size: 0.6rem; letter-spacing: 0.13em;
+  min-width: 30px; min-height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
 .minidil a[aria-current="true"] { color: var(--sc-ink); }
 .minidil i { color: var(--sc-ink-soft); opacity: 0.5; font-style: normal; font-size: 0.6rem; }
 
