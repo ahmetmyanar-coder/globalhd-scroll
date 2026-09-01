@@ -1417,7 +1417,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         its status.</p>
     </div>
 
-    <div class="wrap">
+    <div class="wrap sicil">
       <nav class="idx" aria-label="Project record contents">
         <ol>
           <li><a href="#kayit-01"><span>01</span>Central Classroom Project</a></li>
@@ -2473,7 +2473,10 @@ ScrollCraft.mount(document.body);
      kayıt bloğu izleniyor: bölüm tam ekran bir fotoğrafla açılıyor ve
      o karenin üstünde "0 m²" yazan bir şerit belirmesi kapıyı bozardı.
      Sürekli duran bir sayaç zaten arayüz olurdu; bu bir ölçü. */
-  const blok = bolum.querySelector('.wrap') || bolum;
+  /* Kayıt bloğu ADIYLA seçiliyor. Önce bölümün ilk .wrap'i alınıyordu ama
+     o bölüm başlığının kutusu: başlık ekrandan çıkınca ölçü kayboluyor,
+     kayıtlara gelince geri geliyordu. Sıraya dayanan seçim kırılgandır. */
+  const blok = bolum.querySelector('.sicil') || bolum;
   const gorunur = new IntersectionObserver((g) => {
     const ac = g[0].isIntersecting ? '1' : '0';
     if (kutu) kutu.dataset.ac = ac;
