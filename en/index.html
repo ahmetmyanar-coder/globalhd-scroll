@@ -1138,6 +1138,107 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   .olcu, .olcu-m{ transition: none }
 }
 
+/* ----------------------------------------------------------------
+   Sicilin kapısı: tam ekran tek fotoğraf.
+
+   Kadraj cover, çünkü aynı kare hem 21:9 masaüstünde hem dikey
+   telefonda durmak zorunda. Odak noktası binanın biraz üstünde
+   (%42) ki dar ekranda gökyüzü değil yapı kalsın.
+
+   Yazının altındaki karartma yalnız yazının olduğu şeride konur,
+   tüm kareye değil: kareyi karartmak fotoğrafı öldürür, oysa
+   sorun yalnız o üç satırın okunurluğu.
+   ---------------------------------------------------------------- */
+.kapi{
+  position: relative; margin: 0; height: 100svh; min-height: 30rem;
+  overflow: hidden; background: var(--desk);
+}
+.kapi img{
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%;
+  display: block;
+  transform: scale(calc(1.06 + (var(--ep, 0.5) - 0.5) * -0.05));
+  will-change: transform;
+}
+.kapi__yazi{
+  position: absolute; inset: auto 0 0 0; z-index: 2;
+  padding: clamp(2rem, 7vh, 5rem) var(--sc-gutter) clamp(2rem, 6vh, 4rem);
+  /* Perde yalnız yazının oturduğu şeritte ve orada GERÇEKTEN koyu.
+     Ölçüldü: altta beyaz arabalar ve aydınlık otopark var, hafif bir
+     karartma yazıyı 1,15:1'e kadar düşürüyordu. Kareyi baştan sona
+     karartmak yasak; şeridi karartmak zorunlu. */
+  background: linear-gradient(to top,
+    rgba(10,8,6,0.94) 0%, rgba(10,8,6,0.92) 46%,
+    rgba(10,8,6,0.82) 74%, rgba(10,8,6,0) 100%);
+  color: #F4EFE6;
+}
+.kapi__t{
+  font-family: var(--sc-font-display); font-weight: 600;
+  font-size: clamp(1.6rem, 1rem + 2.6vw, 3.4rem); line-height: 1.04;
+  letter-spacing: -0.025em; max-width: 20ch; margin: 0;
+  text-wrap: balance;
+}
+.kapi__k{
+  margin: var(--sc-4) 0 0; font-family: var(--sc-font-mono);
+  font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #D6CCBC;
+}
+@media (prefers-reduced-motion: reduce){ .kapi img{ transform: scale(1.02) } }
+@media (max-width: 700px){ .kapi{ height: 78svh } }
+
+/* ----------------------------------------------------------------
+   Ortak ölçek.
+
+   Sicilin sonundaki karşılık: on iki kaydı okuyan biri 138,390 m²'yi
+   okumuş olur ama görmüş olmaz. Burada bütün alanlar tek bir karede,
+   aynı ölçekte. Kutular çizim tabakası gibi ince kontur; dolgu yok
+   denecek kadar hafif, çünkü bu bir grafik değil bir ölçek.
+
+   Kutular sicil sırasıyla, birer birer beliriyor: aynı sırayı kenardaki
+   ölçü de takip ediyor, ikisi aynı hikâyenin iki ucu.
+   ---------------------------------------------------------------- */
+.olcek{ padding-block: clamp(3.5rem, 9vh, 6.5rem) clamp(2rem, 5vh, 3.5rem);
+        border-top: 1px solid var(--rule) }
+.olcek__b{ font-family: var(--sc-font-display); font-weight: 600;
+           font-size: clamp(1.7rem, 1.1rem + 2.4vw, 3.2rem); line-height: 1.04;
+           letter-spacing: -0.03em; margin-top: var(--sc-3) }
+.olcek__c{ display: block; width: 100%; height: auto; margin-top: var(--sc-6);
+           overflow: visible }
+.olcekk rect{
+  fill: color-mix(in srgb, var(--sc-ink) 5%, transparent);
+  stroke: var(--sc-ink); stroke-width: 1; vector-effect: non-scaling-stroke;
+}
+.olcekk__no{ font-family: var(--sc-font-mono); font-size: 15px; fill: var(--sc-accent) }
+.olcekk__m{ font-family: var(--sc-font-mono); font-size: 12px; fill: var(--sc-ink-soft) }
+.olcekk{ opacity: clamp(0, calc((var(--epL, 1) - var(--i, 0) * 0.05) * 7), 1) }
+
+.olcek__l{ list-style: none; margin: var(--sc-6) 0 0; padding: 0;
+           columns: 3; column-gap: clamp(1.5rem, 4vw, 3rem) }
+@media (max-width: 860px){ .olcek__l{ columns: 2 } }
+@media (max-width: 520px){ .olcek__l{ columns: 1 } }
+.olcek__l li{ break-inside: avoid; margin-bottom: 2px }
+.olcek__l a{
+  display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.6rem;
+  align-items: baseline; padding: 5px 0; text-decoration: none;
+  border-bottom: 1px solid var(--rule); color: var(--sc-ink-soft);
+  font-size: 0.86rem; min-height: 24px;
+}
+.olcek__l a span{ font-family: var(--sc-font-mono); font-size: 0.7rem;
+                  color: var(--sc-accent) }
+.olcek__l a b{ font-family: var(--sc-font-mono); font-size: 0.7rem; font-weight: 400;
+               color: var(--sc-ink); font-variant-numeric: tabular-nums }
+.olcek__l a:hover{ color: var(--sc-ink) }
+.olcek__n{ margin-top: var(--sc-6); max-width: 62ch;
+           font-family: var(--sc-font-mono); font-size: 0.7rem; line-height: 1.7;
+           color: var(--sc-ink-soft);
+           border-left: 2px solid var(--rule); padding-left: var(--sc-4) }
+/* Dar ekranda kutu içi etiketler okunamayacak kadar küçülüyor. Oranı
+   bozmak (preserveAspectRatio=none) diyagramın tek işini bozardı, o
+   yüzden etiketler gizleniyor: hemen altındaki lejant zaten hepsini
+   numarasıyla ve alanıyla veriyor. Kalan şey saf oran, ki asıl anlatılan
+   da o. */
+@media (max-width: 700px){ .olcekk__no, .olcekk__m{ display: none } }
+@media (prefers-reduced-motion: reduce){ .olcekk{ opacity: 1 } }
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1292,6 +1393,24 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
   <!-- ================= BÖLÜM 03 · SİCİL (the record, densest) =============== -->
   <div class="ch" id="bolum-3" data-ch="03" data-ch-name="Record" data-mark="0.80">
+    <!-- Sicilin kapısı. Sayfada o ana kadar hiçbir fotoğraf ekranı
+         doldurmuyordu; hepsi kibarca sütunun içindeydi. Bir kamu binasını
+         hizmet ettiği ilçenin içinde gösteren tek kare, on iki kaydın
+         neden önemli olduğunu bir cümleden daha iyi anlatıyor. Künyenin
+         altına girmiyor: orada navigasyon yazısı var ve fotoğrafın
+         üstünde okunmaz. -->
+    <figure class="kapi" data-ep data-ep-range="1.05 -0.05">
+      <img src="/assets/saha-web/belediye-01.webp"
+           srcset="/assets/saha-web/belediye-01-1200.webp 1200w,
+                   /assets/saha-web/belediye-01.webp 1600w,
+                   /assets/saha-web/belediye-01-2400.webp 2400w"
+           sizes="100vw" width="2400" height="1350" loading="lazy" decoding="async"
+           alt="Beypazarı Municipality service building from the air, with the town and hills behind.">
+      <figcaption class="kapi__yazi">
+        <p class="kapi__t">A municipal building, inside the town it serves.</p>
+        <p class="kapi__k">Beypazarı Municipality Service Building · Beypazarı / Ankara</p>
+      </figcaption>
+    </figure>
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
       <h2 class="ch-open__t">Twelve projects.</h2>
       <p class="ch-open__d">Completed and ongoing works. Each entry is given with its client, its area and
@@ -1566,6 +1685,93 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         </article>
 
       </div>
+
+          <section class="olcek" data-ep data-ep-range="0.95 0.4"
+               aria-labelledby="olcek-b">
+        <p class="eyebrow">Common scale</p>
+        <h3 class="olcek__b" id="olcek-b">138,390 m², to scale.</h3>
+  <svg class="olcek__c" viewBox="0 0 1200 700" role="img" aria-label="The areas of eleven projects at a common scale: 138,390 square metres in total.">
+    <g class="olcekk" style="--i: 0">
+      <rect x="0.0" y="388.9" width="507.3" height="311.1"/>
+      <text x="9.0" y="410.9" class="olcekk__no">01</text>
+      <text x="9.0" y="428.9" class="olcekk__m">26.000</text>
+      <title>Central Classroom Project · 26,000 m² · %18.8</title>
+    </g>
+    <g class="olcekk" style="--i: 1">
+      <rect x="1020.3" y="521.8" width="136.2" height="178.2"/>
+      <text x="1029.3" y="543.8" class="olcekk__no">02</text>
+      <text x="1029.3" y="561.8" class="olcekk__m">4.000</text>
+      <title>Headquarters and Dining Facility · 4,000 m² · %2.9</title>
+    </g>
+    <g class="olcekk" style="--i: 2">
+      <rect x="0.0" y="0.0" width="507.3" height="388.9"/>
+      <text x="9.0" y="22.0" class="olcekk__no">03</text>
+      <text x="9.0" y="40.0" class="olcekk__m">32.500</text>
+      <title>Landscaping Works · 32,500 m² · %23.5</title>
+    </g>
+    <g class="olcekk" style="--i: 3">
+      <rect x="507.3" y="0.0" width="387.0" height="287.8"/>
+      <text x="516.3" y="22.0" class="olcekk__no">04</text>
+      <text x="516.3" y="40.0" class="olcekk__m">18.350</text>
+      <title>Hotel and Landscape Grounds · 18,350 m² · %13.3</title>
+    </g>
+    <g class="olcekk" style="--i: 4">
+      <rect x="894.2" y="0.0" width="305.8" height="287.8"/>
+      <text x="903.2" y="22.0" class="olcekk__no">05</text>
+      <text x="903.2" y="40.0" class="olcekk__m">14.500</text>
+      <title>Parks and Gardens · 14,500 m² · %10.5</title>
+    </g>
+    <g class="olcekk" style="--i: 5">
+      <rect x="507.3" y="287.8" width="308.7" height="206.4"/>
+      <text x="516.3" y="309.8" class="olcekk__no">06</text>
+      <text x="516.3" y="327.8" class="olcekk__m">10.500</text>
+      <title>Municipal Service Building · 10,500 m² · %7.6</title>
+    </g>
+    <g class="olcekk" style="--i: 6">
+      <rect x="507.3" y="494.3" width="308.7" height="205.7"/>
+      <text x="516.3" y="516.3" class="olcekk__no">07</text>
+      <text x="516.3" y="534.3" class="olcekk__m">10.465</text>
+      <title>Quran Course Building · 10,465 m² · %7.6</title>
+    </g>
+    <g class="olcekk" style="--i: 7">
+      <rect x="816.0" y="287.8" width="228.3" height="233.9"/>
+      <text x="825.0" y="309.8" class="olcekk__no">08</text>
+      <text x="825.0" y="327.8" class="olcekk__m">8.800</text>
+      <title>Mansion Restoration · 8,800 m² · %6.4</title>
+    </g>
+    <g class="olcekk" style="--i: 8">
+      <rect x="1044.3" y="287.8" width="155.7" height="233.9"/>
+      <text x="1053.3" y="309.8" class="olcekk__no">09</text>
+      <text x="1053.3" y="327.8" class="olcekk__m">6.000</text>
+      <title>Abattoir and Livestock Market · 6,000 m² · %4.3</title>
+    </g>
+    <g class="olcekk" style="--i: 9">
+      <rect x="1156.6" y="521.8" width="43.4" height="178.2"/>
+      <text x="1165.6" y="543.8" class="olcekk__no">10</text>
+      <title>Olympic Swimming Pool · 1,275 m² · %0.9</title>
+    </g>
+    <g class="olcekk" style="--i: 10">
+      <rect x="816.0" y="521.8" width="204.3" height="178.2"/>
+      <text x="825.0" y="543.8" class="olcekk__no">11</text>
+      <text x="825.0" y="561.8" class="olcekk__m">6.000</text>
+      <title>Vocational School Project · 6,000 m² · %4.3</title>
+    </g>
+  </svg>
+        <ol class="olcek__l">
+          <li><a href="#kayit-01"><span>01</span>Central Classroom Project<b>26,000 m²</b></a></li>
+          <li><a href="#kayit-02"><span>02</span>Headquarters and Dining Facility<b>4,000 m²</b></a></li>
+          <li><a href="#kayit-03"><span>03</span>Landscaping Works<b>32,500 m²</b></a></li>
+          <li><a href="#kayit-04"><span>04</span>Hotel and Landscape Grounds<b>18,350 m²</b></a></li>
+          <li><a href="#kayit-05"><span>05</span>Parks and Gardens<b>14,500 m²</b></a></li>
+          <li><a href="#kayit-06"><span>06</span>Municipal Service Building<b>10,500 m²</b></a></li>
+          <li><a href="#kayit-07"><span>07</span>Quran Course Building<b>10,465 m²</b></a></li>
+          <li><a href="#kayit-08"><span>08</span>Mansion Restoration<b>8,800 m²</b></a></li>
+          <li><a href="#kayit-09"><span>09</span>Abattoir and Livestock Market<b>6,000 m²</b></a></li>
+          <li><a href="#kayit-10"><span>10</span>Olympic Swimming Pool<b>1,275 m²</b></a></li>
+          <li><a href="#kayit-11"><span>11</span>Vocational School Project<b>6,000 m²</b></a></li>
+        </ol>
+        <p class="olcek__n">Each area is drawn in proportion to its real m² figure; it does not represent building geometry. The 1 record whose area is not published is not shown in the diagram.</p>
+      </section>
     </div>
   </div>
 
@@ -2275,14 +2481,17 @@ ScrollCraft.mount(document.body);
   }, { rootMargin: '-50% 0px -50% 0px' });
   kayitlar.forEach((el) => gozcu.observe(el));
 
-  /* Ölçü yalnız sicil ekrandayken duruyor. Öncesinde ve sonrasında
-     sayfada yeri yok; sürekli duran bir sayaç arayüz olurdu. */
+  /* Ölçü yalnız kayıtlar ekrandayken duruyor. Bölümün tamamı yerine
+     kayıt bloğu izleniyor: bölüm tam ekran bir fotoğrafla açılıyor ve
+     o karenin üstünde "0 m²" yazan bir şerit belirmesi kapıyı bozardı.
+     Sürekli duran bir sayaç zaten arayüz olurdu; bu bir ölçü. */
+  const blok = bolum.querySelector('.wrap') || bolum;
   const gorunur = new IntersectionObserver((g) => {
     const ac = g[0].isIntersecting ? '1' : '0';
     if (kutu) kutu.dataset.ac = ac;
     if (mobil) mobil.dataset.ac = ac;
   }, { threshold: 0 });
-  gorunur.observe(bolum);
+  gorunur.observe(blok);
 
   if (kutu) kutu.hidden = false;
   if (mobil) mobil.hidden = false;
