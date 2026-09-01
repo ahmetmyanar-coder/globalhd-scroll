@@ -180,18 +180,13 @@ p { text-wrap: pretty; }
 }
 
 .folio__mark { width: 62px; min-height: 26px; pointer-events: auto; }
-.folio__mark img {
-  width: 100%; height: auto; display: block;
-  /* The signature move: the real artwork is uncovered from the ground up,
-     never redrawn, so the mark is never approximated. */
-  clip-path: inset(calc(100% - var(--mark-p, 1) * 100%) 0 0 0);
-  transition: clip-path 260ms var(--sc-ease-out);
-}
-.folio__mark--ghost {
-  position: absolute; inset: 0;
-  opacity: 0.14;
-  clip-path: none;
-}
+.folio__mark img { width: 100%; height: auto; display: block; }
+/* Logo, sayfa ilerledikçe aşağıdan yukarı dolan iki katmandı: altta soluk
+   bir hayalet, üstte ilerleme kadar kırpılmış gerçek marka. Fikir olarak
+   hoştu ama sayfanın başında marka %86 görünmez oluyordu ve yarım yüklenmiş
+   bir görsel gibi duruyordu. Dört varyant yan yana bakıldı; hepsinde marka
+   hasarlı görünüyordu. Bir şirketin markası her an okunmalı, o yüzden düz.
+   Sayfanın ilerleme anlatımını zaten sicildeki dolan ölçü taşıyor. */
 .folio__mark { position: relative; }
 
 .folio__now {
@@ -1095,8 +1090,9 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
    Geri sarmaz. Görülen alan görülmüştür; yukarı çıkınca eksilmesi
    sayfadaki diğer her şeyin kuralına aykırı olurdu.
    ---------------------------------------------------------------- */
+.folio__alt{ width: 100%; display: flex; flex-direction: column; gap: 0 }
 .olcu{
-  width: 100%; margin-top: auto; padding: 0 0 var(--sc-5);
+  width: 100%; padding: 0 0 var(--sc-5);
   font-family: var(--sc-font-mono); color: var(--sc-ink-soft);
   opacity: 0; transition: opacity 420ms var(--sc-ease-out);
 }
@@ -1265,8 +1261,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 <!-- The chrome of this grammar: a folio in the margin, not a bar on top. -->
 <nav class="folio" aria-label="Chapters">
   <a class="folio__mark" href="#top" aria-label="Back to top">
-    <img class="folio__mark--ghost" src="/assets/logo-main.png" alt="" aria-hidden="true">
-    <img id="markFill" src="/assets/logo-main.png" alt="" aria-hidden="true">
+    <img src="/assets/logo-main.png" alt="" aria-hidden="true">
   </a>
   <ol class="folio__list">
     <li><a href="#top"           data-fo="—"><span>—</span>Start</a></li>
@@ -1277,13 +1272,18 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <li><a href="#bolum-5"       data-fo="05"><span>05</span>Sustainability</a></li>
     <li><a href="#iletisim"      data-fo="—"><span>·</span>Contact</a></li>
   </ol>
-  <div class="olcu" aria-hidden="true" hidden>
-    <span class="olcu__k">Measured</span>
-    <div class="olcu__bar"><i></i></div>
-    <span class="olcu__n">0</span><span class="olcu__u"> m²</span>
-    <span class="olcu__s"><b>0</b> / 12 records</span>
+  <!-- Ölçü ve dil seçimi tek bir alt grup. Ayrı ayrı durduklarında
+       künyenin space-between dizilimi dört parçaya bölünüyor ve
+       navigasyon listesi ortadan yukarı kayıyordu. -->
+  <div class="folio__alt">
+    <div class="olcu" aria-hidden="true" hidden>
+      <span class="olcu__k">Measured</span>
+      <div class="olcu__bar"><i></i></div>
+      <span class="olcu__n">0</span><span class="olcu__u"> m²</span>
+      <span class="olcu__s"><b>0</b> / 12 records</span>
+    </div>
+    <div class="folio__dil"><a href="/" hreflang="tr" lang="tr">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
   </div>
-  <div class="folio__dil"><a href="/" hreflang="tr" lang="tr">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
 </nav>
 
 <!-- Dar ekranda kenar künyesi sığmaz; aynı bağlantılar üstte ince bir
@@ -2062,17 +2062,13 @@ ScrollCraft.mount(document.body);
    Swap this for a stroke-draw the day the vector logo arrives.
    ------------------------------------------------------------------ */
 (function () {
-  const fill = document.getElementById('markFill');
-  const no = null, name = null;
   const chapters = [...document.querySelectorAll('.ch')];
-  if (!fill || !chapters.length) return;
+  if (!chapters.length) return;
+  let current = null, raf = 0;
 
-  let target = 0.16, shown = 0.16, raf = 0, current = null;
-
-  /* Which chapter owns the middle of the viewport. Computed rather than
-     observed: an IntersectionObserver never fires for a reader who lands
-     straight on #iletisim from a link, and the folio then reads "Başlık"
-     on the closing screen. */
+  /* Hangi bölüm ekranın ortasını tutuyor. Gözlemci yerine hesaplanıyor:
+     bir bağlantıyla doğrudan #iletisim'e düşen okuyucuda gözlemci hiç
+     tetiklenmiyor ve künye kapanış ekranında "Başlık" yazıyordu. */
   function owner() {
     const mid = innerHeight / 2;
     let best = chapters[0];
@@ -2097,28 +2093,20 @@ ScrollCraft.mount(document.body);
   }
 
   function sync() {
+    raf = 0;
     const el = owner();
     if (el === current) return;
     current = el;
-    target = parseFloat(el.dataset.mark) || 0;
+    /* on-desk yalnız ızgara rengi için kaldı; künyenin mürekkebi artık
+       öğe öğe, kendi betiğinde dönüyor. */
     document.documentElement.classList.toggle('on-desk', el.classList.contains('ch--desk'));
     isaretle(el);
   }
 
-  /* Walks the mark's fill toward the chapter's target so it eases rather
-     than snapping at each boundary. This was lost in an earlier rewrite and
-     the resulting ReferenceError aborted the whole script block, which took
-     the element-progress helper below down with it. */
-  function tick() {
-    shown += (target - shown) * 0.12;
-    fill.style.setProperty('--mark-p', shown.toFixed(4));
-    raf = Math.abs(target - shown) > 0.001 ? requestAnimationFrame(tick) : 0;
-  }
-
-  const kick = () => { sync(); if (!raf) raf = requestAnimationFrame(tick); };
+  const kick = () => { if (!raf) raf = requestAnimationFrame(sync); };
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick);
-  kick();
+  sync();
 })();
 
 </script>
