@@ -652,6 +652,13 @@ p { text-wrap: pretty; }
   transition: border-color 160ms var(--sc-ease-out), background 160ms var(--sc-ease-out);
 }
 .ulas__a:hover { border-color: var(--sc-accent); background: color-mix(in srgb, var(--sc-accent) 8%, transparent); }
+.ulas__a--dosya { position: relative; }
+.ulas__a--dosya::after {
+  content: ""; position: absolute; right: var(--sc-5); top: 50%;
+  width: 9px; height: 9px; margin-top: -7px;
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: rotate(45deg); opacity: 0.55;
+}
 .ulas__k {
   font-family: var(--sc-font-mono); font-size: 0.62rem;
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-ink-soft);
@@ -1952,9 +1959,16 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
               <span class="ulas__k">Telephone</span>
               <span class="ulas__v">0312 285 45 85</span>
             </a>
-            <a class="ulas__a" href="mailto:bilgi@globalhdinsaat.com">
+            <a class="ulas__a" href="mailto:bilgi@globalhdinsaat.com?subject=Proje%20g%C3%B6r%C3%BC%C5%9Fmesi%20talebi">
               <span class="ulas__k">Email</span>
               <span class="ulas__v">bilgi@globalhdinsaat.com</span>
+            </a>
+            <!-- Proje listesi, siteyle aynı veriden üretilen bir PDF. Bir ihale
+                 yetkilisi ya da müşteri listeyi kaydetmek ve iletmek ister;
+                 elinde yalnız bir bağlantı olması yetmiyor. -->
+            <a class="ulas__a ulas__a--dosya" href="/assets/global-hd-project-list.pdf" download>
+              <span class="ulas__k">Project list · PDF</span>
+              <span class="ulas__v">Twelve projects, one file</span>
             </a>
           </div>
         </div>
@@ -1970,8 +1984,6 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           <p>Global HD İnşaat A.Ş.<br>Ankara-based engineering and contracting</p>
         </div>
       </div>
-      <p class="colo__form">Our online enquiry form is in preparation; in the meantime the telephone and
-        email above reach us directly.</p>
 
       <p class="colo__fine">
         <span>© 2026 Global HD İnşaat A.Ş.</span>
