@@ -1083,6 +1083,61 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 }
 .kurumsal__alt h3 { font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem); margin-top: var(--sc-3); }
 
+/* ----------------------------------------------------------------
+   Dolan ölçü.
+
+   Sicil sayfanın %40'ı ve on iki kayıt arka arkaya geldiğinde düz bir
+   liste. Okuyucunun devam etmesi için bir sebep gerekiyordu; sebep de
+   sayfanın kendi diline ait olmalıydı. Ölçü çizgisi zaten burada var:
+   her kayıtta o projenin alanı ekleniyor ve on ikinci kayıtta çizgi
+   tam doluyor, tam da manşetteki 138.390 m²'de kapanıyor.
+
+   Geri sarmaz. Görülen alan görülmüştür; yukarı çıkınca eksilmesi
+   sayfadaki diğer her şeyin kuralına aykırı olurdu.
+   ---------------------------------------------------------------- */
+.olcu{
+  width: 100%; margin-top: auto; padding: 0 0 var(--sc-5);
+  font-family: var(--sc-font-mono); color: var(--sc-ink-soft);
+  opacity: 0; transition: opacity 420ms var(--sc-ease-out);
+}
+.olcu[data-ac="1"]{ opacity: 1 }
+.olcu__k{ display:block; font-size: 0.58rem; letter-spacing: 0.16em;
+          text-transform: uppercase; margin-bottom: var(--sc-3) }
+.olcu__bar{ height: 9px; position: relative; margin-bottom: var(--sc-3) }
+.olcu__bar::before{ content:""; position:absolute; inset: 4px 0 auto 0; height:1px;
+                    background: var(--rule) }
+.olcu__bar i{ position:absolute; inset: 4px auto auto 0; height:1px; display:block;
+              width: calc(var(--dolu, 0) * 100%); background: var(--sc-accent) }
+.olcu__bar i::after{ content:""; position:absolute; right:0; top:-4px;
+                     width:1px; height:9px; background: var(--sc-accent) }
+.olcu__n{ font-size: 0.94rem; color: var(--sc-ink); letter-spacing: -0.01em;
+          font-variant-numeric: tabular-nums }
+.olcu__u{ font-size: 0.7rem; color: var(--sc-ink-soft) }
+.olcu__s{ display:block; font-size: 0.58rem; letter-spacing: 0.14em;
+          text-transform: uppercase; margin-top: var(--sc-2) }
+.olcu__s b{ color: var(--sc-ink); font-weight: 400 }
+.folio__mark.koyu-uzeri ~ .olcu .olcu__n{ color: #EFE7D8 }
+
+/* Mobilde künye yok: ölçü ekranın en üstünde bir kıl çizgisi olarak
+   duruyor. Neredeyse görünmez; fark edildiğinde de bir arayüz parçası
+   değil, sayfanın kenarına çizilmiş bir ölçü gibi duruyor. */
+.olcu-m{
+  position: fixed; inset: 0 0 auto 0; z-index: calc(var(--sc-z-chrome) - 1);
+  pointer-events: none; opacity: 0; transition: opacity 420ms var(--sc-ease-out);
+  display: flex; align-items: center; gap: 8px;
+}
+.olcu-m[data-ac="1"]{ opacity: 1 }
+@media (min-width: 1080px){ .olcu-m{ display:none } }
+.olcu-m__bar{ flex:1; height:2px; background: color-mix(in srgb, var(--sc-ink) 12%, transparent) }
+.olcu-m__bar i{ display:block; height:100%; width: calc(var(--dolu,0) * 100%);
+                background: var(--sc-accent) }
+.olcu-m__n{ flex:0 0 auto; padding: 3px 8px 0 0;
+            font-family: var(--sc-font-mono); font-size: 0.56rem; letter-spacing:.1em;
+            color: var(--sc-ink-soft); font-variant-numeric: tabular-nums }
+@media (prefers-reduced-motion: reduce){
+  .olcu, .olcu-m{ transition: none }
+}
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1121,6 +1176,12 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
     <li><a href="#bolum-5"       data-fo="05"><span>05</span>Sürdürülebilirlik</a></li>
     <li><a href="#iletisim"      data-fo="—"><span>·</span>İletişim</a></li>
   </ol>
+  <div class="olcu" aria-hidden="true" hidden>
+    <span class="olcu__k">Ölçülen</span>
+    <div class="olcu__bar"><i></i></div>
+    <span class="olcu__n">0</span><span class="olcu__u"> m²</span>
+    <span class="olcu__s"><b>0</b> / 12 kayıt</span>
+  </div>
   <div class="folio__dil"><a href="/" hreflang="tr" lang="tr" aria-current="true">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en">EN</a></div>
 </nav>
 
@@ -1132,6 +1193,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   <div class="minidil"><a href="/" hreflang="tr" lang="tr" aria-current="true">TR</a><i>/</i><a href="/en/" hreflang="en" lang="en">EN</a></div>
 </nav>
 
+<div class="olcu-m" aria-hidden="true" hidden>
+  <div class="olcu-m__bar"><i></i></div>
+  <span class="olcu-m__n">0</span>
+</div>
 <main id="top">
 
   <!-- ================= TITLE PAGE · type on paper, no media ================= -->
@@ -1256,7 +1321,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
       <div class="rec">
 
-        <article class="rec__lead" id="kayit-01" data-ep data-ep-range="1.05 -0.05">
+        <article class="rec__lead" id="kayit-01" data-alan="26000" data-ep data-ep-range="1.05 -0.05">
           <figure>
             <img src="assets/saha-web/merkezi-derslik-04.webp" srcset="assets/saha-web/merkezi-derslik-04-800.webp 800w, assets/saha-web/merkezi-derslik-04.webp 1200w" sizes="(max-width: 860px) 92vw, 74vw" width="1200" height="800" loading="lazy" alt="Merkezi derslik projesi şantiyesi, tamamlanmaya yakın bloklar, havadan görünüm.">
           </figure>
@@ -1278,7 +1343,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </div>
         </article>
 
-        <article class="rec__lead rec__lead--quiet" id="kayit-02" data-ep data-ep-range="0.95 0.55">
+        <article class="rec__lead rec__lead--quiet" id="kayit-02" data-alan="4000" data-ep data-ep-range="0.95 0.55">
           <div class="rec__lead-body">
             <div>
               <span class="rec__no">02</span>
@@ -1310,7 +1375,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 
       <div class="rec">
 
-        <article id="kayit-03" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-03" class="rec__row" data-alan="32500" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">03</span>
           <div>
             <h3 class="rec__t">Peyzaj Projeleri</h3>
@@ -1329,7 +1394,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-04" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-04" class="rec__row" data-alan="18350" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">04</span>
           <div>
             <h3 class="rec__t">Otel ve Peyzaj Alanı</h3>
@@ -1348,7 +1413,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-05" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-05" class="rec__row" data-alan="14500" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">05</span>
           <div>
             <h3 class="rec__t">Park ve Bahçe Projeleri</h3>
@@ -1365,7 +1430,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-06" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-06" class="rec__row" data-alan="10500" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">06</span>
           <div>
             <h3 class="rec__t">Belediye Hizmet Binası</h3>
@@ -1384,7 +1449,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-07" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-07" class="rec__row" data-alan="10465" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">07</span>
           <div>
             <h3 class="rec__t">Kuran Kursu Binası</h3>
@@ -1403,7 +1468,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-08" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-08" class="rec__row" data-alan="8800" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">08</span>
           <div>
             <h3 class="rec__t">Konak Restorasyonu</h3>
@@ -1421,7 +1486,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-09" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-09" class="rec__row" data-alan="6000" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">09</span>
           <div>
             <h3 class="rec__t">Mezbahane ve Hayvan Pazarı</h3>
@@ -1440,7 +1505,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-10" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-10" class="rec__row" data-alan="1275" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">10</span>
           <div>
             <h3 class="rec__t">Olimpik Yüzme Havuzu</h3>
@@ -1459,7 +1524,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-11" class="rec__row" data-ep data-ep-range="0.92 0.6">
+        <article id="kayit-11" class="rec__row" data-alan="6000" data-ep data-ep-range="0.92 0.6">
           <span class="rec__no">11</span>
           <div>
             <h3 class="rec__t">Meslek Yüksekokulu Projesi</h3>
@@ -1477,7 +1542,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
           </figure>
         </article>
 
-        <article id="kayit-12" class="rec__lead rec__lead--use" data-ep data-ep-range="1.05 -0.05">
+        <article id="kayit-12" class="rec__lead rec__lead--use" data-alan="0" data-ep data-ep-range="1.05 -0.05">
           <div class="use-grid">
             <figure><img src="assets/saha-web/laboratuvar-01.webp" srcset="assets/saha-web/laboratuvar-01-800.webp 800w, assets/saha-web/laboratuvar-01.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Tezgâhları ve cihazlarıyla donatılmış laboratuvar."><figcaption>Laboratuvar</figcaption></figure>
             <figure><img src="assets/saha-web/laboratuvar-05.webp" srcset="assets/saha-web/laboratuvar-05-800.webp 800w, assets/saha-web/laboratuvar-05.webp 1200w" sizes="(max-width: 860px) 92vw, 50vw" width="1200" height="800" loading="lazy" alt="Raflarıyla birlikte tamamlanmış kütüphane."><figcaption>Kütüphane</figcaption></figure>
@@ -2139,6 +2204,90 @@ ScrollCraft.mount(document.body);
   addEventListener('load', kur);
   genis.addEventListener('change', kur);
   kur();
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   Dolan ölçü.
+
+   Her kaydın kendi alanı etiketinde yazıyor (data-alan). Kayıt ekranın
+   ortasını geçtiğinde alanı toplama ekleniyor; sayı oraya doğru kısa
+   bir süre içinde yürüyor, çizgi de aynı oranda doluyor.
+
+   Toplam, sayfadaki manşet rakamla BİREBİR aynı yerde kapanıyor:
+   138.390 m². Bu bir tesadüf değil, üretim onu doğruluyor; kayıtların
+   toplamı manşeti vermezse build zaten kırılıyor.
+
+   Geri sarmaz. Bir kez sayılan kayıt sayılmıştır.
+   ------------------------------------------------------------------ */
+(function () {
+  const kutu = document.querySelector('.olcu');
+  const mobil = document.querySelector('.olcu-m');
+  const bolum = document.getElementById('bolum-3');
+  if (!bolum || (!kutu && !mobil)) return;
+
+  const kayitlar = [...bolum.querySelectorAll('[data-alan]')];
+  if (!kayitlar.length) return;
+  const alanlar = kayitlar.map((el) => +el.dataset.alan || 0);
+  const TOPLAM = alanlar.reduce((a, b) => a + b, 0);
+  if (!TOPLAM) return;
+
+  const ayrac = document.documentElement.lang === 'en' ? ',' : '.';
+  const yaz = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ayrac);
+
+  const nEl = kutu && kutu.querySelector('.olcu__n');
+  const sEl = kutu && kutu.querySelector('.olcu__s b');
+  const mEl = mobil && mobil.querySelector('.olcu-m__n');
+
+  let sayilan = 0, hedef = 0, gosterilen = 0, raf = 0;
+  const azalt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function ciz() {
+    raf = 0;
+    const fark = hedef - gosterilen;
+    gosterilen += azalt ? fark : fark * 0.16;
+    if (Math.abs(hedef - gosterilen) < 1) gosterilen = hedef;
+    const oran = (gosterilen / TOPLAM).toFixed(4);
+    if (kutu) { kutu.style.setProperty('--dolu', oran); }
+    if (mobil) { mobil.style.setProperty('--dolu', oran); }
+    const metin = yaz(gosterilen);
+    if (nEl) nEl.textContent = metin;
+    if (mEl) mEl.textContent = metin + ' m²';
+    if (sEl) sEl.textContent = String(sayilan);
+    if (gosterilen !== hedef) raf = requestAnimationFrame(ciz);
+  }
+  function iste() { if (!raf) raf = requestAnimationFrame(ciz); }
+
+  /* Kayıt ekranın ortasını geçtiğinde sayılır. Eşik ortada, çünkü
+     okunmaya başlanmış sayılması için kaydın gerçekten görülmüş
+     olması gerekiyor. */
+  const gozcu = new IntersectionObserver((girisler) => {
+    let degisti = false;
+    girisler.forEach((g) => {
+      if (!g.isIntersecting) return;
+      const i = kayitlar.indexOf(g.target);
+      if (i < 0 || g.target.dataset.sayildi) return;
+      g.target.dataset.sayildi = '1';
+      hedef += alanlar[i];
+      sayilan += 1;
+      degisti = true;
+    });
+    if (degisti) iste();
+  }, { rootMargin: '-50% 0px -50% 0px' });
+  kayitlar.forEach((el) => gozcu.observe(el));
+
+  /* Ölçü yalnız sicil ekrandayken duruyor. Öncesinde ve sonrasında
+     sayfada yeri yok; sürekli duran bir sayaç arayüz olurdu. */
+  const gorunur = new IntersectionObserver((g) => {
+    const ac = g[0].isIntersecting ? '1' : '0';
+    if (kutu) kutu.dataset.ac = ac;
+    if (mobil) mobil.dataset.ac = ac;
+  }, { threshold: 0 });
+  gorunur.observe(bolum);
+
+  if (kutu) kutu.hidden = false;
+  if (mobil) mobil.hidden = false;
 })();
 </script>
 </body>
