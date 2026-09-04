@@ -322,7 +322,7 @@ p { text-wrap: pretty; }
 .seq-stage__frames {
   --cap-band: clamp(150px, 22vh, 220px);
   /* hold the last frame through the final 12%: that hold is the silence */
-  --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5);
+  --seqP: calc(clamp(0, (var(--sc-p, 0) - 0.22) / 0.62, 1) * 5);
 }
 .seq-stage__frames img {
   position: absolute; inset: 0;
@@ -340,6 +340,29 @@ p { text-wrap: pretty; }
 .seq-stage__frames img:nth-child(5) { --k: 4; }
 .seq-stage__frames img:nth-child(6) { --k: 5; }
 
+
+/* ---- çizim kendini çizer ----
+   --d: çizim ilerlemesi, act'in ilk %24'ü. Her maske vuruşu kendi [--a,--b]
+   penceresinde 0→1 gider (pathLength=1, dashoffset = 1 - r). Katmanın
+   opaklığı M2'nin opaklığının tersi: M2 belirirken çizgiler ona devrolur. */
+.ciz {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; overflow: visible;
+  --d: clamp(0, calc(var(--sc-p, 0) / 0.24), 1);
+  opacity: calc(1 - clamp(0, var(--seqP, 0), 1));
+  will-change: opacity;
+}
+/* pathLength="1" ile birim dash denenmişti; Chrome maske içinde pathLength
+   ölçeklemesini uygulamıyor, 1px aç / 1px kapa bir elek deseni çıkıp her
+   şeyi yarı opaklıkta gösteriyordu. Uzunluk (--L) her vuruşa açıkça yazılı. */
+.ciz .v {
+  stroke-dasharray: var(--L);
+  --r: clamp(0, calc((var(--d) - var(--a, 0)) / (var(--b, 1) - var(--a, 0))), 1);
+  stroke-dashoffset: calc(var(--L) * (1 - var(--r)));
+  stroke-linecap: butt;
+}
+@media (prefers-reduced-motion: reduce) { .ciz { display: none; } }
+
 /* Dizi son karede duruyordu ve o duruş kasıtlıydı: tepe öncesi nefes.
    Ama tamamen hareketsiz kalınca "sayfa dondu" gibi de okunabiliyordu.
    Artık maket, duruş boyunca yavaşça yaklaşıyor: bakış nesnenin üstünde
@@ -356,7 +379,7 @@ p { text-wrap: pretty; }
 
 /* Captions switch on the same variable, harder than the images so one line
    owns the frame instead of two ghosting through each other. */
-.seq-cap__lines { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5); }
+.seq-cap__lines { --seqP: calc(clamp(0, (var(--sc-p, 0) - 0.22) / 0.62, 1) * 5); }
 
 /* Caption sits in its own plate, never laid across the picture as a banner. */
 .seq-cap {
@@ -396,7 +419,7 @@ p { text-wrap: pretty; }
   color: #A99C87;
   max-width: 34ch;
 }
-.seq-progress { --seqP: calc(clamp(0, var(--sc-p, 0) / 0.84, 1) * 5);
+.seq-progress { --seqP: calc(clamp(0, (var(--sc-p, 0) - 0.22) / 0.62, 1) * 5);
   position: absolute; left: var(--sc-6); right: var(--sc-6);
   bottom: calc(var(--cap-band) - 1px); height: 1px;
   background: rgba(239,231,216,0.18);
@@ -770,6 +793,9 @@ p { text-wrap: pretty; }
 @media (max-width: 700px) {
   .seq-stage, .seq-stage__frames { --cap-band: clamp(190px, 30vh, 260px); }
   .seq-stage__frames img { object-fit: contain; object-position: center 45%; }
+  /* SVG, contain ile yerleşen görselin kutusuna oturur: aynı genişlik,
+     16:9, dikeyde aynı %45 konumu. */
+  .ciz { inset: auto 0 auto 0; height: auto; aspect-ratio: 16 / 9; top: 45%; transform: translateY(-45%); }
   .seq-cap { padding-left: var(--sc-6); }
   .seq-cap__line { font-size: clamp(1.25rem, 1rem + 2.2vw, 1.8rem); }
 }
@@ -1344,7 +1370,7 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
         onu kimin, nasıl yaptığı görünmez olur. Görünen tek şey, yapının durup durmadığıdır.</p>
     </div>
 
-    <section data-sc-act="pin" data-sc-span="3.6" data-sc-drift="#16130E" id="dizi"
+    <section data-sc-act="pin" data-sc-span="4.4" data-sc-drift="#16130E" id="dizi"
              aria-label="Çizimden yapıya dönüşüm dizisi">
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
@@ -1355,6 +1381,43 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
             <img data-src="assets/seq-web/M4.webp" data-srcset="assets/seq-web/M4-m.webp 900w, assets/seq-web/M4.webp 1600w" sizes="100vw" alt="Maket ölçeğinde betonarme karkas, iskele ve küçük kule vinç." aria-hidden="true">
             <img data-src="assets/seq-web/M5.webp" data-srcset="assets/seq-web/M5-m.webp 900w, assets/seq-web/M5.webp 1600w" sizes="100vw" alt="Öndeki bloklarda taş kaplama ve kahverengi panel dolgu başlarken arkadakiler hâlâ ham beton." aria-hidden="true">
             <img data-src="assets/seq-web/M6.webp" data-srcset="assets/seq-web/M6-m.webp 900w, assets/seq-web/M6.webp 1600w" sizes="100vw" alt="Kâğıdın üzerinde duran, peyzajı ve yollarıyla tamamlanmış mimari maket." aria-hidden="true">
+
+            <!-- Çizim kendini çizer. M2'nin yalnız kalem çizgilerini taşıyan
+                 alfa katmanı (M2-cizgi.webp), bölge bölge ve vuruş yönünde
+                 açılır: önce halka yol, sonra bloklar önden arkaya, sonra iç
+                 yollar, en son kotlar. Açılan pikseller M2'nin kendi çizgileri
+                 olduğu için M2 belirdiğinde hiçbir şey kaymaz. Maske vuruşları
+                 kalın; izleme hatası görünmez. Elin altındaki sağ yay bilerek
+                 dışarıda: o kısım M2 gelince, el kalkmış gibi, kendiliğinden
+                 gelir. -->
+            <svg class="ciz" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+              <defs>
+                <clipPath id="czHalka"><path clip-rule="evenodd" fill-rule="evenodd" d="M420,578 488,478 596,346 704,214 772,202 1040,214 1040,470 1150,470 1120,530 1010,610 900,665 760,705 620,715 500,690 440,645Z M490,565 540,480 630,375 725,255 790,243 1000,262 1080,300 1100,380 1090,470 1030,540 920,600 780,640 640,650 540,620Z"/></clipPath>
+                <clipPath id="czB1"><polygon points="486,590 582,462 660,498 566,634"/></clipPath>
+                <clipPath id="czB2"><polygon points="656,616 814,455 866,486 764,656"/></clipPath>
+                <clipPath id="czB3"><polygon points="638,512 688,340 758,336 834,380 836,430 764,530"/></clipPath>
+                <clipPath id="czB4"><polygon points="822,440 940,262 1010,296 902,462"/></clipPath>
+                <clipPath id="czB5"><polygon points="712,268 768,250 884,300 852,362 716,325"/></clipPath>
+                <clipPath id="czIc"><polygon points="480,606 720,248 1000,258 1012,470 900,566 760,656 556,656"/></clipPath>
+                <clipPath id="czKot"><polygon points="360,560 700,205 1040,200 1040,470 1160,470 1140,570 900,710 620,815 380,815"/></clipPath>
+                <mask id="mzHalka" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><circle cx="780" cy="450" r="420" fill="none" stroke="#fff" stroke-width="900" class="v" transform="rotate(150 780 450)" style="--a:0;--b:0.32;--L:2638.9"/></mask>
+                <mask id="mzB1" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="522" y1="605" x2="622" y2="482" stroke="#fff" stroke-width="100" class="v" style="--a:0.24;--b:0.36;--L:158.5"/></mask>
+                <mask id="mzB2" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="708" y1="630" x2="842" y2="472" stroke="#fff" stroke-width="104" class="v" style="--a:0.32;--b:0.44;--L:207.2"/></mask>
+                <mask id="mzB3" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="690" y1="504" x2="796" y2="354" stroke="#fff" stroke-width="130" class="v" style="--a:0.40;--b:0.52;--L:183.7"/></mask>
+                <mask id="mzB4" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="846" y1="444" x2="980" y2="278" stroke="#fff" stroke-width="116" class="v" style="--a:0.48;--b:0.60;--L:213.3"/></mask>
+                <mask id="mzB5" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="734" y1="280" x2="866" y2="338" stroke="#fff" stroke-width="96" class="v" style="--a:0.56;--b:0.66;--L:144.2"/></mask>
+                <mask id="mzIc" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="470" y1="660" x2="1020" y2="240" stroke="#fff" stroke-width="520" class="v" style="--a:0.62;--b:0.80;--L:692.0"/></mask>
+                <mask id="mzKot" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><line x1="350" y1="850" x2="1200" y2="160" stroke="#fff" stroke-width="1100" class="v" style="--a:0.70;--b:1;--L:1094.8"/></mask>
+              </defs>
+              <g clip-path="url(#czHalka)" mask="url(#mzHalka)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czB1)" mask="url(#mzB1)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czB2)" mask="url(#mzB2)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czB3)" mask="url(#mzB3)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czB4)" mask="url(#mzB4)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czB5)" mask="url(#mzB5)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czIc)" mask="url(#mzIc)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+              <g clip-path="url(#czKot)" mask="url(#mzKot)"><image data-src="assets/seq-web/M2-cizgi.webp" width="1600" height="900"/></g>
+            </svg>
           </div>
           <div class="seq-cap">
             <div class="seq-cap__lines">
@@ -2031,6 +2094,10 @@ ScrollCraft.mount(document.body);
   function preload() {
     if (started) return;
     started = true;
+    /* Çizim katmanı tek dosya, sekiz <image> ona bakar; tarayıcı bir kez indirir. */
+    document.querySelectorAll('.ciz image[data-src]').forEach((im) => {
+      im.setAttribute('href', im.dataset.src);
+    });
     let i = 1;
     (function next() {
       if (i >= imgs.length) return;
