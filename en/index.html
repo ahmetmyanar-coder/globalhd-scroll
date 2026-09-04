@@ -32,6 +32,7 @@ addEventListener('load', function () {
 "areaServed":["TR","CY"],
 "knowsAbout":["İnşaat ve taahhüt","Üstyapı ve altyapı uygulamaları","Tescilli yapı restorasyonu","Peyzaj ve çevre düzenleme"]}
 </script>
+<link rel="preload" as="image" href="/assets/saha-web/konak-06.webp" imagesrcset="/assets/saha-web/konak-06-800.webp 800w, /assets/saha-web/konak-06.webp 1600w, /assets/saha-web/konak-06-1920.webp 1920w" imagesizes="100vw" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
@@ -266,6 +267,48 @@ p { text-wrap: pretty; }
   padding-left: var(--folio-w);
   position: relative;
 }
+.title-page{ background: var(--desk); overflow: hidden; }
+.title-page__plaka{ position: absolute; inset: 0; z-index: 0; }
+.title-page__plaka img{
+  width: 100%; height: 100%; object-fit: cover; object-position: 42% 55%; display: block;
+  transform: scale(calc(1.05 + (var(--ep, 0.5) - 0.5) * -0.05)); will-change: transform;
+}
+/* İki perde: soldan (yazının olduğu taraf) ve alttan (dipnot şeridi). Sağ
+   üst, fotoğrafın en çok göründüğü yer, en açık kalıyor. Kontrast HARF
+   pikseli altındaki zeminden ölçüldü: gövde metinleri 4,5:1'in üstünde,
+   96 px'lik başlık büyük-metin eşiği 3:1'in üstünde (ölçüm ≥ 3,9:1). */
+.title-page__plaka::after{
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(100deg, rgba(10,8,6,0.72) 0%, rgba(10,8,6,0.62) 40%, rgba(10,8,6,0.40) 62%, rgba(10,8,6,0.16) 82%, rgba(10,8,6,0.08) 100%),
+    linear-gradient(to top, rgba(10,8,6,0.82) 0%, rgba(10,8,6,0) 40%);
+}
+/* Yazı bloğunun hemen arkasında ikinci, yerel bir perde: başlık 16 karaktere
+   kadar uzayıp fotoğrafın açık kısmına giriyordu (ölçüm: 2,9:1). Bu perde
+   yalnız yazının olduğu elipsi karartır, sağ üst köşe fotoğrafa kalır. */
+.title-page .wrap::before{
+  content: ""; position: absolute; z-index: -1; inset: -8% -6% -6% -8%;
+  background: radial-gradient(ellipse 84% 80% at 30% 42%, rgba(10,8,6,0.80) 0%, rgba(10,8,6,0.66) 52%, rgba(10,8,6,0) 84%);
+  pointer-events: none;
+}
+/* Fotoğraf üstünde doygun mavi vurgu geçmez: açık mavi metin (L≈0,41) 4,5:1
+   için neredeyse siyah zemin ister. Plakada vurgu açık mavi tona, ara metin
+   açık tona çekilir; koyu bölümlerdeki mavi vurgu olduğu gibi kalır. */
+.title-page.ch--desk h1 em{ color: #C9DDEE; }
+.title-page.ch--desk .title-page__lede{ color: #D9CFC0; }
+.title-page .wrap{ position: relative; z-index: 1; }
+.title-page__mark img{ filter: brightness(0) invert(1); }
+.title-page__kaynak{
+  position: absolute; right: var(--sc-gutter); bottom: var(--sc-5); z-index: 1; margin: 0;
+  font-family: var(--sc-font-mono); font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #D6CCBC; text-align: right; max-width: 40ch;
+}
+@media (max-width: 700px){
+  .title-page__plaka img{ object-position: 40% 50%; }
+  .title-page__plaka::after{ background: linear-gradient(to top, rgba(10,8,6,0.92) 0%, rgba(10,8,6,0.78) 45%, rgba(10,8,6,0.40) 100%); }
+  .title-page__kaynak{ position: relative; z-index: 1; right: auto; bottom: auto; margin: var(--sc-5) 0 0; text-align: left; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce){ .title-page__plaka img{ transform: none; } }
 .title-page__mark { width: clamp(150px, 20vw, 232px); margin-bottom: var(--sc-8); }
 .title-page__mark img { width: 100%; height: auto; display: block; }
 .title-page h1 {
@@ -1268,6 +1311,29 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 @media (max-width: 700px){ .olcekk__no, .olcekk__m{ display: none } }
 @media (prefers-reduced-motion: reduce){ .olcekk{ opacity: 1 } }
 
+/* ---- dev rakam anı ----
+   Sicil biter, biriken ölçü son değerine ulaşır; sonra o değer bir kere de
+   tek başına, ekranı kaplayarak gelir. Videodaki "PORTAL" anının bizdeki
+   karşılığı: sözcük değil rakam, çünkü bu sayfada iddia rakamdır.
+   Koyu blok künyenin altına da uzanır (negatif kenar boşluğu); künye
+   mürekkebi iç içe koyu bloğu da tanır. */
+.devsayi{
+  min-height: 100svh; display: grid; align-content: center;
+  margin-left: calc(-1 * var(--folio-w));
+  padding: clamp(4rem, 10vh, 8rem) var(--sc-gutter) clamp(4rem, 10vh, 8rem) calc(var(--folio-w) + var(--sc-gutter));
+  background: var(--sc-canvas); color: var(--sc-ink);
+}
+.devsayi__n{
+  font-family: var(--sc-font-display); font-weight: 700;
+  font-size: clamp(4.4rem, 1.5rem + 16.5vw, 19rem); line-height: 0.86; letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums; margin: var(--sc-4) 0 0;
+}
+.devsayi__u{ font-size: 0.26em; font-weight: 500; letter-spacing: -0.02em; margin-left: 0.14em;
+             vertical-align: 1.05em; color: var(--sc-ink-soft); }
+.devsayi__k{ margin: var(--sc-5) 0 0; font-family: var(--sc-font-display);
+             font-size: clamp(1.3rem, 1rem + 1.5vw, 2.3rem); color: var(--sc-ink-soft); letter-spacing: -0.02em; }
+@media (max-width: 700px){ .devsayi{ min-height: 82svh; } }
+
 /* ---- diyagram bir alet ----
    Dikdörtgenler gerçek bağlantı: klavyeyle gezilir, tıklanınca kayda gider.
    Üstüne gelince okuma satırı dolar, diğer alanlar geri çekilir. İmleçle
@@ -1378,7 +1444,18 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
 <main id="top">
 
   <!-- ================= TITLE PAGE · type on paper, no media ================= -->
-  <header class="title-page ch" data-ch="—" data-ch-name="Title" data-mark="0.16">
+  <header class="title-page ch ch--desk" data-ch="—" data-ch-name="Title" data-mark="0.16">
+    <!-- Tam ekran plaka: gerçek saha fotoğrafı. Kural değişmedi, yapıyı gösteren
+         kare gerçek. Perde yalnız yazının oturduğu tarafta koyu; kare baştan
+         sona karartılmıyor. Görsel ilk boyanan şey olduğu için başta yükleniyor
+         (preload + fetchpriority) ve zemin, görsel gelmeden de koyu: yazı hiçbir
+         an açık üstüne açık kalmıyor. -->
+    <div class="title-page__plaka" data-ep data-ep-range="1 0">
+      <img src="/assets/saha-web/konak-06.webp"
+           srcset="/assets/saha-web/konak-06-800.webp 800w, /assets/saha-web/konak-06.webp 1600w, /assets/saha-web/konak-06-1920.webp 1920w"
+           sizes="100vw" width="1600" height="900" fetchpriority="high" decoding="async"
+           alt="The restored listed mansion from the air; tiled roofs and a minaret around it.">
+    </div>
     <div class="wrap">
       <div class="title-page__mark">
         <img src="/assets/logo-main.png" width="2381" height="842" alt="Global HD İnşaat A.Ş.">
@@ -1401,6 +1478,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
           ruling, a military facility restriction, a public procurement specification.</p>
       </div>
     </div>
+    <p class="title-page__kaynak">Mansion Restoration · General Directorate of Cultural Heritage and Museums · Site photograph</p>
   </header>
 
   <!-- ================= BÖLÜM 01 · ÇİZGİ (the one scrub chapter) ============= -->
@@ -1420,7 +1498,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
           <div class="seq-stage__frames" id="seqFrames">
-            <img src="/assets/seq-web/M1.webp" srcset="/assets/seq-web/M1-m.webp 900w, /assets/seq-web/M1.webp 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil." fetchpriority="high">
+            <img src="/assets/seq-web/M1.webp" srcset="/assets/seq-web/M1-m.webp 900w, /assets/seq-web/M1.webp 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil.">
             <img data-src="/assets/seq-web/M2.webp" data-srcset="/assets/seq-web/M2-m.webp 900w, /assets/seq-web/M2.webp 1600w" sizes="100vw" alt="A completed site plan with parallel blocks, link volumes, roads and contours." aria-hidden="true">
             <img data-src="/assets/seq-web/M3.webp" data-srcset="/assets/seq-web/M3-m.webp 900w, /assets/seq-web/M3.webp 1600w" sizes="100vw" alt="A transparent three-dimensional line massing rising from the plan." aria-hidden="true">
             <img data-src="/assets/seq-web/M4.webp" data-srcset="/assets/seq-web/M4-m.webp 900w, /assets/seq-web/M4.webp 1600w" sizes="100vw" alt="A reinforced concrete frame at model scale, with scaffolding and a small tower crane." aria-hidden="true">
@@ -1799,11 +1877,19 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
         </article>
 
       </div>
+    </div>
 
-          <section class="olcek" data-ep data-ep-range="0.95 0.4"
+        <section class="devsayi ch--desk" aria-label="Total works area">
+      <p class="eyebrow">Eleven projects · total works area</p>
+      <p class="devsayi__n"><span data-say>138,390</span><span class="devsayi__u">m²</span></p>
+      <p class="devsayi__k">That much.</p>
+    </section>
+
+    <div class="wrap">
+      <section class="olcek" data-ep data-ep-range="0.95 0.4"
                aria-labelledby="olcek-b">
         <p class="eyebrow">Common scale</p>
-        <h3 class="olcek__b" id="olcek-b">138,390 m², to scale.</h3>
+        <h3 class="olcek__b" id="olcek-b">Each area is drawn at its true value.</h3>
   <svg class="olcek__c" viewBox="0 0 1200 700" role="group" data-yuz="246.4" aria-label="The areas of eleven projects at a common scale: 138,390 square metres in total. Each area opens its record.">
     <a class="olcekk" href="#kayit-01" style="--i: 0" data-no="01" data-ad="Central Classroom Project" data-alan="26,000 m²" data-durum="Ongoing" aria-label="01 · Central Classroom Project · 26,000 m² · Ongoing">
       <rect x="0.0" y="388.9" width="507.3" height="311.1"/>
@@ -2440,7 +2526,9 @@ ScrollCraft.mount(document.body);
 (function () {
   const folio = document.querySelector('.folio');
   if (!folio) return;
-  const bolumler = [...document.querySelectorAll('.ch')];
+  /* .devsayi: bölümün içinde koyu bir plaka. Belge sırasında kapsayan
+     bölüm önce gelir; en son eşleşen kutu en içteki olur, o kazanır. */
+  const bolumler = [...document.querySelectorAll('.ch, .devsayi')];
   if (!bolumler.length) return;
 
   const ogeler = [
@@ -2470,8 +2558,9 @@ ScrollCraft.mount(document.body);
   }
 
   function koyuMu(belgeY) {
-    for (const s of sinirlar) if (belgeY >= s.ust && belgeY < s.alt) return s.koyu;
-    return false;
+    let k = false;
+    for (const s of sinirlar) if (belgeY >= s.ust && belgeY < s.alt) k = s.koyu;
+    return k;
   }
 
   let sonStatus = [];
