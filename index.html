@@ -1268,6 +1268,50 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 @media (max-width: 700px){ .olcekk__no, .olcekk__m{ display: none } }
 @media (prefers-reduced-motion: reduce){ .olcekk{ opacity: 1 } }
 
+/* ---- diyagram bir alet ----
+   Dikdörtgenler gerçek bağlantı: klavyeyle gezilir, tıklanınca kayda gider.
+   Üstüne gelince okuma satırı dolar, diğer alanlar geri çekilir. İmleçle
+   gezen artı işareti ve 100 m çubuğu yalnız hover olan cihazlarda. */
+.olcek__c{ cursor: crosshair }
+.olcekk__hit{ fill: transparent; stroke: none }
+@media (hover: hover){ .olcekk__hit{ display: none } }
+a.olcekk{ cursor: pointer; outline: none }
+a.olcekk rect{ transition: fill 160ms var(--sc-ease-out), stroke 160ms var(--sc-ease-out) }
+a.olcekk:hover rect, a.olcekk:focus-visible rect, a.olcekk.acik rect{
+  fill: color-mix(in srgb, var(--sc-accent) 16%, transparent);
+  stroke: var(--sc-accent); stroke-width: 1.5;
+}
+a.olcekk:hover .olcekk__m, a.olcekk:focus-visible .olcekk__m, a.olcekk.acik .olcekk__m{ fill: var(--sc-ink) }
+a.olcekk:focus-visible rect{ stroke-width: 2.5 }
+.olcek__c.aktif a.olcekk:not(.acik):not(:hover) rect{
+  stroke: color-mix(in srgb, var(--sc-ink) 38%, transparent);
+}
+.olcek__nis{ display: none; pointer-events: none }
+.olcek__c.gezer .olcek__nis{ display: block }
+.olcek__nis line{ stroke: var(--sc-accent); stroke-width: 1; vector-effect: non-scaling-stroke }
+.olcek__nis-x, .olcek__nis-y{ stroke-dasharray: 3 5; opacity: 0.7 }
+.olcek__nis-b{ stroke-width: 2 }
+.olcek__nis-l{ font-family: var(--sc-font-mono); font-size: 12px; letter-spacing: 0.08em;
+               fill: var(--sc-accent) }
+@media (hover: none){ .olcek__c{ cursor: auto } .olcek__c.gezer .olcek__nis{ display: none } }
+.olcek__oku{ margin-top: var(--sc-4); min-height: 1.7em;
+             font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.02em;
+             color: var(--sc-ink-soft); font-variant-numeric: tabular-nums }
+.olcek__oku b{ font-weight: 500; color: var(--sc-ink) }
+.olcek__oku i{ font-style: normal; color: var(--sc-accent) }
+/* Çapayla gelen kayıt üstten nefes payıyla dursun; başlığı kesilmesin. */
+[id^="kayit-"]{ scroll-margin-top: clamp(1.5rem, 5vh, 3rem) }
+/* Hedef kayıt bir an vurgulanır: diyagramdan ya da lejanttan gelen göz,
+   yerini bulsun. */
+[id^="kayit-"].vurgu{ animation: kayitVurgu 1.8s var(--sc-ease-out) 1 }
+@keyframes kayitVurgu{
+  0%{ box-shadow: inset 3px 0 0 var(--sc-accent); background: color-mix(in srgb, var(--sc-accent) 9%, transparent) }
+  100%{ box-shadow: inset 3px 0 0 transparent; background: transparent }
+}
+@media (prefers-reduced-motion: reduce){
+  [id^="kayit-"].vurgu{ animation: none; box-shadow: inset 3px 0 0 var(--sc-accent) }
+}
+
 :where(a, button):focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1759,73 +1803,72 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
                aria-labelledby="olcek-b">
         <p class="eyebrow">Ortak ölçek</p>
         <h3 class="olcek__b" id="olcek-b">138.390 m² bu kadar.</h3>
-  <svg class="olcek__c" viewBox="0 0 1200 700" role="img" aria-label="On bir projenin alanları ortak ölçekte: toplam 138.390 metrekare.">
-    <g class="olcekk" style="--i: 0">
+  <svg class="olcek__c" viewBox="0 0 1200 700" role="group" data-yuz="246.4" aria-label="On bir projenin alanları ortak ölçekte: toplam 138.390 metrekare. Her alan kendi kaydına gider.">
+    <a class="olcekk" href="#kayit-01" style="--i: 0" data-no="01" data-ad="Merkezi Derslik Projesi" data-alan="26.000 m²" data-durum="Devam Ediyor" aria-label="01 · Merkezi Derslik Projesi · 26.000 m² · Devam Ediyor">
       <rect x="0.0" y="388.9" width="507.3" height="311.1"/>
       <text x="9.0" y="410.9" class="olcekk__no">01</text>
       <text x="9.0" y="428.9" class="olcekk__m">26.000</text>
-      <title>Merkezi Derslik Projesi · 26.000 m² · %18.8</title>
-    </g>
-    <g class="olcekk" style="--i: 1">
+    </a>
+    <a class="olcekk" href="#kayit-02" style="--i: 1" data-no="02" data-ad="Karargâh ve Yemekhane Binası" data-alan="4.000 m²" data-durum="Devam Ediyor" aria-label="02 · Karargâh ve Yemekhane Binası · 4.000 m² · Devam Ediyor">
       <rect x="1020.3" y="521.8" width="136.2" height="178.2"/>
       <text x="1029.3" y="543.8" class="olcekk__no">02</text>
       <text x="1029.3" y="561.8" class="olcekk__m">4.000</text>
-      <title>Karargâh ve Yemekhane Binası · 4.000 m² · %2.9</title>
-    </g>
-    <g class="olcekk" style="--i: 2">
+    </a>
+    <a class="olcekk" href="#kayit-03" style="--i: 2" data-no="03" data-ad="Peyzaj Projeleri" data-alan="32.500 m²" data-durum="Tamamlandı" aria-label="03 · Peyzaj Projeleri · 32.500 m² · Tamamlandı">
       <rect x="0.0" y="0.0" width="507.3" height="388.9"/>
       <text x="9.0" y="22.0" class="olcekk__no">03</text>
       <text x="9.0" y="40.0" class="olcekk__m">32.500</text>
-      <title>Peyzaj Projeleri · 32.500 m² · %23.5</title>
-    </g>
-    <g class="olcekk" style="--i: 3">
+    </a>
+    <a class="olcekk" href="#kayit-04" style="--i: 3" data-no="04" data-ad="Otel ve Peyzaj Alanı" data-alan="18.350 m²" data-durum="Tamamlandı" aria-label="04 · Otel ve Peyzaj Alanı · 18.350 m² · Tamamlandı">
       <rect x="507.3" y="0.0" width="387.0" height="287.8"/>
       <text x="516.3" y="22.0" class="olcekk__no">04</text>
       <text x="516.3" y="40.0" class="olcekk__m">18.350</text>
-      <title>Otel ve Peyzaj Alanı · 18.350 m² · %13.3</title>
-    </g>
-    <g class="olcekk" style="--i: 4">
+    </a>
+    <a class="olcekk" href="#kayit-05" style="--i: 4" data-no="05" data-ad="Park ve Bahçe Projeleri" data-alan="14.500 m²" data-durum="Tamamlandı" aria-label="05 · Park ve Bahçe Projeleri · 14.500 m² · Tamamlandı">
       <rect x="894.2" y="0.0" width="305.8" height="287.8"/>
       <text x="903.2" y="22.0" class="olcekk__no">05</text>
       <text x="903.2" y="40.0" class="olcekk__m">14.500</text>
-      <title>Park ve Bahçe Projeleri · 14.500 m² · %10.5</title>
-    </g>
-    <g class="olcekk" style="--i: 5">
+    </a>
+    <a class="olcekk" href="#kayit-06" style="--i: 5" data-no="06" data-ad="Belediye Hizmet Binası" data-alan="10.500 m²" data-durum="Tamamlandı" aria-label="06 · Belediye Hizmet Binası · 10.500 m² · Tamamlandı">
       <rect x="507.3" y="287.8" width="308.7" height="206.4"/>
       <text x="516.3" y="309.8" class="olcekk__no">06</text>
       <text x="516.3" y="327.8" class="olcekk__m">10.500</text>
-      <title>Belediye Hizmet Binası · 10.500 m² · %7.6</title>
-    </g>
-    <g class="olcekk" style="--i: 6">
+    </a>
+    <a class="olcekk" href="#kayit-07" style="--i: 6" data-no="07" data-ad="Kuran Kursu Binası" data-alan="10.465 m²" data-durum="Tamamlandı" aria-label="07 · Kuran Kursu Binası · 10.465 m² · Tamamlandı">
       <rect x="507.3" y="494.3" width="308.7" height="205.7"/>
       <text x="516.3" y="516.3" class="olcekk__no">07</text>
       <text x="516.3" y="534.3" class="olcekk__m">10.465</text>
-      <title>Kuran Kursu Binası · 10.465 m² · %7.6</title>
-    </g>
-    <g class="olcekk" style="--i: 7">
+    </a>
+    <a class="olcekk" href="#kayit-08" style="--i: 7" data-no="08" data-ad="Konak Restorasyonu" data-alan="8.800 m²" data-durum="Tamamlandı" aria-label="08 · Konak Restorasyonu · 8.800 m² · Tamamlandı">
       <rect x="816.0" y="287.8" width="228.3" height="233.9"/>
       <text x="825.0" y="309.8" class="olcekk__no">08</text>
       <text x="825.0" y="327.8" class="olcekk__m">8.800</text>
-      <title>Konak Restorasyonu · 8.800 m² · %6.4</title>
-    </g>
-    <g class="olcekk" style="--i: 8">
+    </a>
+    <a class="olcekk" href="#kayit-09" style="--i: 8" data-no="09" data-ad="Mezbahane ve Hayvan Pazarı" data-alan="6.000 m²" data-durum="Tamamlandı" aria-label="09 · Mezbahane ve Hayvan Pazarı · 6.000 m² · Tamamlandı">
       <rect x="1044.3" y="287.8" width="155.7" height="233.9"/>
       <text x="1053.3" y="309.8" class="olcekk__no">09</text>
       <text x="1053.3" y="327.8" class="olcekk__m">6.000</text>
-      <title>Mezbahane ve Hayvan Pazarı · 6.000 m² · %4.3</title>
-    </g>
-    <g class="olcekk" style="--i: 9">
+    </a>
+    <a class="olcekk" href="#kayit-10" style="--i: 9" data-no="10" data-ad="Olimpik Yüzme Havuzu" data-alan="1.275 m²" data-durum="Tamamlandı" aria-label="10 · Olimpik Yüzme Havuzu · 1.275 m² · Tamamlandı">
       <rect x="1156.6" y="521.8" width="43.4" height="178.2"/>
+      <rect class="olcekk__hit" x="1092.0" y="521.8" width="108.0" height="178.2"/>
       <text x="1165.6" y="543.8" class="olcekk__no">10</text>
-      <title>Olimpik Yüzme Havuzu · 1.275 m² · %0.9</title>
-    </g>
-    <g class="olcekk" style="--i: 10">
+    </a>
+    <a class="olcekk" href="#kayit-11" style="--i: 10" data-no="11" data-ad="Meslek Yüksekokulu Projesi" data-alan="6.000 m²" data-durum="Tamamlandı" aria-label="11 · Meslek Yüksekokulu Projesi · 6.000 m² · Tamamlandı">
       <rect x="816.0" y="521.8" width="204.3" height="178.2"/>
       <text x="825.0" y="543.8" class="olcekk__no">11</text>
       <text x="825.0" y="561.8" class="olcekk__m">6.000</text>
-      <title>Meslek Yüksekokulu Projesi · 6.000 m² · %4.3</title>
+    </a>
+    <g class="olcek__nis" aria-hidden="true">
+      <line class="olcek__nis-y" x1="0" y1="0" x2="0" y2="700"/>
+      <line class="olcek__nis-x" x1="0" y1="0" x2="1200" y2="0"/>
+      <line class="olcek__nis-b" x1="0" y1="0" x2="0" y2="0"/>
+      <line class="olcek__nis-t1" x1="0" y1="0" x2="0" y2="0"/>
+      <line class="olcek__nis-t2" x1="0" y1="0" x2="0" y2="0"/>
+      <text class="olcek__nis-l">100 m</text>
     </g>
   </svg>
+        <p class="olcek__oku" aria-live="polite">Bir alanın üstüne gel ya da dokun: kayda gider.</p>
         <ol class="olcek__l">
           <li><a href="#kayit-01"><span>01</span>Merkezi Derslik Projesi<b>26.000 m²</b></a></li>
           <li><a href="#kayit-02"><span>02</span>Karargâh ve Yemekhane Binası<b>4.000 m²</b></a></li>
@@ -2569,6 +2612,75 @@ ScrollCraft.mount(document.body);
 
   if (kutu) kutu.hidden = false;
   if (mobil) mobil.hidden = false;
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   Ölçek diyagramı bir alet. Üstüne gelince okuma satırı dolar; imleçle
+   bir artı işareti ve 100 m'lik çubuk gezer. Çubuğun uzunluğu build.py'de
+   gerçek ölçekten hesaplanmış (data-yuz): ortak ölçeğin kanıtı, süs değil.
+   Kayda gidince hedef bir an vurgulanır; lejant bağlantıları da bundan
+   yararlanır.
+   ------------------------------------------------------------------ */
+(function () {
+  const svg = document.querySelector('.olcek__c');
+  if (!svg) return;
+  const oku = document.querySelector('.olcek__oku');
+  const varsayilan = oku ? oku.innerHTML : '';
+  const alanlar = [...svg.querySelectorAll('a.olcekk')];
+  const nis = svg.querySelector('.olcek__nis');
+  const yuz = parseFloat(svg.dataset.yuz) || 0;
+  const hoverVar = matchMedia('(hover: hover)').matches;
+
+  function goster(a) {
+    if (!oku) return;
+    if (!a) { oku.innerHTML = varsayilan; return; }
+    const d = a.dataset;
+    oku.innerHTML = '<i>' + d.no + '</i> · <b>' + d.ad + '</b> · ' + d.alan
+      + (d.durum ? ' · ' + d.durum : '') + ' · <i>kayda git ↵</i>';
+  }
+  alanlar.forEach((a) => {
+    a.addEventListener('pointerenter', () => { a.classList.add('acik'); goster(a); });
+    a.addEventListener('pointerleave', () => { a.classList.remove('acik'); goster(null); });
+    a.addEventListener('focus', () => { a.classList.add('acik'); svg.classList.add('aktif'); goster(a); });
+    a.addEventListener('blur', () => { a.classList.remove('acik'); svg.classList.remove('aktif'); goster(null); });
+  });
+
+  if (hoverVar && nis) {
+    const ly = nis.querySelector('.olcek__nis-y'), lx = nis.querySelector('.olcek__nis-x');
+    const bar = nis.querySelector('.olcek__nis-b'), t1 = nis.querySelector('.olcek__nis-t1');
+    const t2 = nis.querySelector('.olcek__nis-t2'), lb = nis.querySelector('.olcek__nis-l');
+    let raf = 0, px = 0, py = 0;
+    function ciz() {
+      raf = 0;
+      const r = svg.getBoundingClientRect();
+      const ux = (px - r.left) / r.width * 1200, uy = (py - r.top) / r.height * 700;
+      ly.setAttribute('x1', ux); ly.setAttribute('x2', ux);
+      lx.setAttribute('y1', uy); lx.setAttribute('y2', uy);
+      /* 100 m çubuğu: imlecin sağ altında; sağa sığmazsa sola */
+      const sag = ux + 18 + yuz <= 1200;
+      const x0 = sag ? ux + 18 : ux - 18 - yuz, x1 = x0 + yuz, y0 = uy + 22;
+      bar.setAttribute('x1', x0); bar.setAttribute('x2', x1); bar.setAttribute('y1', y0); bar.setAttribute('y2', y0);
+      t1.setAttribute('x1', x0); t1.setAttribute('x2', x0); t1.setAttribute('y1', y0 - 5); t1.setAttribute('y2', y0 + 5);
+      t2.setAttribute('x1', x1); t2.setAttribute('x2', x1); t2.setAttribute('y1', y0 - 5); t2.setAttribute('y2', y0 + 5);
+      lb.setAttribute('x', x0); lb.setAttribute('y', y0 + 18);
+    }
+    svg.addEventListener('pointerenter', () => { svg.classList.add('gezer', 'aktif'); });
+    svg.addEventListener('pointerleave', () => { svg.classList.remove('gezer', 'aktif'); });
+    svg.addEventListener('pointermove', (e) => { px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(ciz); }, { passive: true });
+  }
+
+  /* hedef kaydı vurgula: diyagram, lejant ya da doğrudan gelen bağlantı */
+  function vurgula() {
+    const id = location.hash.slice(1);
+    if (!/^kayit-/.test(id)) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('vurgu'); void el.offsetWidth; el.classList.add('vurgu');
+  }
+  addEventListener('hashchange', vurgula);
+  if (location.hash) setTimeout(vurgula, 400);
 })();
 </script>
 </body>
