@@ -32,10 +32,28 @@ addEventListener('load', function () {
 "areaServed":["TR","CY"],
 "knowsAbout":["İnşaat ve taahhüt","Üstyapı ve altyapı uygulamaları","Tescilli yapı restorasyonu","Peyzaj ve çevre düzenleme"]}
 </script>
-<link rel="preload" as="image" href="assets/saha-web/konak-06.webp" imagesrcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06.webp 1600w, assets/saha-web/konak-06-1920.webp 1920w" imagesizes="100vw" fetchpriority="high">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/saha-web/konak-06.webp" imagesrcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06-1200.webp 1200w, assets/saha-web/konak-06.webp 1600w, assets/saha-web/konak-06-1920.webp 1920w" imagesizes="100vw" fetchpriority="high">
+<!-- Yazı tipleri kendi sunucumuzdan: Google'a gidiş-dönüş yok, dosyalar
+     preload ile ilk istekte iner, yedek yüzler (Yedek) metrik eşlemeli olduğu
+     için yazı tipi değişince satırlar kaymaz (CLS). Değerler lab/font.mjs ile ölçüldü. -->
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/sourceserif4-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/sourceserif4-latin-ext.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/plexmono-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"Archivo";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/plexmono-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/plexmono-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/sourceserif4-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/sourceserif4-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+/* Yedek yüzler: sistem yazı tipi, web yazı tipinin ölçülerine çekilmiş.
+   Değerler lab/font.mjs ile Chrome'da ölçüldü (genişlik oranı → size-adjust). */
+@font-face{font-family:"Archivo Yedek";src:local("Arial"),local("Helvetica Neue"),local("Roboto");size-adjust:98.27%;ascent-override:89.55%;descent-override:21.37%;line-gap-override:0%;}
+@font-face{font-family:"Source Serif Yedek";src:local("Georgia"),local("Times New Roman");size-adjust:91.36%;ascent-override:113.83%;descent-override:37.22%;line-gap-override:0%;}
+@font-face{font-family:"Plex Mono Yedek";src:local("Menlo"),local("Consolas"),local("Courier New");size-adjust:99.66%;ascent-override:102.35%;descent-override:27.09%;line-gap-override:0%;}
+</style>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Global HD İnşaat A.Ş.">
 <meta property="og:title" content="Global HD İnşaat · Güçlü yapılar, güvenilir mühendislik">
@@ -61,14 +79,14 @@ addEventListener('load', function () {
   --sc-ink-soft:    #5C5344;
   --sc-accent:      #1D5586;
   --sc-accent-ink:  #F2ECE1;
-  --sc-font-display: "Archivo", system-ui, sans-serif;
-  --sc-font-text:    "Source Serif 4", Georgia, serif;
+  --sc-font-display: "Archivo", "Archivo Yedek", system-ui, sans-serif;
+  --sc-font-text:    "Source Serif 4", "Source Serif Yedek", Georgia, serif;
   /* Third family, deliberately. taste.md caps at two because a third is
      usually costume; here it carries a register the other two cannot.
      Dimension figures, drawing numbers and revision marks are set
      monospaced on a real technical drawing, and every small label on this
      page is an instrument reading rather than prose. */
-  --sc-font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --sc-font-mono:    "IBM Plex Mono", "Plex Mono Yedek", ui-monospace, SFMono-Regular, monospace;
 
   --paper:      #E9E2D5;
   --paper-deep: #DED5C4;
@@ -1036,7 +1054,9 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
 .folio__dil a.koyu-uzeri { color: #A99C87; }
 .folio__dil a.koyu-uzeri[aria-current="true"] { color: #EFE7D8; }
 
-.minidil { display: flex; align-items: center; gap: 6px; padding: 11px 13px; flex: 0 0 auto; }
+/* Dikey dolgu yok: 30 px'lik hedefler + 11 px dolgu satırı 52 px'e
+   uzatıyor, bölüm adları üstte kalıyordu (ölçüldü, 11 px kayık). */
+.minidil { display: flex; align-items: center; gap: 6px; padding: 0 13px; flex: 0 0 auto; align-self: stretch; }
 .minidil a {
   color: var(--sc-ink-soft); text-decoration: none;
   font-family: var(--sc-font-mono); font-size: 0.6rem; letter-spacing: 0.13em;
@@ -1056,6 +1076,13 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   transition: transform 260ms var(--sc-ease-out);
 }
 .mininav::-webkit-scrollbar { display: none; }
+/* Sağ kenarda solma: listenin devam ettiğini söyler; sona gelince kalkar. */
+.mininav::after {
+  content: ""; position: sticky; right: 0; top: 0; flex: 0 0 34px; margin-left: -34px;
+  pointer-events: none; transition: opacity 200ms var(--sc-ease-out);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--sc-canvas) 96%, transparent));
+}
+.mininav.mininav--son::after { opacity: 0; }
 @media (min-width: 1080px) { .mininav { display: none; } }
 .mininav a {
   flex: 0 0 auto; padding: 11px 13px; text-decoration: none;
@@ -1173,6 +1200,10 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   opacity: 0; transition: opacity 420ms var(--sc-ease-out);
 }
 .olcu[data-ac="1"]{ opacity: 1 }
+/* Betik açana kadar yer tutar: hidden ile gelseydi folio ilk boyamadan sonra
+   124 px büyür, liste yukarı kayardı (ölçüldü: CLS 0.0055). Betiksiz
+   tarayıcıda görünmez bir boşluk kalır, kabul. */
+.olcu[hidden]{ display: block; visibility: hidden }
 .olcu__k{ display:block; font-size: 0.58rem; letter-spacing: 0.16em;
           text-transform: uppercase; margin-bottom: var(--sc-3) }
 .olcu__bar{ height: 9px; position: relative; margin-bottom: var(--sc-3) }
@@ -1328,6 +1359,9 @@ html:not(.js) [data-sc-stagger] > * { opacity: 1 !important; transform: none !im
   font-size: clamp(4.4rem, 1.5rem + 16.5vw, 19rem); line-height: 0.86; letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums; margin: var(--sc-4) 0 0;
 }
+/* Sayaçlar satır içi kutu: min-width ancak böyle işler; yoksa 0'dan
+   138.390'a büyürken yanındaki birim kayar (ölçüldü: CLS 0.012). */
+[data-say]{ display: inline-block; font-variant-numeric: tabular-nums }
 .devsayi__u{ font-size: 0.26em; font-weight: 500; letter-spacing: -0.02em; margin-left: 0.14em;
              vertical-align: 1.05em; color: var(--sc-ink-soft); }
 .devsayi__k{ margin: var(--sc-5) 0 0; font-family: var(--sc-font-display);
@@ -1452,7 +1486,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
          an açık üstüne açık kalmıyor. -->
     <div class="title-page__plaka" data-ep data-ep-range="1 0">
       <img src="assets/saha-web/konak-06.webp"
-           srcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06.webp 1600w, assets/saha-web/konak-06-1920.webp 1920w"
+           srcset="assets/saha-web/konak-06-800.webp 800w, assets/saha-web/konak-06-1200.webp 1200w, assets/saha-web/konak-06.webp 1600w, assets/saha-web/konak-06-1920.webp 1920w"
            sizes="100vw" width="1600" height="900" fetchpriority="high" decoding="async"
            alt="Restorasyonu tamamlanan tescilli konak, havadan; çevresinde kiremit çatılar ve bir minare.">
     </div>
@@ -2394,6 +2428,10 @@ ScrollCraft.mount(document.body);
   }
   addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(bak); },
                    { passive: true });
+  // Yatay listenin sonu: solma ipucunu kaldır.
+  function son() { nav.classList.toggle('mininav--son', nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 2); }
+  nav.addEventListener('scroll', son, { passive: true });
+  addEventListener('resize', son); son();
 })();
 </script>
 
