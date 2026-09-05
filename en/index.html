@@ -400,6 +400,12 @@ p { text-wrap: pretty; }
 .seq-stage__frames img:nth-child(4) { --k: 3; }
 .seq-stage__frames img:nth-child(5) { --k: 4; }
 .seq-stage__frames img:nth-child(6) { --k: 5; }
+.seq-stage__film {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0;
+}
+.seq-stage__film:not(.hazir) { opacity: 0 !important; }
+@media (prefers-reduced-motion: reduce) { .seq-stage__film { display: none; } }
 
 
 /* ---- çizim kendini çizer ----
@@ -1543,6 +1549,12 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <img data-src="/assets/seq-web/M5.webp" data-srcset="/assets/seq-web/M5-m.webp 900w, /assets/seq-web/M5.webp 1600w" sizes="100vw" alt="Stone cladding and brown panel infill beginning on the front blocks while those behind remain bare concrete." aria-hidden="true">
             <img data-src="/assets/seq-web/M6.webp" data-srcset="/assets/seq-web/M6-m.webp 900w, /assets/seq-web/M6.webp 1600w" sizes="100vw" alt="A completed architectural model on the drafting paper, with its landscaping and roads." aria-hidden="true">
 
+            <!-- Film: M2→M6 arası dört klip (Kling 3.0, başlangıç+bitiş kareli),
+                 klip başına 20 kare, seq-film klasöründe. Kaydırmayla taranır;
+                 kareler gelmeden ya da hareket azaltılmışsa üstteki altı sabit
+                 karenin çapraz geçişi görünür kalır. Maket masada, bina değil. -->
+            <canvas class="seq-stage__film" data-film="/assets/seq-film/" data-film-n="20" aria-hidden="true"></canvas>
+
             <!-- Çizim kendini çizer. M2'nin yalnız kalem çizgilerini taşıyan
                  alfa katmanı (M2-cizgi.webp), bölge bölge ve vuruş yönünde
                  açılır: önce halka yol, sonra bloklar önden arkaya, sonra iç
@@ -2247,6 +2259,7 @@ ScrollCraft.mount(document.body);
   const act = document.getElementById('dizi');
   if (!box || !act) return;
   const imgs = [...box.querySelectorAll('img')];
+  let raf = 0;
 
   /* Six of the seven frames are 2.4MB together. Fetching them on load costs
      a phone that much data before the title page has even been read, and the
@@ -2263,12 +2276,69 @@ ScrollCraft.mount(document.body);
     });
     let i = 1;
     (function next() {
-      if (i >= imgs.length) return;
+      if (i >= imgs.length) { filmBasla(); return; }
       const img = imgs[i++];
       img.onload = img.onerror = next;
       if (img.dataset.srcset) img.srcset = img.dataset.srcset;
       img.src = img.dataset.src;
     })();
+  }
+
+  /* ---- film: M2→M6 arası 80 kare, kaydırmayla taranır ----
+     Sabit kareler önce iner (yedek), film onlardan sonra ve klip sırasıyla.
+     Kare gelmemişse tuval kapalı kalır, altındaki çapraz geçiş görünür;
+     yani film hiçbir zaman "bekletmez". Bitişik iki kare alfa ile
+     harmanlanır: 80 kare 2,7 ekran yüksekliğine yayıldığı için tek başına
+     kare atlar gibi görünürdü. */
+  const tuval = box.querySelector('.seq-stage__film');
+  const azalt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const KLIP = ['A', 'B', 'C', 'D'];
+  const FN = tuval ? parseInt(tuval.dataset.filmN, 10) || 20 : 20;
+  const kareler = new Array(KLIP.length * FN).fill(null);
+  let filmAcik = false, ctx = null;
+  function filmBasla() {
+    if (!tuval || azalt || filmAcik) return;
+    filmAcik = true;
+    ctx = tuval.getContext('2d', { alpha: false });
+    const ek = innerWidth <= 900 ? '-m' : '';
+    let g = 0;
+    (function sonraki() {
+      if (g >= kareler.length) return;
+      const k = g, im = new Image();
+      im.decoding = 'async';
+      im.onload = () => { kareler[k] = im; if (!raf) raf = requestAnimationFrame(publish); sonraki(); };
+      im.onerror = sonraki;
+      im.src = tuval.dataset.film + KLIP[Math.floor(k / FN)] + '-' + String(k % FN + 1).padStart(2, '0') + ek + '.webp';
+      g++;
+    })();
+  }
+  function tuvalBoyut() {
+    const r = box.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 1.5);
+    const w = Math.round(r.width * d), h = Math.round(r.height * d);
+    if (tuval.width !== w || tuval.height !== h) { tuval.width = w; tuval.height = h; }
+  }
+  function ciz(im, alfa) {
+    const W = tuval.width, H = tuval.height, s = Math.max(W / im.naturalWidth, H / im.naturalHeight);
+    const w = im.naturalWidth * s, h = im.naturalHeight * s;
+    ctx.globalAlpha = alfa;
+    ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+  }
+  function filmCiz(p) {
+    if (!filmAcik) return;
+    const seqP = Math.min(1, Math.max(0, (p - 0.22) / 0.62)) * 5;
+    /* 0,5–1 arası: filmin ilk karesi (elsiz M2) sabit M2'nin üstüne
+       alfa ile biner; el, çizim tamamlandıktan sonra usulca çekilir.
+       Aksi hâlde film başladığı an el "yok olur"du. */
+    if (seqP < 0.5) { tuval.classList.remove('hazir'); return; }
+    const f = seqP < 1 ? 0 : (seqP - 1) / 4 * (kareler.length - 1);
+    const i0 = Math.floor(f), i1 = Math.min(kareler.length - 1, i0 + 1), a = f - i0;
+    const A = kareler[i0], B = kareler[i1];
+    if (!A) { tuval.classList.remove('hazir'); return; }
+    tuvalBoyut();
+    ciz(A, 1);
+    if (B && a > 0.01) ciz(B, a);
+    tuval.style.opacity = seqP < 1 ? String((seqP - 0.5) / 0.5) : '1';
+    tuval.classList.add('hazir');
   }
   function maybe() {
     if (act.getBoundingClientRect().top < innerHeight * 1.5) {
@@ -2285,13 +2355,13 @@ ScrollCraft.mount(document.body);
      hold so the authored silence is not reported as a defect. */
   const stage = act.querySelector('.seq-stage');
   const N = imgs.length;
-  let raf = 0;
   function publish() {
     raf = 0;
     const p = parseFloat(getComputedStyle(act).getPropertyValue('--sc-p')) || 0;
     const t = Math.min(1, p / 0.88) * (N - 1);
     stage.setAttribute('data-sc-verify-state', 'kare:' + t.toFixed(2));
     stage.setAttribute('data-sc-verify-hold', p > 0.88 ? 'true' : 'false');
+    filmCiz(p);
   }
   addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(publish); }, { passive: true });
   addEventListener('resize', publish);
