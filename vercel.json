@@ -10,7 +10,7 @@
    ]
   },
   {
-   "source": "/assets/(saha-web|seq-web|kurum)/(.*)",
+   "source": "/assets/(saha-web|seq-web|seq-film|kurum)/(.*)",
    "headers": [
     {
      "key": "Cache-Control",
