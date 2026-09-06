@@ -158,7 +158,11 @@ p { text-wrap: pretty; }
 }
 .ch-plaka::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.22) 18%, rgba(10,8,6,0) 34%, transparent 62%, var(--sc-canvas) 100%);
+  /* Sol şerit: folio açık taş cephenin üstüne düşüyordu, etiketler kayboldu.
+     Perde yalnız folio genişliğinde, sağa doğru söner. */
+  background:
+    linear-gradient(90deg, rgba(10,8,6,0.62) 0, rgba(10,8,6,0.48) var(--folio-w), rgba(10,8,6,0) calc(var(--folio-w) + 14vw)),
+    linear-gradient(to bottom, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.22) 18%, rgba(10,8,6,0) 34%, transparent 62%, var(--sc-canvas) 100%);
 }
 /* Kaynak notu üstte, fotoğrafın karartılan şeridinde; altta zemin açığa
    eridiği için orada ne açık ne koyu mürekkep okunuyordu. */
