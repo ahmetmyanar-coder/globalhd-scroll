@@ -145,6 +145,30 @@ p { text-wrap: pretty; }
 
 /* Chapter opener plate: the intertitle that makes this a book. */
 .ch-open { padding-block: clamp(5rem, 12vh, 9rem) clamp(2.5rem, 5vh, 4rem); }
+/* Bölüm plakası: folio'nun altına kadar uzanır (devsayi ile aynı negatif
+   kenar), fotoğraf --ep ile hafifçe küçülür, alt %35'i sayfa zeminine erir.
+   Koyu olduğu için ch--desk taşır: folio mürekkebi üstünde açığa döner. */
+.ch-plaka {
+  position: relative; overflow: hidden; height: clamp(360px, 64vh, 680px);
+  margin-left: calc(-1 * var(--folio-w)); background: var(--desk);
+}
+.ch-plaka img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block;
+  transform: scale(calc(1.06 + (var(--ep, 0.5) - 0.5) * -0.06)); will-change: transform;
+}
+.ch-plaka::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.22) 18%, rgba(10,8,6,0) 34%, transparent 62%, var(--sc-canvas) 100%);
+}
+/* Kaynak notu üstte, fotoğrafın karartılan şeridinde; altta zemin açığa
+   eridiği için orada ne açık ne koyu mürekkep okunuyordu. */
+.ch-plaka__k {
+  position: absolute; right: var(--sc-gutter); top: var(--sc-5); z-index: 1; margin: 0;
+  font-family: var(--sc-font-mono); font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #D6CCBC; text-align: right; max-width: 40ch;
+}
+@media (max-width: 700px) { .ch-plaka { height: 46svh; } .ch-plaka img { object-position: 50% 50%; } }
+@media (prefers-reduced-motion: reduce) { .ch-plaka img { transform: none; } }
 /* Bölümlerin "Bölüm bir / iki / üç" künyeleri kaldırıldı: numara zaten
    kenar navigasyonunda duruyor ve sayfada tekrar edilince bilgi değil süs
    oluyordu. Bölüm sınırını artık sert zemin kesmesi ve başlığın kendisi
@@ -2045,6 +2069,13 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
 
   <!-- ================= BÖLÜM 04 · ÖLÇÜ ===================================== -->
   <div class="ch" id="bolum-4" data-ch="04" data-ch-name="The firm" data-mark="0.92">
+    <!-- Bölüm plakası: kenardan kenara gerçek cephe (Merkezi Derslik 05,
+         kapakla aynı mat ton), altta sayfa zeminine erir. Kapaktaki dilin
+         devamı; başlık silmesi plakanın altında olduğu gibi kalır. -->
+    <div class="ch-plaka ch--desk" data-ep data-ep-range="1 0">
+      <img src="/assets/saha-web/kapak-md05.webp" srcset="/assets/saha-web/kapak-md05-800.webp 800w, /assets/saha-web/kapak-md05.webp 1200w" sizes="100vw" width="1200" height="800" loading="lazy" decoding="async" alt="The stone-clad front facade of the Central Classroom building, with brown panel infill and its window grid.">
+      <p class="ch-plaka__k">Central Classroom Project · Council of Higher Education · Site photograph</p>
+    </div>
     <div class="wrap ch-open" data-ep data-ep-range="0.9 0.45">
       <h2 class="ch-open__t">An Ankara-based engineering and contracting firm.</h2>
       <p class="kurumsal__p">Global HD İnşaat A.Ş. delivers superstructure, infrastructure, restoration and landscaping projects for public institutions and the private sector.</p>
@@ -2664,7 +2695,7 @@ ScrollCraft.mount(document.body);
   if (!folio) return;
   /* .devsayi: bölümün içinde koyu bir plaka. Belge sırasında kapsayan
      bölüm önce gelir; en son eşleşen kutu en içteki olur, o kazanır. */
-  const bolumler = [...document.querySelectorAll('.ch, .devsayi')];
+  const bolumler = [...document.querySelectorAll('.ch, .devsayi, .ch-plaka')];
   if (!bolumler.length) return;
 
   const ogeler = [
