@@ -763,7 +763,12 @@ body { hanging-punctuation: first last; } /* Safari; diğerleri yok sayar */
   align-items: center;
 }
 @media (max-width: 900px) { .colo__plate { grid-template-columns: 1fr; } }
-.colo__plate figure { margin: 0; overflow: hidden; }
+.colo__plate figure { margin: 0; overflow: hidden; position: relative; }
+.colo__film {
+  position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover;
+  opacity: 0; transition: opacity 700ms var(--sc-ease-out); pointer-events: none;
+}
+.colo__film.oynuyor { opacity: 1; }
 .colo__plate img, .colo__plate video {
   width: 100%; height: auto; display: block;
   border: 1px solid var(--rule);
@@ -2249,9 +2254,16 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
                şey kımıldamaz (Kling 3.0, F karesi başlangıç ve bitiş, dikiş
                SSIM 0,98). Kaynaklar bölüm görünür olmaya yaklaşınca takılır;
                betiksiz ya da hareket azaltılmışsa poster (F karesi) kalır. -->
-          <video class="colo__film" poster="assets/seq-web/08-F.webp" width="1600" height="900"
-                 muted loop playsinline preload="none" disablepictureinpicture
-                 aria-label="Aynı mimar masası, iş bitmiş: çizim rulo yapılıp kaldırılmış, kalem cetvelin yanında duruyor.">
+          <img src="assets/seq-web/08-F.webp"
+               srcset="assets/seq-web/08-F-m.webp 900w, assets/seq-web/08-F.webp 1600w"
+               sizes="(max-width: 900px) 92vw, 52vw"
+               width="1600" height="900" loading="lazy"
+               alt="Aynı mimar masası, iş bitmiş: çizim rulo yapılıp kaldırılmış, kalem cetvelin yanında duruyor.">
+          <!-- Poster yerine üstteki tembel görsel: poster tarayıcıda ilk yüke
+               girer (ölçüldü, +315 KB); görsel gibi tembel kalsın. Video
+               oynamaya başlayınca görselin üstüne solarak gelir. -->
+          <video class="colo__film" width="1600" height="900" muted loop playsinline preload="none"
+                 disablepictureinpicture aria-hidden="true" tabindex="-1">
             <source data-src="assets/seq-web/masa-dongu.webm" type="video/webm">
             <source data-src="assets/seq-web/masa-dongu.mp4" type="video/mp4">
           </video>
@@ -2455,6 +2467,7 @@ ScrollCraft.mount(document.body);
                            { rootMargin: '150% 0px' }).observe(v);
   new IntersectionObserver((es) => {
     es.forEach((e) => { if (e.isIntersecting) { tak(); v.play().catch(() => {}); } else v.pause(); });
+  v.addEventListener('playing', () => v.classList.add('oynuyor'), { once: true });
   }, { threshold: 0.1 }).observe(v);
 })();
 </script>
