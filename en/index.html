@@ -335,6 +335,24 @@ p { text-wrap: pretty; }
   max-width: 16ch;
 }
 .title-page h1 em { font-style: normal; color: var(--sc-accent); }
+
+/* ---- İlk saniye: çizim masası açılışı ----
+   Sayfa açılırken başlık cetvel çekilir gibi soldan sağa açılır (bölüm
+   açılışlarındaki aynı silme), ölçü çizgisi uzar, giriş metni ve künye
+   sırayla gelir, logo en son. Yalnız clip-path / transform / opacity:
+   yerleşim kaymaz (CLS ölçüldü). Kapak fotoğrafı animasyona girmez,
+   LCP değişmez. Hareket azaltılmışsa hiçbiri çalışmaz. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes tp-silme { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes tp-gel   { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes tp-cetvel{ from { transform: scaleX(0); } to { transform: scaleX(var(--epL, 1)); } }
+  .title-page h1 { animation: tp-silme 950ms cubic-bezier(.2,.7,.2,1) 120ms backwards; }
+  .title-page__lede { animation: tp-gel 700ms var(--sc-ease-out) 640ms backwards; }
+  .title-page .title-rule { animation: tp-cetvel 900ms cubic-bezier(.2,.7,.2,1) 300ms backwards; }
+  .title-page__foot { animation: tp-gel 700ms var(--sc-ease-out) 900ms backwards; }
+  .title-page__mark { animation: tp-gel 800ms var(--sc-ease-out) 1080ms backwards; }
+  .title-page__kaynak { animation: tp-gel 600ms var(--sc-ease-out) 1250ms backwards; }
+}
 .title-page__lede {
   margin-top: var(--sc-6); max-width: 46ch;
   font-size: clamp(1.05rem, 1rem + 0.35vw, 1.3rem);
@@ -394,7 +412,7 @@ p { text-wrap: pretty; }
     clamp(0, calc((var(--k) - var(--seqP)) + 1), 1)
   );
 }
-.seq-stage__frames img:nth-child(1) { --k: 0; }
+.seq-stage__frames picture:nth-child(1) img { --k: 0; }
 .seq-stage__frames img:nth-child(2) { --k: 1; }
 .seq-stage__frames img:nth-child(3) { --k: 2; }
 .seq-stage__frames img:nth-child(4) { --k: 3; }
@@ -852,17 +870,15 @@ p { text-wrap: pretty; }
   .rec__row > div, .rec__no, .kurum__list img { opacity: 1; transform: none; }
 }
 
-/* On a phone a 16:9 frame under object-fit: cover keeps only the middle
-   ~44% of the width, which cuts the hand off one side and the paper's edge
-   off the other: the composition the whole sequence depends on. Letterbox
-   it instead and give the caption the dark band underneath. It reads as a
-   plate on a page, which is what this grammar wants anyway. */
+/* Telefonda 16:9 kareyi olduğu gibi sığdırmak maketi küçük bırakıyordu
+   (letterbox, 219 px). Şimdi her kare için maket merkezli dikey kırpım var:
+   sabit kareler M?-p.webp (540x900, kaynağın 627–1192 px arası, tam boy),
+   film kareleri aynı bölgeden çıkarılmış. Çizim katmanı da aynı pencereye
+   bakar: viewBox betikle "600 0 541 900" yapılır. El kadrajın dışında kalır;
+   telefonda çizgiler kendi kendine çizilir, bu kabul edilen bir fark. */
 @media (max-width: 700px) {
-  .seq-stage, .seq-stage__frames { --cap-band: clamp(190px, 30vh, 260px); }
-  .seq-stage__frames img { object-fit: contain; object-position: center 45%; }
-  /* SVG, contain ile yerleşen görselin kutusuna oturur: aynı genişlik,
-     16:9, dikeyde aynı %45 konumu. */
-  .ciz { inset: auto 0 auto 0; height: auto; aspect-ratio: 16 / 9; top: 45%; transform: translateY(-45%); }
+  .seq-stage, .seq-stage__frames { --cap-band: clamp(170px, 26vh, 240px); }
+  .seq-stage__frames img { object-fit: cover; object-position: center; }
   .seq-cap { padding-left: var(--sc-6); }
   .seq-cap__line { font-size: clamp(1.25rem, 1rem + 2.2vw, 1.8rem); }
 }
@@ -1542,12 +1558,15 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
       <div data-sc-stage>
         <div class="seq-stage" data-sc-verify-state="" data-sc-verify-hold="false">
           <div class="seq-stage__frames" id="seqFrames">
-            <img src="/assets/seq-web/M1.webp" srcset="/assets/seq-web/M1-m.webp 900w, /assets/seq-web/M1.webp 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil.">
-            <img data-src="/assets/seq-web/M2.webp" data-srcset="/assets/seq-web/M2-m.webp 900w, /assets/seq-web/M2.webp 1600w" sizes="100vw" alt="A completed site plan with parallel blocks, link volumes, roads and contours." aria-hidden="true">
-            <img data-src="/assets/seq-web/M3.webp" data-srcset="/assets/seq-web/M3-m.webp 900w, /assets/seq-web/M3.webp 1600w" sizes="100vw" alt="A transparent three-dimensional line massing rising from the plan." aria-hidden="true">
-            <img data-src="/assets/seq-web/M4.webp" data-srcset="/assets/seq-web/M4-m.webp 900w, /assets/seq-web/M4.webp 1600w" sizes="100vw" alt="A reinforced concrete frame at model scale, with scaffolding and a small tower crane." aria-hidden="true">
-            <img data-src="/assets/seq-web/M5.webp" data-srcset="/assets/seq-web/M5-m.webp 900w, /assets/seq-web/M5.webp 1600w" sizes="100vw" alt="Stone cladding and brown panel infill beginning on the front blocks while those behind remain bare concrete." aria-hidden="true">
-            <img data-src="/assets/seq-web/M6.webp" data-srcset="/assets/seq-web/M6-m.webp 900w, /assets/seq-web/M6.webp 1600w" sizes="100vw" alt="A completed architectural model on the drafting paper, with its landscaping and roads." aria-hidden="true">
+            <picture>
+              <source media="(max-width: 700px)" srcset="/assets/seq-web/M1-p.webp">
+              <img src="/assets/seq-web/M1.webp" srcset="/assets/seq-web/M1-m.webp 900w, /assets/seq-web/M1.webp 1600w" sizes="100vw" width="1600" height="900" alt="On an architect's desk, the boundary of a sloping site, the access road and the first long block drawn in pencil.">
+            </picture>
+            <img data-src="/assets/seq-web/M2.webp" data-srcp="/assets/seq-web/M2-p.webp" data-srcset="/assets/seq-web/M2-m.webp 900w, /assets/seq-web/M2.webp 1600w" sizes="100vw" alt="A completed site plan with parallel blocks, link volumes, roads and contours." aria-hidden="true">
+            <img data-src="/assets/seq-web/M3.webp" data-srcp="/assets/seq-web/M3-p.webp" data-srcset="/assets/seq-web/M3-m.webp 900w, /assets/seq-web/M3.webp 1600w" sizes="100vw" alt="A transparent three-dimensional line massing rising from the plan." aria-hidden="true">
+            <img data-src="/assets/seq-web/M4.webp" data-srcp="/assets/seq-web/M4-p.webp" data-srcset="/assets/seq-web/M4-m.webp 900w, /assets/seq-web/M4.webp 1600w" sizes="100vw" alt="A reinforced concrete frame at model scale, with scaffolding and a small tower crane." aria-hidden="true">
+            <img data-src="/assets/seq-web/M5.webp" data-srcp="/assets/seq-web/M5-p.webp" data-srcset="/assets/seq-web/M5-m.webp 900w, /assets/seq-web/M5.webp 1600w" sizes="100vw" alt="Stone cladding and brown panel infill beginning on the front blocks while those behind remain bare concrete." aria-hidden="true">
+            <img data-src="/assets/seq-web/M6.webp" data-srcp="/assets/seq-web/M6-p.webp" data-srcset="/assets/seq-web/M6-m.webp 900w, /assets/seq-web/M6.webp 1600w" sizes="100vw" alt="A completed architectural model on the drafting paper, with its landscaping and roads." aria-hidden="true">
 
             <!-- Film: M2→M6 arası dört klip (Kling 3.0, başlangıç+bitiş kareli),
                  klip başına 20 kare, seq-film klasöründe. Kaydırmayla taranır;
@@ -2260,6 +2279,11 @@ ScrollCraft.mount(document.body);
   if (!box || !act) return;
   const imgs = [...box.querySelectorAll('img')];
   let raf = 0;
+  /* Telefon kadrajı: dikey kırpım (bkz. CSS). Çizim katmanı aynı pencereye
+     bakar. Yalnız yüklemede karar verilir; kareler bir kez iner. */
+  const telefon = matchMedia('(max-width: 700px)').matches;
+  const cizSvg = act.querySelector('.ciz');
+  if (telefon && cizSvg) cizSvg.setAttribute('viewBox', '600 0 541 900');
 
   /* Six of the seven frames are 2.4MB together. Fetching them on load costs
      a phone that much data before the title page has even been read, and the
@@ -2279,8 +2303,8 @@ ScrollCraft.mount(document.body);
       if (i >= imgs.length) { filmBasla(); return; }
       const img = imgs[i++];
       img.onload = img.onerror = next;
-      if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-      img.src = img.dataset.src;
+      if (telefon && img.dataset.srcp) { img.src = img.dataset.srcp; }
+      else { if (img.dataset.srcset) img.srcset = img.dataset.srcset; img.src = img.dataset.src; }
     })();
   }
 
@@ -2300,7 +2324,7 @@ ScrollCraft.mount(document.body);
     if (!tuval || azalt || filmAcik) return;
     filmAcik = true;
     ctx = tuval.getContext('2d', { alpha: false });
-    const ek = innerWidth <= 900 ? '-m' : '';
+    const ek = telefon ? '-m' : '';
     let g = 0;
     (function sonraki() {
       if (g >= kareler.length) return;
