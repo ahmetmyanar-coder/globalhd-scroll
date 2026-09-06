@@ -142,6 +142,7 @@ h1, h2, h3, .display {
   text-wrap: balance;
 }
 p { text-wrap: pretty; }
+body { hanging-punctuation: first last; } /* Safari; diğerleri yok sayar */
 
 /* Chapter opener plate: the intertitle that makes this a book. */
 .ch-open { padding-block: clamp(5rem, 12vh, 9rem) clamp(2.5rem, 5vh, 4rem); }
@@ -763,7 +764,7 @@ p { text-wrap: pretty; }
 }
 @media (max-width: 900px) { .colo__plate { grid-template-columns: 1fr; } }
 .colo__plate figure { margin: 0; overflow: hidden; }
-.colo__plate img {
+.colo__plate img, .colo__plate video {
   width: 100%; height: auto; display: block;
   border: 1px solid var(--rule);
   transform: translate3d(0, calc((var(--ep, 0.5) - 0.5) * -22px), 0) scale(1.05);
@@ -774,7 +775,7 @@ p { text-wrap: pretty; }
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-ink-soft);
 }
 .colo__head .colo__say { margin-top: 0; }
-@media (prefers-reduced-motion: reduce) { .colo__plate img { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .colo__plate img, .colo__plate video { transform: none; } }
 
 
 /* İletişim önce iki kez veriliyordu: bir kez cümlenin içinde, bir kez
@@ -1672,7 +1673,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
           <h2 class="plate__say">A drawing counts as work only when it has a counterpart on site.</h2>
           <div class="plate__meta">
             <div><span class="k">Client</span><span class="v">Council of Higher Education (YÖK)</span></div>
-            <div><span class="k">Enclosed area</span><span class="v">26,000 m²</span></div>
+            <div><span class="k">Enclosed area</span><span class="v">26,000 m²</span></div>
             <div><span class="k">Status</span><span class="v"><span class="tag tag--on">Ongoing</span></span></div>
           </div>
         </div>
@@ -1696,7 +1697,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
            sizes="100vw" width="2400" height="1350" loading="lazy" decoding="async"
            alt="Beypazarı Municipality service building from the air, with the town and hills behind.">
       <figcaption class="kapi__yazi">
-        <p class="kapi__t">At the town's centre, at the town's scale.</p>
+        <p class="kapi__t">At the town’s centre, at the town’s scale.</p>
         <p class="kapi__k">Beypazarı Municipality Service Building · Beypazarı / Ankara</p>
       </figcaption>
     </figure>
@@ -1743,7 +1744,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div>
               <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Council of Higher Education (YÖK)</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">26,000 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">26,000 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag tag--on">Ongoing</span></span></div>
               </div>
               <div class="dim" style="--w: 0.800"><i></i></div>
@@ -1767,7 +1768,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
               <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Ministry of National Defence of Türkiye</span></div>
                 <div><span class="k">Location</span><span class="v">TRNC</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">4,000 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">4,000 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag tag--on">Ongoing</span></span></div>
               </div>
               <div class="dim" style="--w: 0.123"><i></i></div>
@@ -1792,7 +1793,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Hitit University</span></div>
                 <div><span class="k">Location</span><span class="v">Çorum</span></div>
-                <div><span class="k">Landscape area</span><span class="v">32,500 m²<span class="est">*</span></span></div>
+                <div><span class="k">Landscape area</span><span class="v">32,500 m²<span class="est">*</span></span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 1.000"><i></i></div>
@@ -1810,8 +1811,8 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <p class="rec__d">A hotel building and its landscaped grounds, developed by Global HD İnşaat with its own resources. The only entry in the portfolio whose client is the firm itself: work done as an investor rather than as a contractor.</p>
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Global HD İnşaat<span class="tag tag--own">Self-funded investment</span></span></div>
-                <div><span class="k">Enclosed area</span><span class="v">850 m²</span></div>
-                <div><span class="k">Landscape area</span><span class="v">17,500 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">850 m²</span></div>
+                <div><span class="k">Landscape area</span><span class="v">17,500 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.565"><i></i></div>
@@ -1828,7 +1829,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <h3 class="rec__t">Parks and Gardens</h3>
             <p class="rec__d">Park and playground schemes that strengthen urban public space.</p>
             <div class="rec__label">
-                <div><span class="k">Landscape area</span><span class="v">14,500 m²</span></div>
+                <div><span class="k">Landscape area</span><span class="v">14,500 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.446"><i></i></div>
@@ -1847,7 +1848,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Beypazarı Municipality</span></div>
                 <div><span class="k">Location</span><span class="v">Beypazarı / Ankara</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">10,500 m²<span class="est">*</span></span></div>
+                <div><span class="k">Enclosed area</span><span class="v">10,500 m²<span class="est">*</span></span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.323"><i></i></div>
@@ -1866,7 +1867,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Presidency of Religious Affairs</span></div>
                 <div><span class="k">Location</span><span class="v">Çorum</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">10,465 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">10,465 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.322"><i></i></div>
@@ -1884,7 +1885,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <p class="rec__d">Restoration and refurbishment of a registered historic mansion, carried out with its original fabric preserved.</p>
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">General Directorate of Cultural Heritage and Museums</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">8,800 m²<span class="est">*</span></span></div>
+                <div><span class="k">Enclosed area</span><span class="v">8,800 m²<span class="est">*</span></span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.271"><i></i></div>
@@ -1903,7 +1904,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Beypazarı Municipality</span></div>
                 <div><span class="k">Location</span><span class="v">Beypazarı / Ankara</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">6,000 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">6,000 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.185"><i></i></div>
@@ -1922,7 +1923,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Beypazarı Municipality</span></div>
                 <div><span class="k">Location</span><span class="v">Beypazarı / Ankara</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">1,275 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">1,275 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.039"><i></i></div>
@@ -1940,7 +1941,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <p class="rec__d">A vocational school building completed for the Council of Higher Education, housing workshops, classrooms and administrative accommodation together.</p>
             <div class="rec__label">
                 <div><span class="k">Client</span><span class="v">Council of Higher Education (YÖK)</span></div>
-                <div><span class="k">Enclosed area</span><span class="v">6,000 m²</span></div>
+                <div><span class="k">Enclosed area</span><span class="v">6,000 m²</span></div>
                 <div><span class="k">Status</span><span class="v"><span class="tag">Completed</span></span></div>
               </div>
               <div class="dim" style="--w: 0.185"><i></i></div>
@@ -2054,17 +2055,17 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
   </svg>
         <p class="olcek__oku" aria-live="polite">Hover or tap an area: it opens the record.</p>
         <ol class="olcek__l">
-          <li><a href="#kayit-01"><span>01</span>Central Classroom Project<b>26,000 m²</b></a></li>
-          <li><a href="#kayit-02"><span>02</span>Headquarters and Dining Facility<b>4,000 m²</b></a></li>
-          <li><a href="#kayit-03"><span>03</span>Landscaping Works<b>32,500 m²</b></a></li>
-          <li><a href="#kayit-04"><span>04</span>Hotel and Landscape Grounds<b>18,350 m²</b></a></li>
-          <li><a href="#kayit-05"><span>05</span>Parks and Gardens<b>14,500 m²</b></a></li>
-          <li><a href="#kayit-06"><span>06</span>Municipal Service Building<b>10,500 m²</b></a></li>
-          <li><a href="#kayit-07"><span>07</span>Quran Course Building<b>10,465 m²</b></a></li>
-          <li><a href="#kayit-08"><span>08</span>Mansion Restoration<b>8,800 m²</b></a></li>
-          <li><a href="#kayit-09"><span>09</span>Abattoir and Livestock Market<b>6,000 m²</b></a></li>
-          <li><a href="#kayit-10"><span>10</span>Olympic Swimming Pool<b>1,275 m²</b></a></li>
-          <li><a href="#kayit-11"><span>11</span>Vocational School Project<b>6,000 m²</b></a></li>
+          <li><a href="#kayit-01"><span>01</span>Central Classroom Project<b>26,000 m²</b></a></li>
+          <li><a href="#kayit-02"><span>02</span>Headquarters and Dining Facility<b>4,000 m²</b></a></li>
+          <li><a href="#kayit-03"><span>03</span>Landscaping Works<b>32,500 m²</b></a></li>
+          <li><a href="#kayit-04"><span>04</span>Hotel and Landscape Grounds<b>18,350 m²</b></a></li>
+          <li><a href="#kayit-05"><span>05</span>Parks and Gardens<b>14,500 m²</b></a></li>
+          <li><a href="#kayit-06"><span>06</span>Municipal Service Building<b>10,500 m²</b></a></li>
+          <li><a href="#kayit-07"><span>07</span>Quran Course Building<b>10,465 m²</b></a></li>
+          <li><a href="#kayit-08"><span>08</span>Mansion Restoration<b>8,800 m²</b></a></li>
+          <li><a href="#kayit-09"><span>09</span>Abattoir and Livestock Market<b>6,000 m²</b></a></li>
+          <li><a href="#kayit-10"><span>10</span>Olympic Swimming Pool<b>1,275 m²</b></a></li>
+          <li><a href="#kayit-11"><span>11</span>Vocational School Project<b>6,000 m²</b></a></li>
         </ol>
         <p class="olcek__n">Each area is drawn in proportion to its real m² figure; it does not represent building geometry. The one record whose area is not published is not shown in the diagram.</p>
       </section>
@@ -2105,7 +2106,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
             <span class="meas-total__k">Landscaped area</span>
           </div>
         </div>
-        <p class="meas-total__sum">Total <b>138,390 m²</b> of works</p>
+        <p class="meas-total__sum">Total <b>138,390 m²</b> of works</p>
       </div>
 
       <div class="meas sc-stack" data-sc-in data-sc-stagger="80">
@@ -2122,7 +2123,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
           <span class="meas__k">Ongoing</span>
         </div>
       </div>
-      <p class="foot-note">Enclosed building area and landscaped area are totalled separately; together they come to 138,390 m². The figures are approximate areas of works. The areas given for the Municipal Service Building, the Mansion Restoration and the Landscaping Works are presentation estimates and will be confirmed by the company.</p>
+      <p class="foot-note">Enclosed building area and landscaped area are totalled separately; together they come to 138,390 m². The figures are approximate areas of works. The areas given for the Municipal Service Building, the Mansion Restoration and the Landscaping Works are presentation estimates and will be confirmed by the company.</p>
 
       <div class="kurum">
         <p class="eyebrow">Client institutions</p>
@@ -2192,7 +2193,7 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
         <p>In the mansion restoration carried out for the General Directorate of Cultural
           Heritage and Museums, the structural system was strengthened, its stone and
           timber fabric repaired, its façade rehabilitated and its services renewed.</p>
-        <p class="sorumluluk__olcu"><b>8,800 m²<span class="est">*</span></b> of restoration and rehabilitation
+        <p class="sorumluluk__olcu"><b>8,800 m²<span class="est">*</span></b> of restoration and rehabilitation
           on a registered building</p>
         <div class="dim" style="--w: 0.271"><i></i></div>
         <figure class="sorumluluk__fig">
@@ -2208,11 +2209,11 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
         <h3>Nearly half of the portfolio is landscaping.</h3>
         <p>The landscaping works cover irrigation and drainage infrastructure, hardscaping and
           lighting alongside the planting design itself.</p>
-        <p class="sorumluluk__olcu"><b>64,500 m²<span class="est">*</span></b> of landscaping and
+        <p class="sorumluluk__olcu"><b>64,500 m²<span class="est">*</span></b> of landscaping and
           site works</p>
         <div class="dim" style="--w: 1"><i></i></div>
-        <p class="sorumluluk__kirilim">Hitit University 32,500 m²<span class="est">*</span> ·
-          parks and gardens 14,500 m² · hotel grounds 17,500 m²</p>
+        <p class="sorumluluk__kirilim">Hitit University 32,500 m²<span class="est">*</span> ·
+          parks and gardens 14,500 m² · hotel grounds 17,500 m²</p>
         <figure class="sorumluluk__fig">
           <img src="/assets/saha-web/peyzaj-01.webp" srcset="/assets/saha-web/peyzaj-01-800.webp 800w, /assets/saha-web/peyzaj-01.webp 1600w" sizes="(max-width: 860px) 92vw, 46vw"
                width="1600" height="900" loading="lazy"
@@ -2241,11 +2242,16 @@ a.olcekk:focus-visible rect{ stroke-width: 2.5 }
     <div class="wrap">
       <div class="colo__plate">
         <figure data-ep data-ep-range="1.05 -0.05" data-sc-reveal="up" data-sc-reveal-at="0.05 0.5">
-          <img src="/assets/seq-web/08-F.webp"
-               srcset="/assets/seq-web/08-F-m.webp 900w, /assets/seq-web/08-F.webp 1600w"
-               sizes="(max-width: 900px) 92vw, 52vw"
-               width="1600" height="900" loading="lazy"
-               alt="The same architect's desk, the work finished: the drawing rolled away, the pencil resting beside the ruler.">
+          <!-- Masa döngüsü: 8 sn, sessiz, yalnız ışık nefes alır; masada hiçbir
+               şey kımıldamaz (Kling 3.0, F karesi başlangıç ve bitiş, dikiş
+               SSIM 0,98). Kaynaklar bölüm görünür olmaya yaklaşınca takılır;
+               betiksiz ya da hareket azaltılmışsa poster (F karesi) kalır. -->
+          <video class="colo__film" poster="/assets/seq-web/08-F.webp" width="1600" height="900"
+                 muted loop playsinline preload="none" disablepictureinpicture
+                 aria-label="The same architect's desk, the work finished: the drawing rolled away, the pencil resting beside the ruler.">
+            <source data-src="/assets/seq-web/masa-dongu.webm" type="video/webm">
+            <source data-src="/assets/seq-web/masa-dongu.mp4" type="video/mp4">
+          </video>
           <figcaption>A conceptual sequence. It does not document any particular project.</figcaption>
         </figure>
         <div class="colo__head">
@@ -2427,6 +2433,27 @@ ScrollCraft.mount(document.body);
   publish();
 })();
 
+</script>
+<script>
+/* Masa döngüsü: video kaynakları sayfa yüküne girmez; künye bir buçuk
+   ekran yaklaşınca takılır, görünürken oynar, görünmezken durur. Hareket
+   azaltılmışsa hiç takılmaz, poster kalır. */
+(function () {
+  const v = document.querySelector('.colo__film');
+  if (!v || !('IntersectionObserver' in window)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let takili = false;
+  const tak = () => {
+    if (takili) return; takili = true;
+    v.querySelectorAll('source[data-src]').forEach((s) => { s.src = s.dataset.src; });
+    v.load();
+  };
+  new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) tak(); },
+                           { rootMargin: '150% 0px' }).observe(v);
+  new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) { tak(); v.play().catch(() => {}); } else v.pause(); });
+  }, { threshold: 0.1 }).observe(v);
+})();
 </script>
 <script>
 /* ------------------------------------------------------------------
